@@ -7,7 +7,17 @@ defmodule Soap.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
+    ]
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README.md", "LICENSE*"],
+      maintainers: ["Petr Stepchenko"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/potok-digital/soap"}
     ]
   end
 
