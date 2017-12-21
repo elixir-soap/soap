@@ -1,7 +1,11 @@
 # Soap
+[![Build Status](https://travis-ci.org/potok-digital/soap.svg?branch=master)](https://travis-ci.org/potok-digital/soap)
 
-**TODO: Add description**
+Pure Elixir implementation of SOAP client
 
+## NOTE: Library under development stage
+
+<!--
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
@@ -17,5 +21,4 @@ end
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/soap](https://hexdocs.pm/soap).
-
+be found at [https://hexdocs.pm/soap](https://hexdocs.pm/soap). -->
