@@ -8,7 +8,8 @@ defmodule Soap.MixProject do
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      package: package()
+      package: package(),
+      description: description()
     ]
   end
 
@@ -19,6 +20,12 @@ defmodule Soap.MixProject do
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/potok-digital/soap"}
     ]
+  end
+
+  defp description do
+    """
+    Pure Elixir implementation of SOAP client
+    """
   end
 
   # Run "mix help compile.app" to learn about applications.
