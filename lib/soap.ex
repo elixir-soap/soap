@@ -7,6 +7,7 @@ defmodule Soap do
 
   def init_model(wsdl_path) do
     {:ok, wsdl} = File.read(wsdl_path)
+
     %{
       namespaces: parse_namespaces(wsdl),
       endpoint: parse_endpoint(wsdl),
@@ -49,7 +50,7 @@ defmodule Soap do
     xpath(
       wsdl,
       ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
-      [operation: [~x".", name: ~x"@name", action: ~x"./soap:operation/@soapAction"]]
+      operation: [~x".", name: ~x"@name", action: ~x"./soap:operation/@soapAction"]
     )
   end
 
@@ -64,5 +65,4 @@ defmodule Soap do
   defp parse_deferred_types(wsdl) do
     {}
   end
-
 end
