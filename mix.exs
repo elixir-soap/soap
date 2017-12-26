@@ -38,12 +38,15 @@ defmodule Soap.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:sweet_xml, "~> 0.6.5"},
+
       # Code style
       {:credo, "~> 0.5", only: :dev},
 
       # Docs
       {:ex_doc, "~> 0.16", only: [:dev, :docs], runtime: false},
       {:inch_ex, "~> 0.2", only: [:dev, :docs]},
+
     ]
   end
 end
