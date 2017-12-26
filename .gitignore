@@ -23,3 +23,4 @@ erl_crash.dump
 soap-*.tar
 
 .elixir_ls
+/priv
