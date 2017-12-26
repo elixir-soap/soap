@@ -21,31 +21,31 @@ defmodule Soap do
     }
   end
 
-  def parse_namespaces(wsdl) do
+  defp parse_namespaces(wsdl) do
     {}
   end
 
-  def parse_endpoint(wsdl) do
+  defp parse_endpoint(wsdl) do
     {}
   end
 
-  def parse_service_name(wsdl) do
+  defp parse_service_name(wsdl) do
     {}
   end
 
-  def parse_messages(wsdl) do
+  defp parse_messages(wsdl) do
     {}
   end
 
-  def parse_port_types(wsdl) do
+  defp parse_port_types(wsdl) do
     {}
   end
 
-  def parse_port_type_operations(wsdl) do
+  defp parse_port_type_operations(wsdl) do
     {}
   end
 
-  def parse_operations(wsdl) do
+  defp parse_operations(wsdl) do
     xpath(
       wsdl,
       ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
@@ -53,15 +53,15 @@ defmodule Soap do
     )
   end
 
-  def parse_operations_parameters(wsdl) do
+  defp parse_operations_parameters(wsdl) do
     {}
   end
 
-  def parse_types(wsdl) do
+  defp parse_types(wsdl) do
     {}
   end
 
-  def parse_deferred_types(wsdl) do
+  defp parse_deferred_types(wsdl) do
     {}
   end
 
