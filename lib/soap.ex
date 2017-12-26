@@ -27,7 +27,7 @@ defmodule Soap do
   end
 
   defp parse_endpoint(wsdl) do
-    {}
+    xpath(wsdl, ~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
   end
 
   defp parse_service_name(wsdl) do
