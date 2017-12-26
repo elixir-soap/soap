@@ -31,7 +31,7 @@ defmodule Soap do
   end
 
   defp parse_service_name(wsdl) do
-    {}
+    xpath(wsdl, ~x"//@name")
   end
 
   defp parse_messages(wsdl) do
