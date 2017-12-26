@@ -46,7 +46,11 @@ defmodule Soap do
   end
 
   def parse_operations(wsdl) do
-    {}
+    xpath(
+      wsdl,
+      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
+      [operation: [~x".", name: ~x"@name", action: ~x"./soap:operation/@soapAction"]]
+    )
   end
 
   def parse_operations_parameters(wsdl) do
