@@ -66,7 +66,7 @@ defmodule Soap do
   defp parse_operations_parameters(wsdl) do
     parse_operations(wsdl)
     |> Enum.map(fn(x) -> x[:operation][:name] end)
-    |> Enum.map(fn(x) -> %{operation: x} |> Map.merge(operation_parameters(wsdl, x)) end)
+    |> Enum.map(fn(x) -> %{operation: x} |> Map.merge(extract_operation_parameters(wsdl, x)) end)
   end
 
   defp parse_types(wsdl) do
@@ -77,7 +77,7 @@ defmodule Soap do
     {}
   end
 
-  defp operation_parameters(wsdl, name) do
+  defp extract_operation_parameters(wsdl, name) do
     xpath(
       wsdl,
       ~x"//wsdl:definitions/wsdl:types/xsd:schema/xsd:complexType[@name='#{name}']",
