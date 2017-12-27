@@ -47,11 +47,12 @@ defmodule Soap do
   end
 
   defp parse_port_types(wsdl) do
-    {}
+    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType"l, name: ~x"//@name", body: ~x"/")
   end
 
   defp parse_port_type_operations(wsdl) do
-    {}
+    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType"l,
+    port_type: ~x"//@name", operations: ~x"//wsdl:operation/@name"l)
   end
 
   defp parse_operations(wsdl) do
@@ -63,7 +64,9 @@ defmodule Soap do
   end
 
   defp parse_operations_parameters(wsdl) do
-    {}
+    parse_operations(wsdl)
+    |> Enum.map(fn(x) -> x[:operation][:name] end)
+    |> Enum.map(fn(x) -> %{operation: x} |> Map.merge(operation_parameters(wsdl, x)) end)
   end
 
   defp parse_types(wsdl) do
@@ -72,5 +75,13 @@ defmodule Soap do
 
   defp parse_deferred_types(wsdl) do
     {}
+  end
+
+  defp operation_parameters(wsdl, name) do
+    xpath(
+      wsdl,
+      ~x"//wsdl:definitions/wsdl:types/xsd:schema/xsd:complexType[@name='#{name}']",
+      params: [~x"//xsd:element"l, name: ~x"//@name", type: ~x"//@type"]
+    )
   end
 end
