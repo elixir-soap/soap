@@ -35,7 +35,7 @@ defmodule Soap do
   end
 
   defp parse_messages(wsdl) do
-    {}
+    xpath(wsdl, ~x"//*[local-name()='message']"l)
   end
 
   defp parse_port_types(wsdl) do
