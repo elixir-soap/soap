@@ -45,7 +45,8 @@ defmodule Soap.MixProject do
 
       # Docs
       {:ex_doc, "~> 0.16", only: [:dev, :docs], runtime: false},
-      {:inch_ex, "~> 0.2", only: [:dev, :docs]}
+      {:inch_ex, "~> 0.2", only: [:dev, :docs]},
+      {:httpoison, "~> 0.13"}
     ]
   end
 end
