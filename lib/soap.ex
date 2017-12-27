@@ -23,7 +23,15 @@ defmodule Soap do
   end
 
   defp parse_namespaces(wsdl) do
-    {}
+    wsdl
+    |> xpath(~x"//wsdl:definitions/namespace::*"l)
+    |> Enum.map(&get_namespaces/1)
+    |> Enum.into(%{})
+  end
+
+  defp get_namespaces(namespaces_node) do
+    {_, _, _, key, value} = namespaces_node
+    {key, value}
   end
 
   defp parse_endpoint(wsdl) do
