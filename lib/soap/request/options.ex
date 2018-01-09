@@ -34,7 +34,6 @@ defmodule Soap.Request.Options do
   end
 
   defp construct_xml_request_body(params) when is_tuple(params) do
-    tag_name = params |> Tuple.to_list |> List.first
     params
     |> Tuple.to_list
     |> Enum.map(&(construct_xml_request_body(&1)))
