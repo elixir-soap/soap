@@ -6,6 +6,7 @@ defmodule Soap do
   alias Soap.Wsdl
   alias Soap.Request.Options
 
+  @spec init_model(String.t(), :file | :url) :: map()
   def init_model(path, type \\ :file)
   def init_model(path, :file) do
     {:ok, wsdl} = Wsdl.parse_from_file(path)
