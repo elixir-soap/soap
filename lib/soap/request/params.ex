@@ -1,23 +1,31 @@
-defmodule Soap.Request.Options do
+defmodule Soap.Request.Params do
   @moduledoc """
   Documentation for Soap.Request.Options.
   """
   import XmlBuilder
 
-  @spec build(soap_action :: String.t() | atom(), params :: map()) :: map()
-  def build(soap_action, params) do
+  @spec build(wsdl :: map(), soap_action :: String.t(), params :: map()) :: map()
+  def build(wsdl, soap_action, params) do
     %{
-      headers: prepare_headers(soap_action),
-      body: prepare_body(soap_action, params)
+      url: get_url(wsdl),
+      headers: build_headers(soap_action),
+      body: build_body(soap_action, params),
+      method: :post,
+      options: nil
     }
   end
 
   @doc """
   Headers generator by soap action.
   """
-  @spec prepare_headers(soap_action :: String.t()) :: any()
-  defp prepare_headers(soap_action) do
+  @spec build_headers(soap_action :: String.t()) :: any()
+  defp build_headers(soap_action) do
     nil
+  end
+
+  @spec get_url(wsdl :: map()) :: String.t()
+  defp get_url(wsdl) do
+    wsdl[:endpoint]
   end
 
   @doc """
@@ -29,8 +37,8 @@ defmodule Soap.Request.Options do
       %{body: "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>", headers: nil}
 
   """
-  @spec prepare_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
-  defp prepare_body(soap_action, params) do
+  @spec build_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
+  defp build_body(soap_action, params) do
     params
     |> construct_xml_request_body
     |> Enum.map(&(Tuple.to_list(&1)))

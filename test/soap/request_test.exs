@@ -3,41 +3,22 @@ defmodule Soap.RequestTest do
   import Mock
   doctest Soap.Request
   alias Soap.Request
-  alias Soap.Request.{Options}
+  alias Soap.Request.Params
 
-  defp generate_request_model do
-    wsdl    = %{endpoint: "anyendpoint.com"}
-    options = generate_options_model(wsdl)
-
-    %{
-      url: wsdl[:endpoint],
-      headers: options[:headers],
-      body: options[:body],
-      method: :post,
-      options: nil
-    }
-  end
-
-  defp generate_options_model(wsdl) do
+  defp build_params do
+    wsdl = %{endpoint: "anyendpoint.com"}
     soap_action = "test"
     params = %{
       "commonParms" => [{"test_k", "test_v"}]
     }
-    Options.build(soap_action, params)
-  end
-
-  test "#build" do
-    wsdl    = %{endpoint: "anyendpoint.com"}
-    options = generate_options_model(wsdl)
-    request = generate_request_model
-    assert(Request.build(wsdl, options)) == request
+    Params.build(wsdl, soap_action, params)
   end
 
   test "#call" do
-    request = generate_request_model
-    values = request |> Map.values
+    params = build_params
+    values = params |> Map.values
     with_mock(HTTPoison, [request!: fn values -> {:ok, :body} end]) do
-      assert(Request.call(request))
+      assert(Request.call(values))
     end
   end
 end
