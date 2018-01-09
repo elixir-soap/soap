@@ -4,17 +4,23 @@ defmodule Soap.Request do
   Documentation for Soap.Request.
   """
 
-  def init_model(wsdl, method \\ :post, %Soap.Request.Options{} = parameters, options) do
+  def init_model(wsdl, %{headers: headers, body: body}) do
     %Soap.Request{
       url: wsdl[:endpoint],
-      headers: parameters.headers,
-      body: parameters.body,
-      method: method,
-      options: options
+      headers: headers,
+      body: body,
+      method: :post,
+      options: nil
     }
   end
 
-  def call(%Soap.Request{} = soap_request) do
-    HTTPoison.request!(soap_request)
+  @doc """
+  Executing with parsed wsdl and headers with body map.
+  Calling httpoison request by Map with method, url, body, headers, options keys.
+  """
+  def call(wsdl, %{headers: headers, body: body}) do
+    params = init_model(wsdl, %{headers: headers, body: body}) |> Map.values
+
+    HTTPoison.request!(params)
   end
 end

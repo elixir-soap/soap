@@ -49,7 +49,10 @@ defmodule Soap.MixProject do
 
       # Http && XML
       {:httpoison, "~> 0.13"},
-      {:xml_builder, "~> 0.1.1"}
+      {:xml_builder, "~> 0.1.1"},
+
+      # Mocks for tests
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 end
