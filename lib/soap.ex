@@ -17,8 +17,8 @@ defmodule Soap do
     wsdl
   end
 
-  @spec call(map(), String.t(), map(), :default | map()) :: map()
-  def call(wsdl, action, parameters, headers \\ :default) do
-    Request.call(wsdl, action, parameters, headers)
+  @spec call(map(), String.t(), map()) :: map()
+  def call(wsdl, action, parameters) do
+    Request.call(wsdl, action, parameters)
   end
 end
