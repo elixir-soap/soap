@@ -4,7 +4,7 @@ defmodule Soap.Request do
   Documentation for Soap.Request.
   """
 
-  def init_model(wsdl, method \\ :post, parameters, options) do
+  def init_model(wsdl, method \\ :post, %Soap.Request.Options{} = parameters, options) do
     %Soap.Request{
       url: wsdl[:endpoint],
       headers: parameters.headers,
