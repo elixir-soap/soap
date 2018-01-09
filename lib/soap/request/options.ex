@@ -4,7 +4,7 @@ defmodule Soap.Request.Options do
   """
   import XmlBuilder
 
-  @spec init_model(soap_action :: String.t | atom, params :: map) :: map
+  @spec build(soap_action :: String.t() | atom(), params :: map()) :: map()
   def build(soap_action, params) do
     %{
       headers: prepare_headers(soap_action),
@@ -15,7 +15,7 @@ defmodule Soap.Request.Options do
   @doc """
   Headers generator by soap action.
   """
-  @spec prepare_headers(soap_action :: String.t) :: any
+  @spec prepare_headers(soap_action :: String.t()) :: any()
   defp prepare_headers(soap_action) do
     nil
   end
@@ -25,11 +25,11 @@ defmodule Soap.Request.Options do
   Returns xml-like string.
   ## Examples
 
-      iex(2)> Soap.Request.Options.init_model(:get, %{inCommonParms: [{"userID", "WSPB"}]})
+      iex(2)> Soap.Request.Options.build(:get, %{inCommonParms: [{"userID", "WSPB"}]})
       %{body: "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>", headers: nil}
 
   """
-  @spec prepare_body(soap_action :: String.t | atom, params :: map) :: String.t
+  @spec prepare_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
   defp prepare_body(soap_action, params) do
     params
     |> construct_xml_request_body
@@ -42,7 +42,7 @@ defmodule Soap.Request.Options do
   @doc """
   Convert map to list and recursive handle self values.
   """
-  @spec construct_xml_request_body(params :: map) :: list
+  @spec construct_xml_request_body(params :: map()) :: list()
   defp construct_xml_request_body(params) when is_map(params) do
     params |> Map.to_list |> Enum.map(&(construct_xml_request_body(&1)))
   end
@@ -50,7 +50,7 @@ defmodule Soap.Request.Options do
   @doc """
   Recursive handle self values.
   """
-  @spec construct_xml_request_body(params :: list) :: list
+  @spec construct_xml_request_body(params :: list()) :: list()
   defp construct_xml_request_body(params) when is_list(params) do
     params |> Enum.map(&(construct_xml_request_body(&1)))
   end
@@ -58,7 +58,7 @@ defmodule Soap.Request.Options do
   @doc """
   Converting tuple to list, recursive handle self values, adding tag parameters for XmlBuilder and converting back.
   """
-  @spec construct_xml_request_body(params :: tuple) :: tuple
+  @spec construct_xml_request_body(params :: tuple()) :: tuple()
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
     |> Tuple.to_list
@@ -67,32 +67,32 @@ defmodule Soap.Request.Options do
     |> List.to_tuple
   end
 
-  @spec construct_xml_request_body(params :: atom) :: String.t
+  @spec construct_xml_request_body(params :: atom()) :: String.t()
   defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string
 
-  @spec construct_xml_request_body(params :: String.t) :: String.t
+  @spec construct_xml_request_body(params :: String.t()) :: String.t()
   defp construct_xml_request_body(params) when is_binary(params), do: params
 
-  @spec construct_xml_request_body(params :: number) :: String.t
+  @spec construct_xml_request_body(params :: number()) :: String.t()
   defp construct_xml_request_body(params) when is_number(params), do: params |> to_string
 
   @doc """
   Extract tag parameters from wsdl (e.g. name).
   TO DO!
   """
-  @spec tag_parameters(tag_name :: any) :: any
+  @spec tag_parameters(tag_name :: any()) :: any()
   defp tag_parameters(tag_name), do: nil
 
   @doc """
   Insert tag parameters(e.g. name) into parsed list.
   """
-  @spec insert_tag_parameters(params :: list) :: list
+  @spec insert_tag_parameters(params :: list()) :: list()
   defp insert_tag_parameters(params) when is_list(params) do
     tag_name = params |> List.first
 
     params |> List.insert_at(1, tag_parameters(tag_name))
   end
 
-  @spec insert_tag_parameters(params :: any) :: any
+  @spec insert_tag_parameters(params :: any()) :: any()
   defp insert_tag_parameters(params), do: params
 end

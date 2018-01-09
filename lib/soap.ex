@@ -18,7 +18,7 @@ defmodule Soap do
   end
 
   def call(wsdl, soap_action, params) do
-    options = Options.init_model(soap_action, params)
+    options = Options.build(soap_action, params)
     Request.call(wsdl, options)
   end
 end
