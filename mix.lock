@@ -14,5 +14,5 @@
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [], [], "hexpm"},
   "sweet_xml": {:hex, :sweet_xml, "0.6.5", "dd9cde443212b505d1b5f9758feb2000e66a14d3c449f04c572f3048c66e6697", [], [], "hexpm"},
   "unicode_util_compat": {:hex, :unicode_util_compat, "0.3.1", "a1f612a7b512638634a603c8f401892afbf99b8ce93a45041f8aaca99cadb85e", [], [], "hexpm"},
-  "xml_builder": {:hex, :xml_builder, "0.1.2", "b48ab9ed0a24f43a6061e0c21deda88b966a2121af5c445d4fc550dd822e23dc", [], [], "hexpm"}}
+  "xml_builder": {:hex, :xml_builder, "0.1.2", "b48ab9ed0a24f43a6061e0c21deda88b966a2121af5c445d4fc550dd822e23dc", [], [], "hexpm"}
 }

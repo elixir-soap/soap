@@ -39,7 +39,6 @@ defmodule Soap.MixProject do
   defp deps do
     [
       {:sweet_xml, "~> 0.6.5"},
-      {:httpoison, "~> 0.13"},
 
       # Code style
       {:credo, "~> 0.5", only: :dev},
@@ -47,6 +46,8 @@ defmodule Soap.MixProject do
       # Docs
       {:ex_doc, "~> 0.16", only: [:dev, :docs], runtime: false},
       {:inch_ex, "~> 0.2", only: [:dev, :docs]},
+
+      # Http && XML
       {:httpoison, "~> 0.13"},
       {:xml_builder, "~> 0.1.1"}
     ]

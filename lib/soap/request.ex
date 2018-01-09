@@ -14,7 +14,7 @@ defmodule Soap.Request do
     }
   end
 
-  def call(%Soap.Request{}) do
-    HTTPoison.request!(%Soap.Request{})
+  def call(%Soap.Request{} = soap_request) do
+    HTTPoison.request!(soap_request)
   end
 end
