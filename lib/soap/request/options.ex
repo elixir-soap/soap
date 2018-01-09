@@ -5,7 +5,7 @@ defmodule Soap.Request.Options do
   import XmlBuilder
 
   @spec init_model(soap_action :: String.t | atom, params :: map) :: map
-  def init_model(soap_action, params) do
+  def build(soap_action, params) do
     %{
       headers: prepare_headers(soap_action),
       body: prepare_body(soap_action, params)

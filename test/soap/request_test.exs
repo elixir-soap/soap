@@ -23,14 +23,14 @@ defmodule Soap.RequestTest do
     params = %{
       "commonParms" => [{"test_k", "test_v"}]
     }
-    Options.init_model(soap_action, params)
+    Options.build(soap_action, params)
   end
 
-  test "#init_model" do
+  test "#build" do
     wsdl    = %{endpoint: "anyendpoint.com"}
     options = generate_options_model(wsdl)
     request = generate_request_model
-    assert(Request.init_model(wsdl, options)) == request
+    assert(Request.build(wsdl, options)) == request
   end
 
   test "#call" do

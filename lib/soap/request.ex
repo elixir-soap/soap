@@ -4,7 +4,7 @@ defmodule Soap.Request do
   """
 
   @spec init_model(wsdl :: String.t, %{headers: headers :: String.t, body: body :: String.t}) :: map
-  def init_model(wsdl, %{headers: headers, body: body}) do
+  def build(wsdl, %{headers: headers, body: body}) do
     %{
       url: wsdl[:endpoint],
       headers: headers,
@@ -20,7 +20,7 @@ defmodule Soap.Request do
   """
   @spec call(wsdl :: String.t, %{headers: headers :: String.t, body: body :: String.t}) :: tuple
   def call(wsdl, %{headers: headers, body: body}) do
-    params = init_model(wsdl, %{headers: headers, body: body}) |> Map.values
+    params = build(wsdl, %{headers: headers, body: body}) |> Map.values
 
     HTTPoison.request!(params)
   end

@@ -3,7 +3,7 @@ defmodule Soap.Request.OptionsTest do
   doctest Soap.Request.Options
   alias Soap.Request.Options
 
-  test "#init_model" do
+  test "#build" do
     soap_action = "test"
     params = %{
       "commonParms" => [{"test_k", "test_v"}]
@@ -13,6 +13,6 @@ defmodule Soap.Request.OptionsTest do
       headers: nil
     }
 
-    assert(Options.init_model(soap_action, params)) == result
+    assert(Options.build(soap_action, params)) == result
   end
 end
