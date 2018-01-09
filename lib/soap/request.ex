@@ -1,12 +1,11 @@
 defmodule Soap.Request do
-  defstruct [:method, :url, :body, :headers, :options]
   @moduledoc """
   Documentation for Soap.Request.
   """
 
   @spec init_model(wsdl :: String.t, %{headers: headers :: String.t, body: body :: String.t}) :: map
   def init_model(wsdl, %{headers: headers, body: body}) do
-    %Soap.Request{
+    %{
       url: wsdl[:endpoint],
       headers: headers,
       body: body,

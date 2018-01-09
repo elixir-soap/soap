@@ -9,7 +9,7 @@ defmodule Soap.RequestTest do
     wsdl    = %{endpoint: "anyendpoint.com"}
     options = generate_options_model(wsdl)
 
-    %Request{
+    %{
       url: wsdl[:endpoint],
       headers: options[:headers],
       body: options[:body],
