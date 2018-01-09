@@ -17,7 +17,7 @@ defmodule Soap.Request do
 
   @doc """
   Executing with parsed wsdl and headers with body map.
-  Calling httpoison request by Map with method, url, body, headers, options keys.
+  Calling HTTPoison request by Map with method, url, body, headers, options keys.
   """
   @spec call(wsdl :: String.t, %{headers: headers :: String.t, body: body :: String.t}) :: tuple
   def call(wsdl, %{headers: headers, body: body}) do
