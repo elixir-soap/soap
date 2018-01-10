@@ -6,7 +6,7 @@ defmodule Soap.RequestTest do
   alias Soap.Wsdl
 
   test "#call returns response body" do
-    wsdl_path   = Fixtures.full_file_path("wsdl/SendService.wsdl")
+    wsdl_path   = Fixtures.get_file_path("wsdl/SendService.wsdl")
     {_, wsdl}   = Wsdl.parse_from_file(wsdl_path)
     soap_action = :testAction
     params      = %{inCommonParms: [{"userID", "WSPB"}]}
