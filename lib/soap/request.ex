@@ -10,8 +10,10 @@ defmodule Soap.Request do
   """
   @spec call(wsdl :: map(), soap_action :: String.t(), params :: map()) :: tuple()
   def call(wsdl, soap_action, params) do
-    params = Params.build(wsdl, soap_action, params) |> Map.values
+    url = Params.get_url(wsdl)
+    headers = Params.build_headers(soap_action)
+    body = Params.build_body(soap_action, params)
 
-    HTTPoison.request!(params)
+    HTTPoison.post!(url, body, headers)
   end
 end

@@ -4,27 +4,16 @@ defmodule Soap.Request.Params do
   """
   import XmlBuilder
 
-  @spec build(wsdl :: map(), soap_action :: String.t(), params :: map()) :: map()
-  def build(wsdl, soap_action, params) do
-    %{
-      url: get_url(wsdl),
-      headers: build_headers(soap_action),
-      body: build_body(soap_action, params),
-      method: :post,
-      options: nil
-    }
-  end
-
   @doc """
   Headers generator by soap action.
   """
   @spec build_headers(soap_action :: String.t()) :: any()
-  defp build_headers(soap_action) do
-    nil
+  def build_headers(soap_action) do
+    []
   end
 
   @spec get_url(wsdl :: map()) :: String.t()
-  defp get_url(wsdl) do
+  def get_url(wsdl) do
     wsdl[:endpoint]
   end
 
@@ -38,7 +27,7 @@ defmodule Soap.Request.Params do
 
   """
   @spec build_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
-  defp build_body(soap_action, params) do
+  def build_body(soap_action, params) do
     params
     |> construct_xml_request_body
     |> Enum.map(&(Tuple.to_list(&1)))
