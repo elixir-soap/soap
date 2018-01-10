@@ -19,7 +19,7 @@ defmodule Soap.Request.Params do
   """
   @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
-    wsdl[:endpoint]
+    Soap.Wsdl.get_endpoint(wsdl)
   end
 
   @doc """

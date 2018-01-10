@@ -72,7 +72,7 @@ defmodule Soap.Wsdl do
   def parse_operations_parameters(wsdl) do
     wsdl
     |> parse_operations
-    |> Enum.map(fn(x) -> extract_operation_parameters(wsdl, x[:operation][:name]) end)
+    |> Enum.map(&extract_operation_parameters(wsdl, &1[:operation][:name]))
   end
 
   # def parse_types(wsdl) do

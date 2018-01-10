@@ -1,7 +1,8 @@
 defmodule Soap.Request.ParamsTest do
   use ExUnit.Case
-  doctest Soap.Request.Params
+  # doctest Soap.Request.Params
   alias Soap.Request.Params
+  alias Soap.Wsdl
 
   @soap_action :testAction
 
@@ -27,10 +28,12 @@ defmodule Soap.Request.ParamsTest do
     assert function_result == xml_body
   end
 
-  test "#get_url extract url from wsdl successful" do
-    wsdl = %{endpoint: "test_endpoint.com"}
-    function_result = Params.get_url wsdl
+  test "#get_url returns correct soap:address" do
+    endpoint  = "http://localhost:8080/soap/SendService"
+    wsdl_path = Path.expand("../fixtures/SendService.wsdl", __DIR__)
+    {_, wsdl} = Wsdl.parse_from_file(wsdl_path)
+    result    = wsdl |> Wsdl.get_endpoint |> to_string
 
-    assert function_result == wsdl[:endpoint]
+    assert result == endpoint
   end
 end
