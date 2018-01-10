@@ -1,6 +1,6 @@
 defmodule Soap.Request.ParamsTest do
   use ExUnit.Case
-  # doctest Soap.Request.Params
+  doctest Soap.Request.Params
   alias Soap.Request.Params
   alias Soap.Wsdl
 
@@ -30,7 +30,7 @@ defmodule Soap.Request.ParamsTest do
 
   test "#get_url returns correct soap:address" do
     endpoint  = "http://localhost:8080/soap/SendService"
-    wsdl_path = Path.expand("../fixtures/SendService.wsdl", __DIR__)
+    wsdl_path = Fixtures.full_file_path("wsdl/SendService.wsdl")
     {_, wsdl} = Wsdl.parse_from_file(wsdl_path)
     result    = wsdl |> Wsdl.get_endpoint |> to_string
 
