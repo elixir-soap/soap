@@ -4,7 +4,7 @@ defmodule Soap do
   """
 
   alias Soap.Wsdl
-  alias Soap.Request.Options
+  alias Soap.Request
 
   @spec init_model(String.t(), :file | :url) :: map()
   def init_model(path, type \\ :file)
@@ -18,7 +18,6 @@ defmodule Soap do
   end
 
   def call(wsdl, soap_action, params) do
-    options = Options.build(soap_action, params)
-    Request.call(wsdl, options)
+    Request.call(wsdl, soap_action, params)
   end
 end

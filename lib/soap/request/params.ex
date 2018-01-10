@@ -2,18 +2,21 @@ defmodule Soap.Request.Params do
   @moduledoc """
   Documentation for Soap.Request.Options.
   """
-  import XmlBuilder
+  import XmlBuilder, only: [generate: 1]
 
   @doc """
-  Headers generator by soap action.
+  Headers generator by soap action and custom headers.
+  ## Examples
+
   """
   @spec build_headers(soap_action :: String.t(), custom_headers :: list()) :: list()
   def build_headers(soap_action, custom_headers \\ []) do
-    soap_action
-    |> base_headers
-    |> Enum.concat(custom_headers)
+    extract_headers(soap_action, custom_headers)
   end
 
+  @doc """
+  Returns endpoint url from wsdl.
+  """
   @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
     wsdl[:endpoint]
@@ -43,25 +46,20 @@ defmodule Soap.Request.Params do
      {"Content-Type", "text/xml;charset=UTF-8"}]
   end
 
-  @doc """
-  Convert map to list and recursive handle self values.
-  """
+  defp extract_headers(soap_action, []), do: base_headers(soap_action)
+
+  defp extract_headers(_, custom_headers), do: custom_headers
+
   @spec construct_xml_request_body(params :: map()) :: list()
   defp construct_xml_request_body(params) when is_map(params) do
     params |> Map.to_list |> Enum.map(&(construct_xml_request_body(&1)))
   end
 
-  @doc """
-  Recursive handle self values.
-  """
   @spec construct_xml_request_body(params :: list()) :: list()
   defp construct_xml_request_body(params) when is_list(params) do
     params |> Enum.map(&(construct_xml_request_body(&1)))
   end
 
-  @doc """
-  Converting tuple to list, recursive handle self values, adding tag parameters for XmlBuilder and converting back.
-  """
   @spec construct_xml_request_body(params :: tuple()) :: tuple()
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
@@ -80,16 +78,9 @@ defmodule Soap.Request.Params do
   @spec construct_xml_request_body(params :: number()) :: String.t()
   defp construct_xml_request_body(params) when is_number(params), do: params |> to_string
 
-  @doc """
-  Extract tag parameters from wsdl (e.g. name).
-  TO DO!
-  """
   @spec tag_parameters(tag_name :: any()) :: any()
   defp tag_parameters(tag_name), do: nil
 
-  @doc """
-  Insert tag parameters(e.g. name) into parsed list.
-  """
   @spec insert_tag_parameters(params :: list()) :: list()
   defp insert_tag_parameters(params) when is_list(params) do
     tag_name = params |> List.first
