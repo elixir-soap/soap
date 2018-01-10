@@ -28,7 +28,7 @@ defmodule Soap.Request.Params do
   ## Examples
 
       iex(2)> Soap.Request.Params.build_body(:get, %{inCommonParms: [{"userID", "WSPB"}]})
-      %{body: "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>", headers: nil}
+      "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>"
 
   """
   @spec build_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()

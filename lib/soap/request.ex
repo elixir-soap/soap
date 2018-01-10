@@ -14,6 +14,9 @@ defmodule Soap.Request do
     headers = Params.build_headers(soap_action, headers)
     body = Params.build_body(soap_action, params)
 
-    HTTPoison.post!(url, body, headers)
+    response = HTTPoison.post!(url, body, headers)
+    handle_response(response)
   end
+
+  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: body
 end
