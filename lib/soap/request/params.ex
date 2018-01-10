@@ -35,7 +35,7 @@ defmodule Soap.Request.Params do
   def build_body(soap_action, params) do
     params
     |> construct_xml_request_body
-    |> Enum.map(&(Tuple.to_list(&1)))
+    |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
     |> generate
@@ -52,19 +52,19 @@ defmodule Soap.Request.Params do
 
   @spec construct_xml_request_body(params :: map()) :: list()
   defp construct_xml_request_body(params) when is_map(params) do
-    params |> Map.to_list |> Enum.map(&(construct_xml_request_body(&1)))
+    params |> Enum.map(&construct_xml_request_body/1)
   end
 
   @spec construct_xml_request_body(params :: list()) :: list()
   defp construct_xml_request_body(params) when is_list(params) do
-    params |> Enum.map(&(construct_xml_request_body(&1)))
+    params |> Enum.map(&construct_xml_request_body/1)
   end
 
   @spec construct_xml_request_body(params :: tuple()) :: tuple()
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
     |> Tuple.to_list
-    |> Enum.map(&(construct_xml_request_body(&1)))
+    |> Enum.map(&construct_xml_request_body/1)
     |> insert_tag_parameters
     |> List.to_tuple
   end

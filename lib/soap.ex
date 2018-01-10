@@ -18,6 +18,6 @@ defmodule Soap do
   end
 
   def call(wsdl, soap_action, headers \\ [], params) do
-    Request.call(wsdl, soap_action, headers \\ [], params)
+    Request.call(wsdl, soap_action, headers, params)
   end
 end
