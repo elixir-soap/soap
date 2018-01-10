@@ -10,7 +10,7 @@ defmodule Soap.Request.Params do
 
   """
   @spec build_headers(soap_action :: String.t(), custom_headers :: list()) :: list()
-  def build_headers(soap_action, custom_headers \\ []) do
+  def build_headers(soap_action, custom_headers) do
     extract_headers(soap_action, custom_headers)
   end
 
