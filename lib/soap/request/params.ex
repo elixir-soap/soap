@@ -7,9 +7,11 @@ defmodule Soap.Request.Params do
   @doc """
   Headers generator by soap action.
   """
-  @spec build_headers(soap_action :: String.t()) :: any()
-  def build_headers(soap_action) do
-    []
+  @spec build_headers(soap_action :: String.t(), custom_headers :: list()) :: list()
+  def build_headers(soap_action, custom_headers \\ []) do
+    soap_action
+    |> base_headers
+    |> Enum.concat(custom_headers)
   end
 
   @spec get_url(wsdl :: map()) :: String.t()
@@ -22,7 +24,7 @@ defmodule Soap.Request.Params do
   Returns xml-like string.
   ## Examples
 
-      iex(2)> Soap.Request.Options.build(:get, %{inCommonParms: [{"userID", "WSPB"}]})
+      iex(2)> Soap.Request.Params.build_body(:get, %{inCommonParms: [{"userID", "WSPB"}]})
       %{body: "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>", headers: nil}
 
   """
@@ -34,6 +36,11 @@ defmodule Soap.Request.Params do
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
     |> generate
+  end
+
+  defp base_headers(soap_action) do
+    [{"SOAPAction", to_string(soap_action)},
+     {"Content-Type", "text/xml;charset=UTF-8"}]
   end
 
   @doc """
