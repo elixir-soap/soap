@@ -50,13 +50,8 @@ defmodule Soap.Request.Params do
 
   defp extract_headers(_, custom_headers), do: custom_headers
 
-  @spec construct_xml_request_body(params :: map()) :: list()
-  defp construct_xml_request_body(params) when is_map(params) do
-    params |> Enum.map(&construct_xml_request_body/1)
-  end
-
-  @spec construct_xml_request_body(params :: list()) :: list()
-  defp construct_xml_request_body(params) when is_list(params) do
+  @spec construct_xml_request_body(params :: map() | list()) :: list()
+  defp construct_xml_request_body(params) when is_map(params) or is_list(params) do
     params |> Enum.map(&construct_xml_request_body/1)
   end
 
@@ -69,14 +64,11 @@ defmodule Soap.Request.Params do
     |> List.to_tuple
   end
 
-  @spec construct_xml_request_body(params :: atom()) :: String.t()
-  defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string
+  @spec construct_xml_request_body(params :: atom() | number()) :: String.t()
+  defp construct_xml_request_body(params) when is_atom(params) or is_number(params), do: params |> to_string
 
   @spec construct_xml_request_body(params :: String.t()) :: String.t()
   defp construct_xml_request_body(params) when is_binary(params), do: params
-
-  @spec construct_xml_request_body(params :: number()) :: String.t()
-  defp construct_xml_request_body(params) when is_number(params), do: params |> to_string
 
   @spec tag_parameters(tag_name :: any()) :: any()
   defp tag_parameters(tag_name), do: nil
