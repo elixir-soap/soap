@@ -1,6 +1,6 @@
 defmodule Soap.Request.ParamsTest do
   use ExUnit.Case
-  # doctest Soap.Request.Params
+  doctest Soap.Request.Params
   alias Soap.Request.Params
 
   @soap_action :testAction
