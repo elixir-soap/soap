@@ -16,13 +16,14 @@ defmodule Soap.Request.ParamsTest do
 
   test "#build_headers with custom parameters" do
     custom_parameters = [{"SOAPAction", "AnotherAction"}]
+    {_, wsdl}         = Wsdl.parse_from_file(@wsdl_path)
     function_result   = Params.build_headers @soap_action, custom_parameters
 
     assert function_result == custom_parameters
   end
 
   test "#build_body converts map to Xml-like string successful" do
-    xml_body   = "<env:Body>\n\t<tns:sendMessage>\n\t\t<inCommonParms>\n\t\t\t<userID>WSPB</userID>\n\t\t</inCommonParms>\n\t</tns:sendMessage>\n</env:Body>"
+    xml_body   = Fixtures.load_xml("send_service/#{@soap_action}.xml")
     parameters = %{inCommonParms: [{"userID", "WSPB"}]}
     {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_body wsdl, @soap_action, parameters
