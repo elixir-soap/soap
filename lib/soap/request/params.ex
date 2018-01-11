@@ -36,19 +36,13 @@ defmodule Soap.Request.Params do
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
   Returns xml-like string.
   """
-<<<<<<< HEAD
-  @spec build_body(wsdl :: map(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
-  def build_body(wsdl, soap_action, params) do
-    params
-    |> construct_xml_request_body
-=======
+
   @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(wsdl, soap_action, params) do
     params
     |> construct_xml_request_body
     |> add_action_tag_wrapper(wsdl, soap_action)
     |> add_body_tag_wrapper
->>>>>>> 468aad47eafea02ee6536f3e63c978349c155544
     |> add_envelop_wrapper(wsdl)
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
@@ -98,8 +92,6 @@ defmodule Soap.Request.Params do
   @spec insert_tag_parameters(params :: any()) :: any()
   defp insert_tag_parameters(params), do: params
 
-<<<<<<< HEAD
-=======
   defp add_action_tag_wrapper(body, wsdl, soap_action) do
     action_tag =
       wsdl
@@ -110,17 +102,12 @@ defmodule Soap.Request.Params do
   end
 
   defp add_body_tag_wrapper(body), do: [element(:"#{env_namespace()}:Body", nil, body)]
->>>>>>> 468aad47eafea02ee6536f3e63c978349c155544
 
   defp add_envelop_wrapper(body, wsdl) do
     soap_version = soap_version() |> to_string
     soap_version_attribute = %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
     envelop_attributes = @schema_types |> Map.merge(soap_version_attribute) |> Map.merge(custom_namespaces())
-<<<<<<< HEAD
-    [element(:"env:Envelope", envelop_attributes, body)]
-=======
     [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
->>>>>>> 468aad47eafea02ee6536f3e63c978349c155544
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
