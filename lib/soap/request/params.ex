@@ -43,7 +43,7 @@ defmodule Soap.Request.Params do
     |> construct_xml_request_body
     |> add_action_tag_wrapper(wsdl, soap_action)
     |> add_body_tag_wrapper
-    |> add_envelop_wrapper(wsdl)
+    |> add_envelope_tag_wrapper(wsdl, soap_action)
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
@@ -90,21 +90,46 @@ defmodule Soap.Request.Params do
   defp insert_tag_parameters(params), do: params
 
   defp add_action_tag_wrapper(body, wsdl, soap_action) do
-    action_tag =
-      wsdl
-      |> Wsdl.get_compex_types
-      |> Enum.find(fn(x) -> x[:name] == soap_action end)
-      |> Map.get(:type)
+    action_tag = get_action_with_namespace(wsdl, soap_action)
     [element(action_tag, nil, body)]
+  end
+
+  @spec get_action_with_namespace(wsdl :: String.t(), soap_action :: String.t()) :: String.t()
+  defp get_action_with_namespace(wsdl, soap_action) do
+    wsdl
+    |> Wsdl.get_compex_types
+    |> Enum.find(fn(x) -> x[:name] == soap_action end)
+    |> Map.get(:type)
+  end
+
+  @spec get_action_namespace(wsdl :: String.t(), soap_action :: String.t()) :: String.t()
+  defp get_action_namespace(wsdl, soap_action) do
+    get_action_with_namespace(wsdl, soap_action)
+    |> String.split(":")
+    |> List.first
   end
 
   defp add_body_tag_wrapper(body), do: [element(:"#{env_namespace()}:Body", nil, body)]
 
-  defp add_envelop_wrapper(body, wsdl) do
-    soap_version = soap_version() |> to_string
-    soap_version_attribute = %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
-    envelop_attributes = @schema_types |> Map.merge(soap_version_attribute) |> Map.merge(custom_namespaces())
+  @spec add_envelope_tag_wrapper(body :: any(), wsdl :: String.t(), soap_action :: String.t()) :: any()
+  defp add_envelope_tag_wrapper(body, wsdl, soap_action) do
+    envelop_attributes =
+      @schema_types
+      |> Map.merge(build_soap_version_attribute())
+      |> Map.merge(build_action_attribute(wsdl, soap_action))
+      |> Map.merge(custom_namespaces())
     [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
+  end
+
+  defp build_soap_version_attribute do
+    soap_version = soap_version() |> to_string
+    %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
+  end
+
+  defp build_action_attribute(wsdl, soap_action) do
+    action_attribute_namespace = get_action_namespace(wsdl, soap_action)
+    action_attribute_value = Wsdl.get_namespaces(wsdl)[action_attribute_namespace][:value]
+    %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
