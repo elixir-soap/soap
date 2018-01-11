@@ -26,13 +26,6 @@ defmodule Soap.Request.Params do
   @doc ~S"""
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
   Returns xml-like string.
-  ## Examples
-
-      iex(1)> wsdl_path = "./test/fixtures/wsdl/SendService.wsdl"
-      iex(2)> {_, wsdl} = Soap.Wsdl.parse_from_file(wsdl_path)
-      iex(3)> Soap.Request.Params.build_body(wsdl, "sendMessage", %{inCommonParms: [{"userID", "WSPB"}]})
-      "<env:Body>\n\t<tns:sendMessage>\n\t\t<inCommonParms>\n\t\t\t<userID>WSPB</userID>\n\t\t</inCommonParms>\n\t</tns:sendMessage>\n</env:Body>"
-
   """
   @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(wsdl, soap_action, params) do
@@ -89,10 +82,11 @@ defmodule Soap.Request.Params do
   defp insert_tag_parameters(params), do: params
 
   defp add_action_tag_wrapper(body, wsdl, soap_action) do
-    action_tag = wsdl
-                 |> Wsdl.get_complex_types
-                 |> Enum.find(fn(x) -> x[:name] == soap_action end)
-                 |> Map.get(:type)
+    action_tag =
+      wsdl
+      |> Wsdl.get_compex_types
+      |> Enum.find(fn(x) -> x[:name] == soap_action end)
+      |> Map.get(:type)
     [element(action_tag, nil, body)]
   end
 

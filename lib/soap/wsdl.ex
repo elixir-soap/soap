@@ -95,7 +95,7 @@ defmodule Soap.Wsdl do
   #   }
   # end
 
-  def get_complex_types(wsdl) do
+  def get_compex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
