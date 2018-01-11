@@ -37,6 +37,7 @@ defmodule Soap.Request.Params do
     params
     |> construct_xml_request_body
     |> add_action_tag_wrapper(wsdl, soap_action)
+    |> add_body_tag_wrapper
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
@@ -93,4 +94,6 @@ defmodule Soap.Request.Params do
                  |> String.to_atom
     [element(action_tag, nil, body)]
   end
+
+  defp add_body_tag_wrapper(body), do: [element(:"env:Body", nil, body)]
 end
