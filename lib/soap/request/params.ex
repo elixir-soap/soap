@@ -48,6 +48,7 @@ defmodule Soap.Request.Params do
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
     |> generate
+    |> String.replace(["\n", "\t"], "")
   end
 
   defp base_headers(soap_action) do

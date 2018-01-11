@@ -5,6 +5,9 @@ defmodule Fixtures do
 
   def load_xml(file) do
     xml_path = get_file_path("xml/#{file}")
-    File.read!(xml_path)
+    xml_path
+    |> File.read!
+    |> String.trim
+    |> String.replace(["\n", "\t"], "")
   end
 end
