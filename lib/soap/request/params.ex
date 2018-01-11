@@ -2,7 +2,7 @@ defmodule Soap.Request.Params do
   @moduledoc """
   Documentation for Soap.Request.Options.
   """
-  import XmlBuilder, only: [generate: 1]
+  import XmlBuilder, only: [generate: 1, element: 3]
   alias Soap.Wsdl
 
   @doc """
@@ -35,8 +35,8 @@ defmodule Soap.Request.Params do
   @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(wsdl, soap_action, params) do
     params
-    |> build_action_tag(wsdl, soap_action)
     |> construct_xml_request_body
+    |> add_action_tag_wrapper(wsdl, soap_action)
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
@@ -85,17 +85,12 @@ defmodule Soap.Request.Params do
   @spec insert_tag_parameters(params :: any()) :: any()
   defp insert_tag_parameters(params), do: params
 
-  defp build_action_tag(params, wsdl, soap_action) do
-    wsdl
-    |> Wsdl.get_complex_types
-    |> Enum.find(fn(x) -> x[:name] == soap_action end)
-    |> Map.get(:type)
-    |> add_parrent_element(params)
-  end
-
-  defp add_parrent_element(element, params) do
-    %{
-      element => params
-    }
+  defp add_action_tag_wrapper(body, wsdl, soap_action) do
+    action_tag = wsdl
+                 |> Wsdl.get_complex_types
+                 |> Enum.find(fn(x) -> x[:name] == soap_action end)
+                 |> Map.get(:type)
+                 |> String.to_atom
+    [element(action_tag, nil, body)]
   end
 end
