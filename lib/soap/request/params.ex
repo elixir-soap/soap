@@ -28,8 +28,10 @@ defmodule Soap.Request.Params do
   Returns xml-like string.
   ## Examples
 
-      iex(2)> Soap.Request.Params.build_body("wsdl", :get, %{inCommonParms: [{"userID", "WSPB"}]})
-      "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>"
+      iex(1)> wsdl_path = "./test/fixtures/wsdl/SendService.wsdl"
+      iex(2)> {_, wsdl} = Soap.Wsdl.parse_from_file(wsdl_path)
+      iex(3)> Soap.Request.Params.build_body(wsdl, "sendMessage", %{inCommonParms: [{"userID", "WSPB"}]})
+      "<env:Body>\n\t<tns:sendMessage>\n\t\t<inCommonParms>\n\t\t\t<userID>WSPB</userID>\n\t\t</inCommonParms>\n\t</tns:sendMessage>\n</env:Body>"
 
   """
   @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
