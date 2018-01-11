@@ -19,17 +19,16 @@ defmodule Soap.Request.Params do
   """
   @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
-    wsdl[:endpoint]
+    Soap.Wsdl.get_endpoint(wsdl)
   end
 
-  @doc """
+  @doc ~S"""
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
   Returns xml-like string.
   ## Examples
 
       iex(2)> Soap.Request.Params.build_body(:get, %{inCommonParms: [{"userID", "WSPB"}]})
       "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>"
-
   """
   @spec build_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(soap_action, params) do

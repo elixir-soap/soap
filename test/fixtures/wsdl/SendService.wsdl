@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+  xmlns:tns="com.esendex.ems.soapinterface"
+  targetNamespace="com.esendex.ems.soapinterface"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="com.esendex.ems.soapinterface">
+        <xsd:element type="tns:sendMessageMultipleRecipientsResponse" name="sendMessageMultipleRecipientsResponse"/>
+        <xsd:element type="tns:sendMessageMultipleRecipients" name="sendMessageMultipleRecipients"/>
+        <xsd:element type="tns:sendMessageResponse" name="sendMessageResponse"/>
+        <xsd:element type="tns:sendMessage" name="sendMessage"/>
+
+        <xsd:complexType name="sendMessageMultipleRecipients">
+            <xsd:sequence>
+                <xsd:element minOccurs="0" type="tns:recipients" name="recipients"/>
+                <xsd:element minOccurs="0" type="xsd:string" name="body"/>
+                <xsd:element type="xsd:string" name="type"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="recipients">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" type="xsd:string" name="recipient"/>
+            </xsd:sequence>
+        </xsd:complexType>
+
+        <xsd:complexType name="sendMessageMultipleRecipientsResponse">
+            <xsd:sequence>
+                <xsd:element minOccurs="0" type="tns:results" name="results"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="results">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" type="xsd:string" name="result"/>
+            </xsd:sequence>
+        </xsd:complexType>
+
+        <xsd:complexType name="sendMessage">
+            <xsd:sequence>
+                <xsd:element minOccurs="0" type="xsd:string" name="recipient"/>
+                <xsd:element minOccurs="0" type="xsd:string" name="body"/>
+                <xsd:element type="xsd:string" name="type"/>
+            </xsd:sequence>
+        </xsd:complexType>
+
+        <xsd:complexType name="sendMessageResponse">
+            <xsd:sequence>
+                <xsd:element minOccurs="0" type="xsd:string" name="sendMessageResult"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:schema>
+
+  </wsdl:types>
+
+  <wsdl:message name="SendMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:sendMessage" />
+  </wsdl:message>
+  <wsdl:message name="SendMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:sendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendMessageMultipleRecipientsSoapIn">
+    <wsdl:part name="parameters" element="tns:sendMessageMultipleRecipients" />
+  </wsdl:message>
+  <wsdl:message name="SendMessageMultipleRecipientsSoapOut">
+    <wsdl:part name="parameters" element="tns:sendMessageMultipleRecipientsResponse" />
+  </wsdl:message>
+
+  <wsdl:portType name="SendServiceSoap">
+    <wsdl:operation name="SendMessage">
+      <wsdl:input message="tns:SendMessageSoapIn" />
+      <wsdl:output message="tns:SendMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageMultipleRecipients">
+      <wsdl:input message="tns:SendMessageMultipleRecipientsSoapIn" />
+      <wsdl:output message="tns:SendMessageMultipleRecipientsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="SendServiceSoap" type="tns:SendServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendMessage">
+      <soap:operation soapAction="com.esendex.ems.soapinterface/SendMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageMultipleRecipients">
+      <soap:operation soapAction="com.esendex.ems.soapinterface/SendMessageMultipleRecipients" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SendMessageMultipleRecipientsMessengerHeader" part="MessengerHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:binding name="SendServiceSoap12" type="tns:SendServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendMessage">
+      <soap12:operation
+        soapAction="com.esendex.ems.soapinterface/SendMessage"
+        style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header
+          message="tns:SendMessageMessengerHeader"
+          part="MessengerHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageMultipleRecipients">
+      <soap12:operation
+        soapAction="com.esendex.ems.soapinterface/SendMessageMultipleRecipients"
+        style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header
+          message="tns:SendMessageMultipleRecipientsMessengerHeader"
+          part="MessengerHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="SendService">
+    <wsdl:port name="SendServiceSoap" binding="tns:SendServiceSoap">
+      <soap:address location="http://localhost:8080/soap/SendService" />
+    </wsdl:port>
+    <wsdl:port name="SendServiceSoap12" binding="tns:SendServiceSoap12">
+      <soap12:address location="http://localhost:8080/soap/SendService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
