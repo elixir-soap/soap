@@ -23,7 +23,7 @@ defmodule Soap.Request.Params do
     Wsdl.get_endpoint(wsdl)
   end
 
-  @doc ~S"""
+  @doc """
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
   Returns xml-like string.
   """
