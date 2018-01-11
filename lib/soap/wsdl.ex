@@ -72,7 +72,7 @@ defmodule Soap.Wsdl do
   def parse_operations_parameters(wsdl) do
     wsdl
     |> parse_operations
-    |> Enum.map(&extract_operation_parameters(wsdl, &1))
+    |> Enum.map(&extract_operation_parameters(wsdl, &1[:operation][:name]))
   end
 
   # def parse_types(wsdl) do
@@ -95,11 +95,11 @@ defmodule Soap.Wsdl do
   #   }
   # end
 
-  def get_compex_types(wsdl) do
+  def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
-  def extract_operation_parameters(wsdl, %{operation: %{name: name}} = _operation) do
+  def extract_operation_parameters(wsdl, name) do
     wsdl
     |> xpath(
       ~x"//wsdl:definitions/wsdl:types/xsd:schema/xsd:complexType[@name='#{name}']",

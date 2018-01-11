@@ -3,6 +3,7 @@ defmodule Soap.Request.Params do
   Documentation for Soap.Request.Options.
   """
   import XmlBuilder, only: [generate: 1]
+  alias Soap.Wsdl
 
   @doc """
   Headers generator by soap action and custom headers.
@@ -19,20 +20,22 @@ defmodule Soap.Request.Params do
   """
   @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
-    Soap.Wsdl.get_endpoint(wsdl)
+    Wsdl.get_endpoint(wsdl)
   end
 
-  @doc ~S"""
+  @doc """
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
   Returns xml-like string.
   ## Examples
 
-      iex(2)> Soap.Request.Params.build_body(:get, %{inCommonParms: [{"userID", "WSPB"}]})
-      "<inCommonParms>\n\t<userID>WSPB</userID>\n</inCommonParms>"
+      iex(2)> Soap.Request.Params.build_body("wsdl", :get, %{inCommonParms: [{"userID", "WSPB"}]})
+      "<inCommonParms>\n\t<userID>WSPD</userID>\n</inCommonParms>"
+
   """
-  @spec build_body(soap_action :: String.t() | atom(), params :: map()) :: String.t()
-  def build_body(soap_action, params) do
+  @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
+  def build_body(wsdl, soap_action, params) do
     params
+    |> build_action_tag(wsdl, soap_action)
     |> construct_xml_request_body
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
@@ -81,4 +84,18 @@ defmodule Soap.Request.Params do
 
   @spec insert_tag_parameters(params :: any()) :: any()
   defp insert_tag_parameters(params), do: params
+
+  defp build_action_tag(params, wsdl, soap_action) do
+    wsdl
+    |> Wsdl.get_complex_types
+    |> Enum.find(fn(x) -> x[:name] == soap_action end)
+    |> Map.get(:type)
+    |> add_parrent_element(params)
+  end
+
+  defp add_parrent_element(element, params) do
+    %{
+      element => params
+    }
+  end
 end
