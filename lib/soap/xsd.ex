@@ -1,9 +1,8 @@
 defmodule Soap.Xsd do
   @moduledoc """
   Provides functions for parsing xsd file
+  # TODO: Implement in version 0.2
   """
-
-  import SweetXml, except: [parse: 1]
 
   def parse_from_file(path) do
     {:ok, wsdl} = File.read(path)
@@ -11,6 +10,6 @@ defmodule Soap.Xsd do
   end
 
   def parse(wsdl) do
-    %{}
+    wsdl
   end
 end
