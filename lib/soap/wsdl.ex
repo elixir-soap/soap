@@ -45,66 +45,7 @@ defmodule Soap.Wsdl do
     xpath(wsdl, ~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
   end
 
-  def get_messages(wsdl) do
-    xpath(wsdl, ~x"//*[local-name()='message']"l)
-  end
-
-  def get_port_types(wsdl) do
-    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType"l, name: ~x"//@name", body: ~x"/")
-  end
-
-  def get_port_type_operations(wsdl) do
-    xpath(
-      wsdl,
-      ~x"//wsdl:definitions/wsdl:portType"l,
-      port_type: ~x"//@name",
-      operations: ~x"//wsdl:operation/@name"l
-    )
-  end
-
-  def parse_operations(wsdl) do
-    xpath(
-      wsdl,
-      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
-      operation: [~x".", name: ~x"@name", action: ~x"./soap:operation/@soapAction"]
-    )
-  end
-
-  def parse_operations_parameters(wsdl) do
-    wsdl
-    |> parse_operations
-    |> Enum.map(&extract_operation_parameters(wsdl, &1))
-  end
-
-  # def parse_types(wsdl) do
-  #   compex_types = get_compex_types(wsdl)
-  #   compex_types
-  #   |> Enum.map(&get_root_elements(&1, wsdl))
-  # end
-
-  # def get_root_elements(complex_type, wsdl) do
-  #   elements = xpath(
-  #     wsdl,
-  #     ~x"//xsd:complexType[@name='#{complex_type.name}']/xsd:sequence/xsd:element"l, name: ~x"./@name", type: ~x"./@type", complex_type: ~x"local-name()"
-  #   )
-  #   |> Enum.map(&get_types/1)
-  #
-  #   %{
-  #     name: complex_type.name,
-  #     type: complex_type.type,
-  #     elements: elements
-  #   }
-  # end
-
-  def get_compex_types(wsdl) do
+  def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
-  end
-
-  def extract_operation_parameters(wsdl, %{operation: %{name: name}} = _operation) do
-    wsdl
-    |> xpath(
-      ~x"//wsdl:definitions/wsdl:types/xsd:schema/xsd:complexType[@name='#{name}']",
-      params: [~x"//xsd:element"l, name: ~x"//@name", type: ~x"//@type"])
-    |> Map.merge(%{operation: name})
   end
 end

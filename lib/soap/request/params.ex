@@ -94,7 +94,7 @@ defmodule Soap.Request.Params do
   @spec get_action_with_namespace(wsdl :: String.t(), soap_action :: String.t()) :: String.t()
   defp get_action_with_namespace(wsdl, soap_action) do
     wsdl
-    |> Wsdl.get_compex_types
+    |> Wsdl.get_complex_types
     |> Enum.find(fn(x) -> x[:name] == soap_action end)
     |> Map.get(:type)
   end
