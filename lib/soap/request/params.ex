@@ -5,6 +5,15 @@ defmodule Soap.Request.Params do
   import XmlBuilder, only: [generate: 1, element: 3]
   alias Soap.Wsdl
 
+  @schema_types %{
+    "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
+    "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance"
+  }
+  @soap_version_namespaces %{
+    "1" => "http://schemas.xmlsoap.org/soap/envelope/",
+    "1.2" => "http://www.w3.org/2003/05/soap-envelope"
+  }
+
   @doc """
   Headers generator by soap action and custom headers.
   ## Examples
@@ -33,6 +42,7 @@ defmodule Soap.Request.Params do
     |> construct_xml_request_body
     |> add_action_tag_wrapper(wsdl, soap_action)
     |> add_body_tag_wrapper
+    |> add_envelop_wrapper(wsdl)
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
@@ -91,4 +101,15 @@ defmodule Soap.Request.Params do
   end
 
   defp add_body_tag_wrapper(body), do: [element(:"env:Body", nil, body)]
+
+  defp add_envelop_wrapper(body, wsdl) do
+    soap_version = soap_version() |> to_string
+    soap_version_attribute = %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
+    envelop_attributes = @schema_types |> Map.merge(soap_version_attribute) |> Map.merge(custom_namespaces())
+    [element(:"env:Envelope", envelop_attributes, body)]
+  end
+
+  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  defp env_namespace, do: Application.fetch_env!(:soap, :globals)[:env_namespace] || :env
+  defp custom_namespaces, do: Application.fetch_env!(:soap, :globals)[:custom_namespaces] || %{}
 end
