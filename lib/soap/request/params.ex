@@ -100,13 +100,13 @@ defmodule Soap.Request.Params do
     [element(action_tag, nil, body)]
   end
 
-  defp add_body_tag_wrapper(body), do: [element(:"env:Body", nil, body)]
+  defp add_body_tag_wrapper(body), do: [element(:"#{env_namespace()}:Body", nil, body)]
 
   defp add_envelop_wrapper(body, wsdl) do
     soap_version = soap_version() |> to_string
     soap_version_attribute = %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
     envelop_attributes = @schema_types |> Map.merge(soap_version_attribute) |> Map.merge(custom_namespaces())
-    [element(:"env:Envelope", envelop_attributes, body)]
+    [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
