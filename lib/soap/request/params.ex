@@ -93,7 +93,6 @@ defmodule Soap.Request.Params do
                  |> Wsdl.get_complex_types
                  |> Enum.find(fn(x) -> x[:name] == soap_action end)
                  |> Map.get(:type)
-                 |> String.to_atom
     [element(action_tag, nil, body)]
   end
 
