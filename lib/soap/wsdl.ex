@@ -28,15 +28,16 @@ defmodule Soap.Wsdl do
 
   defp get_namespace(namespaces_node, wsdl) do
     {_, _, _, key, value} = namespaces_node
+    string_key = key |> to_string
     value = Atom.to_string(value)
 
     cond do
       xpath(wsdl, ~x"//wsdl:definitions[@targetNamespace='#{value}']") ->
-        {key, %{value: value, type: :wsdl}}
+        {string_key, %{value: value, type: :wsdl}}
       xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:import[@namespace='#{value}']") ->
-        {key, %{value: value, type: :xsd}}
+        {string_key, %{value: value, type: :xsd}}
       true ->
-        {key, %{value: value, type: :soap}}
+        {string_key, %{value: value, type: :soap}}
     end
   end
 
