@@ -8,6 +8,5 @@ defmodule Fixtures do
     xml_path
     |> File.read!
     |> String.trim
-    |> String.replace(["\n", "\t"], "")
   end
 end
