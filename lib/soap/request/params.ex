@@ -78,13 +78,9 @@ defmodule Soap.Request.Params do
 
   @spec construct_xml_request_body(params :: String.t()) :: String.t()
   defp construct_xml_request_body(params) when is_binary(params), do: params
-  
-  @spec insert_tag_parameters(params :: list()) :: list()
-  defp insert_tag_parameters(params) when is_list(params) do
-    tag_name = params |> List.first
 
-    params |> List.insert_at(1, nil)
-  end
+  @spec insert_tag_parameters(params :: list()) :: list()
+  defp insert_tag_parameters(params) when is_list(params), do: params |> List.insert_at(1, nil)
 
   @spec insert_tag_parameters(params :: any()) :: any()
   defp insert_tag_parameters(params), do: params
