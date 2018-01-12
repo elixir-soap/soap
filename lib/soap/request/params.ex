@@ -27,7 +27,7 @@ defmodule Soap.Request.Params do
   @doc """
   Returns endpoint url from wsdl.
   """
-  @spec get_url(wsdl :: map()) :: String.t()
+  @spec get_url(wsdl :: String.t()) :: String.t()
   def get_url(wsdl) do
     Wsdl.get_endpoint(wsdl)
   end
@@ -82,9 +82,6 @@ defmodule Soap.Request.Params do
 
   @spec insert_tag_parameters(params :: list()) :: list()
   defp insert_tag_parameters(params) when is_list(params), do: params |> List.insert_at(1, nil)
-
-  @spec insert_tag_parameters(params :: any()) :: any()
-  defp insert_tag_parameters(params), do: params
 
   defp add_action_tag_wrapper(body, wsdl, soap_action) do
     action_tag = get_action_with_namespace(wsdl, soap_action)
