@@ -5,20 +5,24 @@ defmodule Soap.Wsdl do
 
   import SweetXml, except: [parse: 1]
 
+  @spec parse_from_file(String.t()) :: tuple()
   def parse_from_file(path) do
     {:ok, wsdl} = File.read(path)
     parse(wsdl)
   end
 
+  @spec parse_from_url(String.t()) :: tuple()
   def parse_from_url(path) do
     %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path)
     parse(wsdl)
   end
 
+  @spec parse(String.t()) :: tuple()
   def parse(wsdl) do
     {:ok, wsdl}
   end
 
+  @spec get_namespaces(String.t()) :: map()
   def get_namespaces(wsdl) do
     wsdl
     |> xpath(~x"//wsdl:definitions/namespace::*"l)
@@ -41,8 +45,11 @@ defmodule Soap.Wsdl do
     end
   end
 
+  @spec get_endpoint(String.t()) :: String.t()
   def get_endpoint(wsdl) do
-    xpath(wsdl, ~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
+    wsdl
+    |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
+    |> to_string
   end
 
   def get_complex_types(wsdl) do

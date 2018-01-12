@@ -9,4 +9,9 @@ defmodule Fixtures do
     |> File.read!
     |> String.trim
   end
+
+  def load_wsdl(file) do
+    wsdl_path = get_file_path("wsdl/#{file}")
+    File.read!(wsdl_path)
+  end
 end
