@@ -3,7 +3,6 @@ defmodule Soap.Request.Params do
   Documentation for Soap.Request.Options.
   """
   import XmlBuilder, only: [generate: 1, element: 3]
-  alias Soap.Wsdl
 
   @schema_types %{
     "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
@@ -27,9 +26,9 @@ defmodule Soap.Request.Params do
   @doc """
   Returns endpoint url from wsdl.
   """
-  @spec get_url(wsdl :: String.t()) :: String.t()
+  @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
-    Wsdl.get_endpoint(wsdl)
+    wsdl[:endpoint]
   end
 
   @doc """
@@ -37,7 +36,7 @@ defmodule Soap.Request.Params do
   Returns xml-like string.
   """
 
-  @spec build_body(wsdl :: String.t(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
+  @spec build_body(wsdl :: map(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(wsdl, soap_action, params) do
     params
     |> construct_xml_request_body
@@ -88,15 +87,14 @@ defmodule Soap.Request.Params do
     [element(action_tag, nil, body)]
   end
 
-  @spec get_action_with_namespace(wsdl :: String.t(), soap_action :: String.t()) :: String.t()
+  @spec get_action_with_namespace(wsdl :: map(), soap_action :: String.t()) :: String.t()
   defp get_action_with_namespace(wsdl, soap_action) do
-    wsdl
-    |> Wsdl.get_complex_types
+    wsdl[:complex_types]
     |> Enum.find(fn(x) -> x[:name] == soap_action end)
     |> Map.get(:type)
   end
 
-  @spec get_action_namespace(wsdl :: String.t(), soap_action :: String.t()) :: String.t()
+  @spec get_action_namespace(wsdl :: map(), soap_action :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, soap_action) do
     get_action_with_namespace(wsdl, soap_action)
     |> String.split(":")
@@ -105,7 +103,7 @@ defmodule Soap.Request.Params do
 
   defp add_body_tag_wrapper(body), do: [element(:"#{env_namespace()}:Body", nil, body)]
 
-  @spec add_envelope_tag_wrapper(body :: any(), wsdl :: String.t(), soap_action :: String.t()) :: any()
+  @spec add_envelope_tag_wrapper(body :: any(), wsdl :: map(), soap_action :: String.t()) :: any()
   defp add_envelope_tag_wrapper(body, wsdl, soap_action) do
     envelop_attributes =
       @schema_types
@@ -122,7 +120,7 @@ defmodule Soap.Request.Params do
 
   defp build_action_attribute(wsdl, soap_action) do
     action_attribute_namespace = get_action_namespace(wsdl, soap_action)
-    action_attribute_value = Wsdl.get_namespaces(wsdl)[action_attribute_namespace][:value]
+    action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
