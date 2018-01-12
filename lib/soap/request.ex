@@ -8,7 +8,7 @@ defmodule Soap.Request do
   Executing with parsed wsdl and headers with body map.
   Calling HTTPoison request by Map with method, url, body, headers, options keys.
   """
-  @spec call(wsdl :: map(), soap_action :: String.t(), params :: map()) :: tuple()
+  @spec call(wsdl :: String.t(), soap_action :: String.t(), params :: any()) :: any()
   def call(wsdl, soap_action, headers \\ [], params) do
     url = Params.get_url(wsdl)
     headers = Params.build_headers(soap_action, headers)
