@@ -2,6 +2,7 @@ language: elixir
 elixir:
   - 1.4.0
   - 1.5.3
+otp_release: '19.0'
 notifications:
   recipients:
     - nitrinodev@gmail.com
