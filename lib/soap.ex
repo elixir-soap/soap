@@ -14,5 +14,12 @@ defmodule Soap do
   @spec call(map(), String.t(), map(), any()) :: any()
   def call(wsdl, soap_action, params, headers \\ []) do
     Request.call(wsdl, soap_action, params, headers)
+    |> handle_response
   end
+
+  defp handle_response({:ok, %HTTPoison.Response{status_code: 404}}), do: {:error, "Not found"}
+
+  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
+
+  defp handle_response({:error, %HTTPoison.Error{reason: reason}}), do: {:error, reason}
 end
