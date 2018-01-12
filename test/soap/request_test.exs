@@ -2,8 +2,7 @@ defmodule Soap.RequestTest do
   use ExUnit.Case
   import Mock
   doctest Soap.Request
-  alias Soap.Request
-  alias Soap.Wsdl
+  alias Soap.{Wsdl, Request}
 
   test "#call returns response body" do
     {_, wsdl}   = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Wsdl.parse_from_file

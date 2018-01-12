@@ -1,8 +1,7 @@
 defmodule Soap.Request.ParamsTest do
   use ExUnit.Case
   doctest Soap.Request.Params
-  alias Soap.Request.Params
-  alias Soap.Wsdl
+  alias Soap.{Request.Params, Wsdl}
   @wsdl_path Fixtures.get_file_path("wsdl/SendService.wsdl")
 
   @soap_action "sendMessage"
