@@ -15,4 +15,9 @@ defmodule Soap do
   def call(wsdl, soap_action, params, headers \\ []) do
     Request.call(wsdl, soap_action, params, headers)
   end
+
+  @spec operations(map()) :: nonempty_list(String.t())
+  def operations(wsdl) do
+    ["operation1"]
+  end
 end
