@@ -16,7 +16,6 @@ defmodule Soap.Request.ParamsTest do
 
   test "#build_headers with custom parameters" do
     custom_parameters = [{"SOAPAction", "AnotherAction"}]
-    {_, wsdl}         = Wsdl.parse_from_file(@wsdl_path)
     function_result   = Params.build_headers @soap_action, custom_parameters
 
     assert function_result == custom_parameters
@@ -34,7 +33,7 @@ defmodule Soap.Request.ParamsTest do
   test "#get_url returns correct soap:address" do
     endpoint  = "http://localhost:8080/soap/SendService"
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
-    result    = wsdl |> Wsdl.get_endpoint |> to_string
+    result    = wsdl[:endpoint]
 
     assert result == endpoint
   end
