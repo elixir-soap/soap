@@ -18,6 +18,7 @@ defmodule Soap do
 
   @spec operations(map()) :: nonempty_list(String.t())
   def operations(wsdl) do
-    ["operation1"]
+    wsdl.operations
+    |> Enum.map(&(&1.name))
   end
 end

@@ -34,7 +34,21 @@ defmodule Soap.WsdlTest do
         type: :soap,
         value: "http://schemas.xmlsoap.org/wsdl/"
       }
-    }
+    },
+    operations: [
+      %{
+        name: "SendMessage"
+      },
+      %{
+        name: "SendMessageMultipleRecipients"
+      },
+      %{
+        name: "SendMessage"
+      },
+      %{
+        name: "SendMessageMultipleRecipients"
+      }
+    ]
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
@@ -76,5 +90,16 @@ defmodule Soap.WsdlTest do
     ]
 
     assert Wsdl.get_complex_types(@wsdl) == types
+  end
+
+  test "#get_operations returns list of operations" do
+    operations = [
+      %{name: "SendMessage"},
+      %{name: "SendMessageMultipleRecipients"},
+      %{name: "SendMessage"},
+      %{name: "SendMessageMultipleRecipients"}
+    ]
+
+    assert Wsdl.get_operations(@wsdl) == operations
   end
 end

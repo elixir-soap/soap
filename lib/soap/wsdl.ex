@@ -22,7 +22,8 @@ defmodule Soap.Wsdl do
     parsed_response = %{
       namespaces: get_namespaces(wsdl),
       endpoint: get_endpoint(wsdl),
-      complex_types: get_complex_types(wsdl)
+      complex_types: get_complex_types(wsdl),
+      operations: get_operations(wsdl)
     }
     {:ok, parsed_response}
   end
@@ -59,5 +60,9 @@ defmodule Soap.Wsdl do
 
   def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
+  end
+
+  def get_operations(wsdl) do
+    xpath(wsdl, ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l, name: ~x"./@name"s)
   end
 end
