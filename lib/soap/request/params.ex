@@ -18,9 +18,9 @@ defmodule Soap.Request.Params do
   ## Examples
 
   """
-  @spec build_headers(soap_action :: String.t(), custom_headers :: list()) :: list()
-  def build_headers(soap_action, custom_headers) do
-    extract_headers(soap_action, custom_headers)
+  @spec build_headers(operation :: String.t(), custom_headers :: list()) :: list()
+  def build_headers(operation, custom_headers) do
+    extract_headers(operation, custom_headers)
   end
 
   @doc """

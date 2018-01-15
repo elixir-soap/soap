@@ -77,4 +77,11 @@ defmodule Soap.WsdlTest do
 
     assert Wsdl.get_complex_types(@wsdl) == types
   end
+
+  test "get_soap_action_by_operation_name returns correctly action" do
+    operation = "SendMessage"
+    soap_action = "com.esendex.ems.soapinterface/SendMessage"
+
+    assert Wsdl.get_soap_action_by_operation_name(@wsdl, operation) == soap_action
+  end
 end
