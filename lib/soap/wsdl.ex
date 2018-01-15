@@ -13,7 +13,7 @@ defmodule Soap.Wsdl do
 
   @spec parse_from_url(String.t()) :: {:ok, map()}
   def parse_from_url(path) do
-    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path)
+    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], [follow_redirect: true, max_redirect: 5])
     parse(wsdl)
   end
 
