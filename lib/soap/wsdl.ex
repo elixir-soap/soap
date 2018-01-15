@@ -60,9 +60,13 @@ defmodule Soap.Wsdl do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
-  @spec get_soap_action_by_operation_name(String.t, String.t) :: String.t
-  defp get_soap_action_by_operation_name(wsdl, operation) do
+  def get_operations(wsdl) do
     wsdl
-    |> xpath(~x"//wsdl:definitions/wsdl:binding/wsdl:operation[@name='#{operation}']/soap:operation/@soapAction"s)
+    |> xpath(
+      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
+      name: ~x"./@name"s,
+      soap_action: ~x"./soap:operation/@soapAction"s
+    )
+    |> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
 end
