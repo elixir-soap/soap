@@ -1,6 +1,5 @@
 defmodule SoapTest do
   use ExUnit.Case
-  doctest Soap
   import Mock
   alias Soap.Wsdl
 

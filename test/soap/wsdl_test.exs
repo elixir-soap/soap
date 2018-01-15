@@ -44,7 +44,7 @@ defmodule Soap.WsdlTest do
   end
 
   test "#parse_from_url returns {:ok, wsdl}" do
-    with_mock(HTTPoison, [get!: fn(_) -> %HTTPoison.Response{body: @wsdl} end]) do
+    with_mock(HTTPoison, [get!: fn(_, _, _) -> %HTTPoison.Response{body: @wsdl} end]) do
       assert Wsdl.parse_from_url("any_url") == {:ok, @parsed_wsdl}
     end
   end
