@@ -60,4 +60,11 @@ defmodule Soap.Wsdl do
   def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
+
+  @spec get_soap_action_by_operation_name(String.t, String.t) :: String.t
+  def get_soap_action_by_operation_name(wsdl, operation) do
+    wsdl
+    |> xpath(~x"//wsdl:definitions/wsdl:binding/wsdl:operation[@name='#{operation}']/soap:operation/@soapAction")
+    |> to_string
+  end
 end
