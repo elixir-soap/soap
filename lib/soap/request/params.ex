@@ -124,7 +124,7 @@ defmodule Soap.Request.Params do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
-  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  def soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
   defp env_namespace, do: Application.fetch_env!(:soap, :globals)[:env_namespace] || :env
   defp custom_namespaces, do: Application.fetch_env!(:soap, :globals)[:custom_namespaces] || %{}
 end

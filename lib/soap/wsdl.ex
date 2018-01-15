@@ -62,8 +62,23 @@ defmodule Soap.Wsdl do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
-  @spec get_operations(String.t()) :: list()
   def get_operations(wsdl) do
+    soap_version = Application.fetch_env!(:soap, :globals)[:version]
+    get_operations(wsdl, soap_version)
+  end
+
+  defp get_operations(wsdl, "1.2") do
+    wsdl
+    |> xpath(
+      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
+      name: ~x"./@name"s,
+      soap_action: ~x"./soap12:operation/@soapAction"s
+    )
+    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+    |> process_operations_extractor_result(wsdl)
+  end
+
+  defp get_operations(wsdl, "1.1") do
     wsdl
     |> xpath(
       ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
@@ -72,4 +87,10 @@ defmodule Soap.Wsdl do
     )
     |> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
+
+  defp process_operations_extractor_result(result, wsdl) when result == [] do
+    wsdl |> get_operations("1.1")
+  end
+
+  defp process_operations_extractor_result(result, _wsdl), do: result
 end
