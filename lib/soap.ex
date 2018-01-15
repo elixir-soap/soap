@@ -16,8 +16,8 @@ defmodule Soap do
 
   ## Examples
 
-      iex> Soap.init_model("https://git.io/vNCWd", :url)
-      {:ok, %{..}}
+      iex> {:ok, wsdl} = Soap.init_model("https://git.io/vNCWd", :url)
+      {:ok, %{...}}
   """
   @spec init_model(String.t(), :file | :url) :: {:ok, map()}
   def init_model(path, type \\ :file)
@@ -51,7 +51,6 @@ defmodule Soap do
   ## Examples
 
       iex> {:ok, wsdl} = Soap.init_model("https://git.io/vNCWd", :url)
-      {:ok, %{..}}
       iex> Soap.operations(wsdl)
       ["SendMessage", "SendMessageMultipleRecipients"]
   """
