@@ -9,7 +9,8 @@ defmodule Soap.Request.Params do
     "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance"
   }
   @soap_version_namespaces %{
-    "1" => "http://schemas.xmlsoap.org/soap/envelope/",
+    "1.0" => "http://schemas.xmlsoap.org/soap/envelope/"
+    "1.1" => "http://schemas.xmlsoap.org/soap/envelope/",
     "1.2" => "http://www.w3.org/2003/05/soap-envelope"
   }
 
@@ -124,7 +125,7 @@ defmodule Soap.Request.Params do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
-  def soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
   defp env_namespace, do: Application.fetch_env!(:soap, :globals)[:env_namespace] || :env
   defp custom_namespaces, do: Application.fetch_env!(:soap, :globals)[:custom_namespaces] || %{}
 end
