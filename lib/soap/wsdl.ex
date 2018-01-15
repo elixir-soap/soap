@@ -63,6 +63,6 @@ defmodule Soap.Wsdl do
   end
 
   def get_operations(wsdl) do
-    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType/wsdl:operation"l, name: ~x"./@name"s)
+    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType/wsdl:operation/@name"sl)
   end
 end

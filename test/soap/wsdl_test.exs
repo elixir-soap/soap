@@ -35,14 +35,7 @@ defmodule Soap.WsdlTest do
         value: "http://schemas.xmlsoap.org/wsdl/"
       }
     },
-    operations: [
-      %{
-        name: "SendMessage"
-      },
-      %{
-        name: "SendMessageMultipleRecipients"
-      }
-    ]
+    operations: ["SendMessage", "SendMessageMultipleRecipients"]
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
@@ -87,10 +80,7 @@ defmodule Soap.WsdlTest do
   end
 
   test "#get_operations returns list of operations" do
-    operations = [
-      %{name: "SendMessage"},
-      %{name: "SendMessageMultipleRecipients"}
-    ]
+    operations = ["SendMessage", "SendMessageMultipleRecipients"]
 
     assert Wsdl.get_operations(@wsdl) == operations
   end
