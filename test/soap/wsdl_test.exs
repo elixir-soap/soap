@@ -34,7 +34,8 @@ defmodule Soap.WsdlTest do
         type: :soap,
         value: "http://schemas.xmlsoap.org/wsdl/"
       }
-    }
+    },
+    operations: ["SendMessage", "SendMessageMultipleRecipients"]
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
@@ -83,5 +84,11 @@ defmodule Soap.WsdlTest do
     soap_action = "com.esendex.ems.soapinterface/SendMessage"
 
     assert Wsdl.get_soap_action_by_operation_name(@wsdl, operation) == soap_action
+  end
+  
+  test "#get_operations returns list of operations" do
+    operations = ["SendMessage", "SendMessageMultipleRecipients"]
+
+    assert Wsdl.get_operations(@wsdl) == operations
   end
 end
