@@ -62,6 +62,7 @@ defmodule Soap.Wsdl do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
+  @spec get_operations(String.t()) :: list()
   def get_operations(wsdl) do
     soap_version = Application.fetch_env!(:soap, :globals)[:version]
     get_operations(wsdl, soap_version)
