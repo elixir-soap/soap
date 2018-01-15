@@ -4,14 +4,13 @@ defmodule Fixtures do
   end
 
   def load_xml(file) do
-    xml_path = get_file_path("xml/#{file}")
-    xml_path
+    get_file_path("xml/#{file}")
     |> File.read!
     |> String.trim
   end
 
   def load_wsdl(file) do
-    wsdl_path = get_file_path("wsdl/#{file}")
-    File.read!(wsdl_path)
+    get_file_path("wsdl/#{file}")
+    |> File.read!
   end
 end

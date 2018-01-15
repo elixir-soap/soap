@@ -2,12 +2,10 @@ defmodule Soap.RequestTest do
   use ExUnit.Case
   import Mock
   doctest Soap.Request
-  alias Soap.Request
-  alias Soap.Wsdl
+  alias Soap.{Wsdl, Request}
 
   test "#call returns response body" do
-    wsdl_path   = Fixtures.get_file_path("wsdl/SendService.wsdl")
-    {_, wsdl}   = Wsdl.parse_from_file(wsdl_path)
+    {_, wsdl}   = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Wsdl.parse_from_file
     soap_action = "sendMessage"
     params      = %{inCommonParms: [{"userID", "WSPB"}]}
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: "Anything"}}
