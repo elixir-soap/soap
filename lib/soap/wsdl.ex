@@ -56,10 +56,12 @@ defmodule Soap.Wsdl do
     |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location"s)
   end
 
+  @spec get_complex_types(String.t()) :: list()
   def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
+  @spec get_operations(String.t()) :: list()
   def get_operations(wsdl) do
     wsdl
     |> xpath(
