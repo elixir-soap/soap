@@ -22,7 +22,8 @@ defmodule Soap.Wsdl do
     parsed_response = %{
       namespaces: get_namespaces(wsdl),
       endpoint: get_endpoint(wsdl),
-      complex_types: get_complex_types(wsdl)
+      complex_types: get_complex_types(wsdl),
+      operations: get_operations(wsdl)
     }
     {:ok, parsed_response}
   end
