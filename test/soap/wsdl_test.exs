@@ -41,12 +41,6 @@ defmodule Soap.WsdlTest do
       },
       %{
         name: "SendMessageMultipleRecipients"
-      },
-      %{
-        name: "SendMessage"
-      },
-      %{
-        name: "SendMessageMultipleRecipients"
       }
     ]
   }
@@ -94,8 +88,6 @@ defmodule Soap.WsdlTest do
 
   test "#get_operations returns list of operations" do
     operations = [
-      %{name: "SendMessage"},
-      %{name: "SendMessageMultipleRecipients"},
       %{name: "SendMessage"},
       %{name: "SendMessageMultipleRecipients"}
     ]
