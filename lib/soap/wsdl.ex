@@ -53,8 +53,7 @@ defmodule Soap.Wsdl do
   @spec get_endpoint(String.t()) :: String.t()
   def get_endpoint(wsdl) do
     wsdl
-    |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
-    |> to_string
+    |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location"s)
   end
 
   def get_complex_types(wsdl) do
@@ -62,9 +61,8 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_soap_action_by_operation_name(String.t, String.t) :: String.t
-  def get_soap_action_by_operation_name(wsdl, operation) do
+  defp get_soap_action_by_operation_name(wsdl, operation) do
     wsdl
-    |> xpath(~x"//wsdl:definitions/wsdl:binding/wsdl:operation[@name='#{operation}']/soap:operation/@soapAction")
-    |> to_string
+    |> xpath(~x"//wsdl:definitions/wsdl:binding/wsdl:operation[@name='#{operation}']/soap:operation/@soapAction"s)
   end
 end
