@@ -1,1 +1,0 @@
-<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="com.esendex.ems.soapinterface" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><env:Body><tns:sendMessage><inCommonParms><userID>WSPB</userID></inCommonParms></tns:sendMessage></env:Body></env:Envelope>
