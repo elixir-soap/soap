@@ -24,7 +24,6 @@ defmodule Soap do
   def init_model(path, :file), do: Wsdl.parse_from_file(path)
   def init_model(path, :url), do: Wsdl.parse_from_url(path)
 
-
   @doc """
   Sends a request to the SOAP server based on the passed wsdl_model, action and parameters.
 
@@ -37,7 +36,9 @@ defmodule Soap do
   """
   @spec call(map(), String.t(), map(), any()) :: any()
   def call(wsdl, operation, params, headers \\ []) do
-    Request.call(wsdl, operation, params, headers)
+    wsdl
+    |> validate_operation(operation)
+    |> Request.call(operation, params, headers)
     |> handle_response
   end
 
@@ -60,8 +61,17 @@ defmodule Soap do
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 404}}), do: {:error, "Not found"}
-
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
-
   defp handle_response({:error, %HTTPoison.Error{reason: reason}}), do: {:error, reason}
+
+  defp validate_operation(wsdl, operation) do
+    case valid_operation?(wsdl, operation) do
+      false -> raise OperationError, operation
+      true -> wsdl
+    end
+  end
+
+  defp valid_operation?(wsdl, operation) do
+    Enum.any?(wsdl[:operations], & &1[:name] == operation)
+  end
 end
