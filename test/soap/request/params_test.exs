@@ -11,7 +11,7 @@ defmodule Soap.Request.ParamsTest do
       {"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"},
       {"Content-Type", "text/xml;charset=UTF-8"}
     ]
-    {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
+    {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_headers wsdl, @operation, []
 
     assert function_result == base_headers
@@ -19,25 +19,25 @@ defmodule Soap.Request.ParamsTest do
 
   test "#build_headers with custom parameters" do
     custom_parameters = [{"SOAPAction", "AnotherAction"}]
-    {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
-    function_result   = Params.build_headers wsdl, @operation, custom_parameters
+    {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
+    function_result = Params.build_headers wsdl, @operation, custom_parameters
 
     assert function_result == custom_parameters
   end
 
   test "#build_body converts map to Xml-like string successful" do
-    xml_body   = Fixtures.load_xml("send_service/#{@operation}.xml")
+    xml_body = Fixtures.load_xml("send_service/#{@operation}.xml")
     parameters = %{inCommonParms: [{"userID", "WSPB"}]}
-    {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
+    {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_body wsdl, @operation, parameters
 
     assert function_result == xml_body
   end
 
   test "#get_url returns correct soap:address" do
-    endpoint  = "http://localhost:8080/soap/SendService"
+    endpoint = "http://localhost:8080/soap/SendService"
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
-    result    = wsdl[:endpoint]
+    result = wsdl[:endpoint]
 
     assert result == endpoint
   end
