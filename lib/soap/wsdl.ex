@@ -19,25 +19,35 @@ defmodule Soap.Wsdl do
 
   @spec parse(String.t()) :: {:ok, map()}
   def parse(wsdl) do
+    schema_namespace = get_schema_namespace(wsdl)
     parsed_response = %{
-      namespaces: get_namespaces(wsdl),
+      namespaces: get_namespaces(wsdl, schema_namespace),
       endpoint: get_endpoint(wsdl),
-      complex_types: get_complex_types(wsdl),
+      complex_types: get_complex_types(wsdl, schema_namespace),
       operations: get_operations(wsdl)
     }
     {:ok, parsed_response}
   end
 
-  @spec get_namespaces(String.t()) :: map()
-  def get_namespaces(wsdl) do
+  @spec get_schema_namespace(String.t()) :: String.t()
+  def get_schema_namespace(wsdl) do
+    {_, _, _, schema_namespace, _} =
+      wsdl
+      |> xpath(~x"//wsdl:definitions/namespace::*"l)
+      |> Enum.find(fn({_, _, _, _, x}) -> x == :"http://www.w3.org/2001/XMLSchema" end)
+    schema_namespace
+  end
+
+  @spec get_namespaces(String.t(), String.t()) :: map()
+  def get_namespaces(wsdl, schema_namespace) do
     wsdl
     |> xpath(~x"//wsdl:definitions/namespace::*"l)
-    |> Enum.map(&get_namespace(&1, wsdl))
+    |> Enum.map(&get_namespace(&1, wsdl, schema_namespace))
     |> Enum.into(%{})
   end
 
-  @spec get_namespace(map(), String.t()) :: tuple()
-  defp get_namespace(namespaces_node, wsdl) do
+  @spec get_namespace(map(), String.t(), String.t()) :: tuple()
+  defp get_namespace(namespaces_node, wsdl, schema_namespace) do
     {_, _, _, key, value} = namespaces_node
     string_key = key |> to_string
     value = Atom.to_string(value)
@@ -45,7 +55,7 @@ defmodule Soap.Wsdl do
     cond do
       xpath(wsdl, ~x"//wsdl:definitions[@targetNamespace='#{value}']") ->
         {string_key, %{value: value, type: :wsdl}}
-      xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:import[@namespace='#{value}']") ->
+      xpath(wsdl, ~x"//wsdl:types/#{schema_namespace}:schema/#{schema_namespace}:import[@namespace='#{value}']") ->
         {string_key, %{value: value, type: :xsd}}
       true ->
         {string_key, %{value: value, type: :soap}}
@@ -58,9 +68,9 @@ defmodule Soap.Wsdl do
     |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location"s)
   end
 
-  @spec get_complex_types(String.t()) :: list()
-  def get_complex_types(wsdl) do
-    xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
+  @spec get_complex_types(String.t(), String.t()) :: list()
+  def get_complex_types(wsdl, namespace) do
+    xpath(wsdl, ~x"//wsdl:types/#{namespace}:schema/#{namespace}:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
   @spec get_operations(String.t()) :: list()
