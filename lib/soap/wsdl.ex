@@ -89,7 +89,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec process_operations_extractor_result(list(), String.t) :: list()
-  defp process_operations_extractor_result(result, wsdl) when result == [], do: get_operations(wsdl, "1.1")
+  defp process_operations_extractor_result([], wsdl), do: get_operations(wsdl, "1.1")
   defp process_operations_extractor_result(result, _wsdl), do: result
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
