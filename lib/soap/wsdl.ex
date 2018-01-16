@@ -36,6 +36,7 @@ defmodule Soap.Wsdl do
     |> Enum.into(%{})
   end
 
+  @spec get_namespace(map(), String.t()) :: tuple()
   defp get_namespace(namespaces_node, wsdl) do
     {_, _, _, key, value} = namespaces_node
     string_key = key |> to_string
@@ -54,15 +55,42 @@ defmodule Soap.Wsdl do
   @spec get_endpoint(String.t()) :: String.t()
   def get_endpoint(wsdl) do
     wsdl
-    |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location")
-    |> to_string
+    |> xpath(~x"//wsdl:definitions/wsdl:service/wsdl:port/soap:address/@location"s)
   end
 
+  @spec get_complex_types(String.t()) :: list()
   def get_complex_types(wsdl) do
     xpath(wsdl, ~x"//wsdl:types/xsd:schema/xsd:element"l, name: ~x"./@name"s, type: ~x"./@type"s)
   end
 
-  def get_operations(wsdl) do
-    xpath(wsdl, ~x"//wsdl:definitions/wsdl:portType/wsdl:operation/@name"sl)
+  @spec get_operations(String.t()) :: list()
+  defp get_operations(wsdl), do: get_operations(wsdl, soap_version())
+
+  @spec get_operations(String.t(), String.t()) :: list()
+  defp get_operations(wsdl, "1.2") do
+    wsdl
+    |> xpath(
+      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
+      name: ~x"./@name"s,
+      soap_action: ~x"./soap12:operation/@soapAction"s
+    )
+    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+    |> process_operations_extractor_result(wsdl)
   end
+
+  defp get_operations(wsdl, _soap_version) do
+    wsdl
+    |> xpath(
+      ~x"//wsdl:definitions/wsdl:binding/wsdl:operation"l,
+      name: ~x"./@name"s,
+      soap_action: ~x"./soap:operation/@soapAction"s
+    )
+    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+  end
+
+  @spec process_operations_extractor_result(list(), String.t) :: list()
+  defp process_operations_extractor_result([], wsdl), do: get_operations(wsdl, "1.1")
+  defp process_operations_extractor_result(result, _wsdl), do: result
+
+  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
 end

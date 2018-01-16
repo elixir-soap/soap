@@ -36,8 +36,8 @@ defmodule Soap do
   - `headers`: Custom request headers.
   """
   @spec call(map(), String.t(), map(), any()) :: any()
-  def call(wsdl, soap_action, params, headers \\ []) do
-    Request.call(wsdl, soap_action, params, headers)
+  def call(wsdl, operation, params, headers \\ []) do
+    Request.call(wsdl, operation, params, headers)
     |> handle_response
   end
 

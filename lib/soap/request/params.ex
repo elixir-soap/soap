@@ -9,7 +9,7 @@ defmodule Soap.Request.Params do
     "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance"
   }
   @soap_version_namespaces %{
-    "1" => "http://schemas.xmlsoap.org/soap/envelope/",
+    "1.1" => "http://schemas.xmlsoap.org/soap/envelope/",
     "1.2" => "http://www.w3.org/2003/05/soap-envelope"
   }
 
@@ -18,9 +18,11 @@ defmodule Soap.Request.Params do
   ## Examples
 
   """
-  @spec build_headers(soap_action :: String.t(), custom_headers :: list()) :: list()
-  def build_headers(soap_action, custom_headers) do
-    extract_headers(soap_action, custom_headers)
+  @spec build_headers(map(), String.t, list()) :: list()
+  def build_headers(wsdl, operation, custom_headers) do
+    wsdl
+    |> extract_soap_action_by_operation(operation)
+    |> extract_headers(custom_headers)
   end
 
   @doc """
@@ -28,7 +30,7 @@ defmodule Soap.Request.Params do
   """
   @spec get_url(wsdl :: map()) :: String.t()
   def get_url(wsdl) do
-    wsdl[:endpoint]
+    wsdl.endpoint
   end
 
   @doc """
@@ -36,13 +38,13 @@ defmodule Soap.Request.Params do
   Returns xml-like string.
   """
 
-  @spec build_body(wsdl :: map(), soap_action :: String.t() | atom(), params :: map()) :: String.t()
-  def build_body(wsdl, soap_action, params) do
+  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map()) :: String.t()
+  def build_body(wsdl, operation, params) do
     params
     |> construct_xml_request_body
-    |> add_action_tag_wrapper(wsdl, soap_action)
+    |> add_action_tag_wrapper(wsdl, operation)
     |> add_body_tag_wrapper
-    |> add_envelope_tag_wrapper(wsdl, soap_action)
+    |> add_envelope_tag_wrapper(wsdl, operation)
     |> Enum.map(&Tuple.to_list/1)
     |> List.foldl([], &(&1 ++ &2))
     |> List.to_tuple
@@ -50,11 +52,13 @@ defmodule Soap.Request.Params do
     |> String.replace(["\n", "\t"], "")
   end
 
+  @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
-    [{"SOAPAction", to_string(soap_action)},
+    [{"SOAPAction", soap_action},
      {"Content-Type", "text/xml;charset=UTF-8"}]
   end
 
+  @spec extract_headers(String.t(), list()) :: list()
   defp extract_headers(soap_action, []), do: base_headers(soap_action)
 
   defp extract_headers(_, custom_headers), do: custom_headers
@@ -82,46 +86,63 @@ defmodule Soap.Request.Params do
   @spec insert_tag_parameters(params :: list()) :: list()
   defp insert_tag_parameters(params) when is_list(params), do: params |> List.insert_at(1, nil)
 
-  defp add_action_tag_wrapper(body, wsdl, soap_action) do
-    action_tag = get_action_with_namespace(wsdl, soap_action)
+  @spec add_action_tag_wrapper(list(), map(), String.t()) :: list()
+  defp add_action_tag_wrapper(body, wsdl, operation) do
+    action_tag = get_action_with_namespace(wsdl, operation)
     [element(action_tag, nil, body)]
   end
 
-  @spec get_action_with_namespace(wsdl :: map(), soap_action :: String.t()) :: String.t()
-  defp get_action_with_namespace(wsdl, soap_action) do
+  @spec get_action_with_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
+  defp get_action_with_namespace(wsdl, operation) do
     wsdl[:complex_types]
-    |> Enum.find(fn(x) -> x[:name] == soap_action end)
+    |> Enum.find(fn(x) -> x[:name] == operation end)
+    |> handle_action_extractor_result(wsdl, operation)
+  end
+
+  defp handle_action_extractor_result(nil, wsdl, operation) do
+    wsdl[:complex_types]
+    |> Enum.find(fn(x) -> Macro.camelize(x[:name]) == operation end)
     |> Map.get(:type)
   end
 
-  @spec get_action_namespace(wsdl :: map(), soap_action :: String.t()) :: String.t()
-  defp get_action_namespace(wsdl, soap_action) do
-    get_action_with_namespace(wsdl, soap_action)
+  defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type)
+
+  @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
+  defp get_action_namespace(wsdl, operation) do
+    get_action_with_namespace(wsdl, operation)
     |> String.split(":")
     |> List.first
   end
 
+  @spec add_body_tag_wrapper(list()) :: list()
   defp add_body_tag_wrapper(body), do: [element(:"#{env_namespace()}:Body", nil, body)]
 
-  @spec add_envelope_tag_wrapper(body :: any(), wsdl :: map(), soap_action :: String.t()) :: any()
-  defp add_envelope_tag_wrapper(body, wsdl, soap_action) do
+  @spec add_envelope_tag_wrapper(body :: any(), wsdl :: map(), operation :: String.t()) :: any()
+  defp add_envelope_tag_wrapper(body, wsdl, operation) do
     envelop_attributes =
       @schema_types
       |> Map.merge(build_soap_version_attribute())
-      |> Map.merge(build_action_attribute(wsdl, soap_action))
+      |> Map.merge(build_action_attribute(wsdl, operation))
       |> Map.merge(custom_namespaces())
     [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
   end
 
+  @spec build_soap_version_attribute() :: map()
   defp build_soap_version_attribute do
     soap_version = soap_version() |> to_string
     %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
   end
 
-  defp build_action_attribute(wsdl, soap_action) do
-    action_attribute_namespace = get_action_namespace(wsdl, soap_action)
+  @spec build_action_attribute(map(), String.t) :: map()
+  defp build_action_attribute(wsdl, operation) do
+    action_attribute_namespace = get_action_namespace(wsdl, operation)
     action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
+  end
+
+  @spec extract_soap_action_by_operation(map(), String.t) :: String.t
+  defp extract_soap_action_by_operation(wsdl, operation) do
+    Enum.find(wsdl[:operations], fn(x) -> x[:name] == operation end)[:soap_action]
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
