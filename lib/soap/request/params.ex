@@ -9,7 +9,6 @@ defmodule Soap.Request.Params do
     "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance"
   }
   @soap_version_namespaces %{
-    "1.0" => "http://schemas.xmlsoap.org/soap/envelope/",
     "1.1" => "http://schemas.xmlsoap.org/soap/envelope/",
     "1.2" => "http://www.w3.org/2003/05/soap-envelope"
   }
