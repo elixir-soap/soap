@@ -6,7 +6,7 @@ defmodule Soap.RequestTest do
 
   test "#call returns response body" do
     {_, wsdl}   = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Wsdl.parse_from_file
-    operation   = "sendMessage"
+    operation   = "SendMessage"
     params      = %{inCommonParms: [{"userID", "WSPB"}]}
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: "Anything"}}
 

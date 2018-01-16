@@ -3,7 +3,7 @@ defmodule SoapTest do
   import Mock
   alias Soap.Wsdl
 
-  @operation "sendMessage"
+  @operation "SendMessage"
   @request_params %{inCommonParms: [{"userID", "WSPB"}]}
 
   test "#call was success" do

@@ -4,18 +4,23 @@ defmodule Soap.Request.ParamsTest do
   alias Soap.{Request.Params, Wsdl}
   @wsdl_path Fixtures.get_file_path("wsdl/SendService.wsdl")
 
-  @operation "sendMessage"
+  @operation "SendMessage"
 
   test "#build_headers without custom parameters" do
-    base_headers    = [{"SOAPAction", "sendMessage"}, {"Content-Type", "text/xml;charset=UTF-8"}]
-    function_result = Params.build_headers @operation, []
+    base_headers = [
+      {"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"},
+      {"Content-Type", "text/xml;charset=UTF-8"}
+    ]
+    {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
+    function_result = Params.build_headers wsdl, @operation, []
 
     assert function_result == base_headers
   end
 
   test "#build_headers with custom parameters" do
     custom_parameters = [{"SOAPAction", "AnotherAction"}]
-    function_result   = Params.build_headers @operation, custom_parameters
+    {_, wsdl}  = Wsdl.parse_from_file(@wsdl_path)
+    function_result   = Params.build_headers wsdl, @operation, custom_parameters
 
     assert function_result == custom_parameters
   end

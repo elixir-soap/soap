@@ -36,6 +36,7 @@ defmodule Soap.Wsdl do
     |> Enum.into(%{})
   end
 
+  @spec get_namespace(map(), String.t()) :: tuple()
   defp get_namespace(namespaces_node, wsdl) do
     {_, _, _, key, value} = namespaces_node
     string_key = key |> to_string
@@ -63,10 +64,9 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_operations(String.t()) :: list()
-  def get_operations(wsdl), do: get_operations(wsdl, soap_version)
+  defp get_operations(wsdl), do: get_operations(wsdl, soap_version())
 
-  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
-
+  @spec get_operations(String.t(), String.t()) :: list()
   defp get_operations(wsdl, "1.2") do
     wsdl
     |> xpath(
@@ -88,7 +88,9 @@ defmodule Soap.Wsdl do
     |> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
 
+  @spec process_operations_extractor_result(list(), String.t) :: list()
   defp process_operations_extractor_result(result, wsdl) when result == [], do: get_operations(wsdl, "1.1")
-
   defp process_operations_extractor_result(result, _wsdl), do: result
+
+  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
 end
