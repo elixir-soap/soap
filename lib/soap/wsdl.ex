@@ -24,7 +24,8 @@ defmodule Soap.Wsdl do
       namespaces: get_namespaces(wsdl, schema_namespace),
       endpoint: get_endpoint(wsdl),
       complex_types: get_complex_types(wsdl, schema_namespace),
-      operations: get_operations(wsdl)
+      operations: get_operations(wsdl),
+      schema_attributes: get_schema_attributes(wsdl)
     }
     {:ok, parsed_response}
   end
@@ -96,6 +97,15 @@ defmodule Soap.Wsdl do
       soap_action: ~x"./soap:operation/@soapAction"s
     )
     |> Enum.reject(fn x -> x[:soap_action] == "" end)
+  end
+
+  defp get_schema_attributes(wsdl) do
+    wsdl
+    |> xpath(
+       ~x"//wsdl:types/*[local-name() = 'schema']",
+       target_namespace: ~x"./@targetNamespace"s,
+       element_form_default: ~x"./@elementFormDefault"s
+     )
   end
 
   @spec process_operations_extractor_result(list(), String.t) :: list()
