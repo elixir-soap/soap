@@ -10,7 +10,7 @@ defmodule Soap.RequestTest do
     params = %{inCommonParms: [{"userID", "WSPB"}]}
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: "Anything"}}
 
-    with_mock(HTTPoison, [post!: fn(_, _, _) -> http_poison_result end]) do
+    with_mock(HTTPoison, [post: fn(_, _, _) -> http_poison_result end]) do
       assert(Request.call(wsdl, operation, params) == http_poison_result)
     end
   end
