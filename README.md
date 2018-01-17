@@ -5,7 +5,6 @@ Pure Elixir implementation of SOAP client
 
 ## NOTE: Library is NOT production ready before 1.0 version
 
-<!--
 ## Installation
 
 1) Add `soap` to your deps:
