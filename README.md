@@ -3,22 +3,38 @@
 
 Pure Elixir implementation of SOAP client
 
-## NOTE: Library under development stage
+## NOTE: Library is NOT production ready before 1.0 version
 
-<!--
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `soap` to your list of dependencies in `mix.exs`:
+1) Add `soap` to your deps:
 
 ```elixir
 def deps do
-  [
-    {:soap, "~> 0.1.0"}
-  ]
+  [{:soap, "~> 0.1.0"}]
+end
+```
+2) Add `soap` to the list of application dependencies
+
+```elixir
+def application do
+  [applications: [:logger, :soap]]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/soap](https://hexdocs.pm/soap). -->
+## Usage
+
+```elixir
+wsdl_path = "https://git.io/vNCWd"
+action = "sendMessage"
+params = %{recipient: "1", body: ""}
+
+# Parse wsdl file for execution of action on its basis
+{:ok, wsdl} = Soap.init_model(wsdl_path, :url)
+
+# Call action
+Soap.call(wsdl, action, params)
+
+# Cache the wsdl to do recurrent calls quickly
+{:ok, body} = Detergentex.init_model(wsdl_url)
+```
