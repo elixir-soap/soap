@@ -16,7 +16,7 @@ defmodule Soap.MixProject do
   defp package do
     [
       files: ["lib", "mix.exs", "README.md", "LICENSE*"],
-      maintainers: ["Petr Stepchenko"],
+      maintainers: ["Petr Stepchenko", "Roman Kakorin"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/potok-digital/soap"}
     ]
