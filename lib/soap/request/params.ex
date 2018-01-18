@@ -52,7 +52,7 @@ defmodule Soap.Request.Params do
   @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
     [{"SOAPAction", soap_action},
-     {"Content-Type", "text/xml; charset=utf-8"}]
+     {"Content-Type", "text/xml;charset=utf-8"}]
   end
 
   @spec extract_headers(String.t(), list()) :: list()

@@ -9,7 +9,7 @@ defmodule Soap.Request.ParamsTest do
   test "#build_headers without custom parameters" do
     base_headers = [
       {"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"},
-      {"Content-Type", "text/xml;charset=UTF-8"}
+      {"Content-Type", "text/xml;charset=utf-8"}
     ]
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_headers wsdl, @operation, []
