@@ -33,9 +33,7 @@ defmodule Soap.Wsdl do
   @spec get_schema_namespace(String.t()) :: String.t()
   def get_schema_namespace(wsdl) do
     {_, _, _, schema_namespace, _} =
-      wsdl
-      |> xpath(~x"//wsdl:definitions/namespace::*"l)
-      |> Enum.find(fn({_, _, _, _, x}) -> x == :"http://www.w3.org/2001/XMLSchema" end)
+      wsdl |> xpath(~x"//namespace::*"l) |> Enum.find(fn({_, _, _, _, x}) -> x == :"http://www.w3.org/2001/XMLSchema" end)
     schema_namespace
   end
 
