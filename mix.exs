@@ -9,7 +9,9 @@ defmodule Soap.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      description: description()
+      description: description(),
+      name: "Soap",
+      source_url: "https://github.com/potok-digital/soap"
     ]
   end
 
