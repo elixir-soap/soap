@@ -2,7 +2,7 @@ defmodule Soap.Request.Params do
   @moduledoc """
   Documentation for Soap.Request.Options.
   """
-  import XmlBuilder, only: [generate: 1, element: 3]
+  import XmlBuilder, only: [element: 3, doc: 1]
 
   @schema_types %{
     "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
@@ -45,17 +45,14 @@ defmodule Soap.Request.Params do
     |> add_action_tag_wrapper(wsdl, operation)
     |> add_body_tag_wrapper
     |> add_envelope_tag_wrapper(wsdl, operation)
-    |> Enum.map(&Tuple.to_list/1)
-    |> List.foldl([], &(&1 ++ &2))
-    |> List.to_tuple
-    |> generate
+    |> doc
     |> String.replace(["\n", "\t"], "")
   end
 
   @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
     [{"SOAPAction", soap_action},
-     {"Content-Type", "text/xml;charset=UTF-8"}]
+     {"Content-Type", "text/xml;charset=utf-8"}]
   end
 
   @spec extract_headers(String.t(), list()) :: list()
@@ -88,9 +85,19 @@ defmodule Soap.Request.Params do
 
   @spec add_action_tag_wrapper(list(), map(), String.t()) :: list()
   defp add_action_tag_wrapper(body, wsdl, operation) do
-    action_tag = get_action_with_namespace(wsdl, operation)
-    [element(action_tag, nil, body)]
+    action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes])
+    action_tag =
+      wsdl
+      |> get_action_with_namespace(operation)
+      |> prepare_action_tag(operation)
+    [element(action_tag, action_tag_attributes, body)]
   end
+
+  defp handle_element_form_default(%{target_namespace: ns, element_form_default: "qualified"}), do: %{xmlns: ns}
+  defp handle_element_form_default(_schema_attributes), do: %{}
+
+  defp prepare_action_tag("", operation), do: operation
+  defp prepare_action_tag(action_tag, _operation), do: action_tag
 
   @spec get_action_with_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_with_namespace(wsdl, operation) do
@@ -104,7 +111,6 @@ defmodule Soap.Request.Params do
     |> Enum.find(fn(x) -> Macro.camelize(x[:name]) == operation end)
     |> Map.get(:type)
   end
-
   defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type)
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
@@ -137,6 +143,11 @@ defmodule Soap.Request.Params do
   defp build_action_attribute(wsdl, operation) do
     action_attribute_namespace = get_action_namespace(wsdl, operation)
     action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
+    prepare_action_attribute(action_attribute_namespace, action_attribute_value)
+  end
+
+  defp prepare_action_attribute(_action_attribute_namespace, nil), do: %{}
+  defp prepare_action_attribute(action_attribute_namespace, action_attribute_value) do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 

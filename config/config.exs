@@ -29,4 +29,4 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 config :soap, :globals,
-  version: "1.2"
+  version: "1.1"
