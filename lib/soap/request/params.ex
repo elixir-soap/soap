@@ -143,11 +143,11 @@ defmodule Soap.Request.Params do
   defp build_action_attribute(wsdl, operation) do
     action_attribute_namespace = get_action_namespace(wsdl, operation)
     action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
-    prepare_attribute(action_attribute_namespace, action_attribute_value)
+    prepare_action_attribute(action_attribute_namespace, action_attribute_value)
   end
 
-  defp prepare_attribute(_action_attribute_namespace, nil), do: %{}
-  defp prepare_attribute(action_attribute_namespace, action_attribute_value) do
+  defp prepare_action_attribute(_action_attribute_namespace, nil), do: %{}
+  defp prepare_action_attribute(action_attribute_namespace, action_attribute_value) do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
