@@ -94,8 +94,7 @@ defmodule Soap.Request.Params do
   end
 
   defp handle_element_form_default(%{target_namespace: ns, element_form_default: "qualified"}), do: %{xmlns: ns}
-  defp handle_element_form_default(%{}), do: %{}
-  defp handle_element_form_default(nil), do: %{}
+  defp handle_element_form_default(_schema_attributes), do: %{}
 
   defp prepare_action_tag("", operation), do: operation
   defp prepare_action_tag(action_tag, _operation), do: action_tag
