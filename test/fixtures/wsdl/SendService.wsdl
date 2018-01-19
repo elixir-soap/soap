@@ -15,6 +15,8 @@
         <xsd:complexType name="sendMessageMultipleRecipients">
             <xsd:sequence>
                 <xsd:element minOccurs="0" type="tns:recipients" name="recipients"/>
+                <xsd:element minOccurs="0" type="tns:dates" name="dates"/>
+                <xsd:element minOccurs="0" type="tns:dateTimes" name="dateTimes"/>
                 <xsd:element minOccurs="0" type="xsd:string" name="body"/>
                 <xsd:element type="xsd:string" name="type"/>
             </xsd:sequence>
@@ -22,6 +24,16 @@
         <xsd:complexType name="recipients">
             <xsd:sequence>
                 <xsd:element maxOccurs="unbounded" minOccurs="0" type="xsd:string" name="recipient"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="dates">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" type="xsd:date" name="date"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="dateTimes">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" type="xsd:dateTime" name="dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
 
@@ -41,6 +53,8 @@
                 <xsd:element minOccurs="0" type="xsd:string" name="recipient"/>
                 <xsd:element minOccurs="0" type="xsd:string" name="body"/>
                 <xsd:element type="xsd:string" name="type"/>
+                <xsd:element type="xsd:date" name="date"/>
+                <xsd:element type="xsd:dateTime" name="dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
 
