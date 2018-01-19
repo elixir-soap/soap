@@ -17,6 +17,11 @@ defmodule Soap.Response do
   defp parse_elements(elements) when is_list(elements) do
     elements
     |> Enum.map(fn x -> parse_record(x) end)
+    |> handle_elements_list
   end
   defp parse_elements(elements) when is_tuple(elements), do: parse_record(elements)
+
+  defp handle_elements_list(elements) do
+    if Enum.count(elements) > 1, do: elements, else: List.first(elements)
+  end
 end
