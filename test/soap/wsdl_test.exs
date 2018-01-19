@@ -47,26 +47,36 @@ defmodule Soap.WsdlTest do
     },
     validation_types: %{
       "recipients" => %{
-        'recipient' => %{maxOccurs: "unbounded", minOccurs: "0", type: 'xsd:string'}
+        "recipient" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:string"}
       },
       "results" => %{
-        'result' => %{maxOccurs: "unbounded", minOccurs: "0", type: 'xsd:string'}
+        "result" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:string"}
       },
-      "sendMessage" => %{
-        'body' => %{minOccurs: "0", type: 'xsd:string'},
-        'recipient' => %{minOccurs: "0", type: 'xsd:string'},
-        'type' => %{type: 'xsd:string'}
+      "sendmessage" => %{
+        "body" => %{minOccurs: "0", type: "xsd:string"},
+        "recipient" => %{minOccurs: "0", type: "xsd:string"},
+        "type" => %{type: "xsd:string"},
+        "date" => %{type: "xsd:date"},
+        "dateTime" => %{type: "xsd:dateTime"}
       },
-      "sendMessageMultipleRecipients" => %{
-        'body' => %{minOccurs: "0", type: 'xsd:string'},
-        'recipients' => %{minOccurs: "0", type: 'tns:recipients'},
-        'type' => %{type: 'xsd:string'}
+      "sendmessagemultiplerecipients" => %{
+        "body" => %{minOccurs: "0", type: "xsd:string"},
+        "recipients" => %{minOccurs: "0", type: "tns:recipients"},
+        "type" => %{type: "xsd:string"},
+        "dateTimes" => %{minOccurs: "0", type: "tns:dateTimes"},
+        "dates" => %{minOccurs: "0", type: "tns:dates"}
       },
-      "sendMessageMultipleRecipientsResponse" => %{
-        'results' => %{minOccurs: "0", type: 'tns:results'}
+      "sendmessagemultiplerecipientsresponse" => %{
+        "results" => %{minOccurs: "0", type: "tns:results"}
       },
-      "sendMessageResponse" => %{
-        'sendMessageResult' => %{minOccurs: "0", type: 'xsd:string'}
+      "sendmessageresponse" => %{
+        "sendMessageResult" => %{minOccurs: "0", type: "xsd:string"}
+      },
+      "dates" => %{
+        "date" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:date"}
+      },
+      "datetimes" => %{
+        "dateTime" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:dateTime"}
       }
     }
   }
