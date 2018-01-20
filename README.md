@@ -34,7 +34,3 @@ params = %{recipient: "1", body: ""}
 
 # Call action
 Soap.call(wsdl, action, params)
-
-# Cache the wsdl to do recurrent calls quickly
-{:ok, body} = Detergentex.init_model(wsdl_url)
-```
