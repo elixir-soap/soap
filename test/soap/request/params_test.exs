@@ -1,4 +1,6 @@
 defmodule Soap.Request.ParamsTest do
+  @moduledoc false
+
   use ExUnit.Case
   doctest Soap.Request.Params
   alias Soap.{Request.Params, Wsdl}
@@ -27,7 +29,7 @@ defmodule Soap.Request.ParamsTest do
   end
 
   test "#build_body converts map to Xml-like string successful" do
-    xml_body = Fixtures.load_xml("send_service/#{@operation}Request.xml")
+    xml_body = Fixtures.load_xml("send_service/SendServiceRequest.xml")
     parameters = %{inCommonParms: [{"userID", "WSPB"}]}
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_body(wsdl, @operation, parameters)

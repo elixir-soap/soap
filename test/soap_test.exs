@@ -1,4 +1,6 @@
 defmodule SoapTest do
+  @moduledoc false
+
   use ExUnit.Case
   import Mock
   alias Soap.{Wsdl, Response}

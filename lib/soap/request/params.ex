@@ -56,7 +56,6 @@ defmodule Soap.Request.Params do
 
   @spec extract_headers(String.t(), list()) :: list()
   defp extract_headers(soap_action, []), do: base_headers(soap_action)
-
   defp extract_headers(_, custom_headers), do: custom_headers
 
   @spec construct_xml_request_body(params :: map() | list()) :: list()
@@ -73,10 +72,8 @@ defmodule Soap.Request.Params do
     |> List.to_tuple()
   end
 
-  @spec construct_xml_request_body(params :: atom() | number()) :: String.t()
+  @spec construct_xml_request_body(params :: String.t() | atom() | number()) :: String.t()
   defp construct_xml_request_body(params) when is_atom(params) or is_number(params), do: params |> to_string
-
-  @spec construct_xml_request_body(params :: String.t()) :: String.t()
   defp construct_xml_request_body(params) when is_binary(params), do: params
 
   @spec insert_tag_parameters(params :: list()) :: list()

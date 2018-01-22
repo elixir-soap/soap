@@ -1,4 +1,6 @@
 defmodule Soap.WsdlTest do
+  @moduledoc false
+
   use ExUnit.Case
   doctest Soap.Wsdl
   alias Soap.Wsdl
