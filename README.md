@@ -11,7 +11,7 @@ Pure Elixir implementation of SOAP client
 
 ```elixir
 def deps do
-  [{:soap, "~> 0.1.0"}]
+  [{:soap, "~> 0.1.1"}]
 end
 ```
 2) Add `soap` to the list of application dependencies
