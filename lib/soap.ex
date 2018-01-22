@@ -5,6 +5,7 @@ defmodule Soap do
 
   alias Soap.Wsdl
   alias Soap.Request
+  alias Soap.Response
 
   @doc """
   Initialization of a WSDL model. Response a map of parsed data from file.
@@ -60,9 +61,15 @@ defmodule Soap do
     wsdl.operations
   end
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: 404}}), do: {:error, "Not found"}
-  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
-  defp handle_response({:error, %HTTPoison.Error{reason: reason}}), do: {:error, reason}
+  defp handle_response(
+         {:ok, %HTTPoison.Response{body: body, headers: headers, request_url: request_url, status_code: status_code}}
+       ) do
+    {:ok, %Response{body: body, headers: headers, request_url: request_url, status_code: status_code}}
+  end
+
+  defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
+    {:error, reason}
+  end
 
   defp validate_operation(wsdl, operation) do
     case valid_operation?(wsdl, operation) do
@@ -72,6 +79,6 @@ defmodule Soap do
   end
 
   defp valid_operation?(wsdl, operation) do
-    Enum.any?(wsdl[:operations], & &1[:name] == operation)
+    Enum.any?(wsdl[:operations], &(&1[:name] == operation))
   end
 end

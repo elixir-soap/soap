@@ -3,6 +3,15 @@ defmodule Soap.Response do
   Documentation for Soap.Request.
   """
   import SweetXml
+  
+  defstruct body: nil, headers: [], request_url: nil, status_code: nil
+
+  @type t :: %__MODULE__{
+          body: any(),
+          headers: list(tuple()),
+          request_url: String.t(),
+          status_code: pos_integer()
+        }
 
   @doc """
   Executing with xml response body and list with tag names.
