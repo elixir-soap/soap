@@ -18,7 +18,7 @@ defmodule Soap.Request.Params do
   ## Examples
 
   """
-  @spec build_headers(map(), String.t, list()) :: list()
+  @spec build_headers(map(), String.t(), list()) :: list()
   def build_headers(wsdl, operation, custom_headers) do
     wsdl
     |> extract_soap_action_by_operation(operation)
@@ -51,8 +51,7 @@ defmodule Soap.Request.Params do
 
   @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
-    [{"SOAPAction", soap_action},
-     {"Content-Type", "text/xml;charset=utf-8"}]
+    [{"SOAPAction", soap_action}, {"Content-Type", "text/xml;charset=utf-8"}]
   end
 
   @spec extract_headers(String.t(), list()) :: list()
@@ -68,10 +67,10 @@ defmodule Soap.Request.Params do
   @spec construct_xml_request_body(params :: tuple()) :: tuple()
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
-    |> Tuple.to_list
+    |> Tuple.to_list()
     |> Enum.map(&construct_xml_request_body/1)
     |> insert_tag_parameters
-    |> List.to_tuple
+    |> List.to_tuple()
   end
 
   @spec construct_xml_request_body(params :: atom() | number()) :: String.t()
@@ -86,10 +85,12 @@ defmodule Soap.Request.Params do
   @spec add_action_tag_wrapper(list(), map(), String.t()) :: list()
   defp add_action_tag_wrapper(body, wsdl, operation) do
     action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes])
+
     action_tag =
       wsdl
       |> get_action_with_namespace(operation)
       |> prepare_action_tag(operation)
+
     [element(action_tag, action_tag_attributes, body)]
   end
 
@@ -102,22 +103,23 @@ defmodule Soap.Request.Params do
   @spec get_action_with_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_with_namespace(wsdl, operation) do
     wsdl[:complex_types]
-    |> Enum.find(fn(x) -> x[:name] == operation end)
+    |> Enum.find(fn x -> x[:name] == operation end)
     |> handle_action_extractor_result(wsdl, operation)
   end
 
   defp handle_action_extractor_result(nil, wsdl, operation) do
     wsdl[:complex_types]
-    |> Enum.find(fn(x) -> Macro.camelize(x[:name]) == operation end)
+    |> Enum.find(fn x -> Macro.camelize(x[:name]) == operation end)
     |> Map.get(:type)
   end
+
   defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type)
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, operation) do
     get_action_with_namespace(wsdl, operation)
     |> String.split(":")
-    |> List.first
+    |> List.first()
   end
 
   @spec add_body_tag_wrapper(list()) :: list()
@@ -130,6 +132,7 @@ defmodule Soap.Request.Params do
       |> Map.merge(build_soap_version_attribute())
       |> Map.merge(build_action_attribute(wsdl, operation))
       |> Map.merge(custom_namespaces())
+
     [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
   end
 
@@ -139,7 +142,7 @@ defmodule Soap.Request.Params do
     %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
   end
 
-  @spec build_action_attribute(map(), String.t) :: map()
+  @spec build_action_attribute(map(), String.t()) :: map()
   defp build_action_attribute(wsdl, operation) do
     action_attribute_namespace = get_action_namespace(wsdl, operation)
     action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
@@ -147,13 +150,14 @@ defmodule Soap.Request.Params do
   end
 
   defp prepare_action_attribute(_action_attribute_namespace, nil), do: %{}
+
   defp prepare_action_attribute(action_attribute_namespace, action_attribute_value) do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
 
-  @spec extract_soap_action_by_operation(map(), String.t) :: String.t
+  @spec extract_soap_action_by_operation(map(), String.t()) :: String.t()
   defp extract_soap_action_by_operation(wsdl, operation) do
-    Enum.find(wsdl[:operations], fn(x) -> x[:name] == operation end)[:soap_action]
+    Enum.find(wsdl[:operations], fn x -> x[:name] == operation end)[:soap_action]
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]

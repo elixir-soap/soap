@@ -5,12 +5,12 @@ defmodule Fixtures do
 
   def load_xml(file) do
     get_file_path("xml/#{file}")
-    |> File.read!
-    |> String.trim
+    |> File.read!()
+    |> String.trim()
   end
 
   def load_wsdl(file) do
     get_file_path("wsdl/#{file}")
-    |> File.read!
+    |> File.read!()
   end
 end
