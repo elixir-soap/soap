@@ -37,11 +37,14 @@ defmodule Soap.WsdlTest do
     },
     operations: [
       %{name: "SendMessage", soap_action: "com.esendex.ems.soapinterface/SendMessage"},
-      %{name: "SendMessageMultipleRecipients",
-        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients"}
+      %{
+        name: "SendMessageMultipleRecipients",
+        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients"
+      }
     ],
     schema_attributes: %{
-      element_form_default: "qualified", target_namespace: "com.esendex.ems.soapinterface"
+      element_form_default: "qualified",
+      target_namespace: "com.esendex.ems.soapinterface"
     }
   }
 
@@ -51,7 +54,7 @@ defmodule Soap.WsdlTest do
   end
 
   test "#parse_from_url returns {:ok, wsdl}" do
-    with_mock(HTTPoison, [get!: fn(_, _, _) -> %HTTPoison.Response{body: @wsdl} end]) do
+    with_mock HTTPoison, get!: fn _, _, _ -> %HTTPoison.Response{body: @wsdl} end do
       assert Wsdl.parse_from_url("any_url") == {:ok, @parsed_wsdl}
     end
   end
@@ -62,6 +65,7 @@ defmodule Soap.WsdlTest do
 
   test "#get_namespaces returns correctly namespaces list" do
     schema_namespace = Wsdl.get_schema_namespace(@wsdl)
+
     namespaces_list = %{
       "soap" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap/"},
       "soap12" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap12/"},
@@ -78,6 +82,7 @@ defmodule Soap.WsdlTest do
 
   test "#get_complex_types returns list of types" do
     schema_namespace = Wsdl.get_schema_namespace(@wsdl)
+
     types = [
       %{name: "sendMessageMultipleRecipientsResponse", type: "tns:sendMessageMultipleRecipientsResponse"},
       %{name: "sendMessageMultipleRecipients", type: "tns:sendMessageMultipleRecipients"},

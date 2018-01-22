@@ -11,8 +11,9 @@ defmodule Soap.Request.ParamsTest do
       {"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"},
       {"Content-Type", "text/xml;charset=utf-8"}
     ]
+
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
-    function_result = Params.build_headers wsdl, @operation, []
+    function_result = Params.build_headers(wsdl, @operation, [])
 
     assert function_result == base_headers
   end
@@ -20,7 +21,7 @@ defmodule Soap.Request.ParamsTest do
   test "#build_headers with custom parameters" do
     custom_parameters = [{"SOAPAction", "AnotherAction"}]
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
-    function_result = Params.build_headers wsdl, @operation, custom_parameters
+    function_result = Params.build_headers(wsdl, @operation, custom_parameters)
 
     assert function_result == custom_parameters
   end
@@ -29,7 +30,7 @@ defmodule Soap.Request.ParamsTest do
     xml_body = Fixtures.load_xml("send_service/#{@operation}.xml")
     parameters = %{inCommonParms: [{"userID", "WSPB"}]}
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
-    function_result = Params.build_body wsdl, @operation, parameters
+    function_result = Params.build_body(wsdl, @operation, parameters)
 
     assert function_result == xml_body
   end

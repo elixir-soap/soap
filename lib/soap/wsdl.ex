@@ -13,13 +13,14 @@ defmodule Soap.Wsdl do
 
   @spec parse_from_url(String.t()) :: {:ok, map()}
   def parse_from_url(path) do
-    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], [follow_redirect: true, max_redirect: 5])
+    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], follow_redirect: true, max_redirect: 5)
     parse(wsdl)
   end
 
   @spec parse(String.t()) :: {:ok, map()}
   def parse(wsdl) do
     schema_namespace = get_schema_namespace(wsdl)
+
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace),
       endpoint: get_endpoint(wsdl),
@@ -27,6 +28,7 @@ defmodule Soap.Wsdl do
       operations: get_operations(wsdl),
       schema_attributes: get_schema_attributes(wsdl)
     }
+
     {:ok, parsed_response}
   end
 
@@ -35,7 +37,8 @@ defmodule Soap.Wsdl do
     {_, _, _, schema_namespace, _} =
       wsdl
       |> xpath(~x"//namespace::*"l)
-      |> Enum.find(fn({_, _, _, _, x}) -> x == :"http://www.w3.org/2001/XMLSchema" end)
+      |> Enum.find(fn {_, _, _, _, x} -> x == :"http://www.w3.org/2001/XMLSchema" end)
+
     schema_namespace
   end
 
@@ -56,8 +59,10 @@ defmodule Soap.Wsdl do
     cond do
       xpath(wsdl, ~x"//wsdl:definitions[@targetNamespace='#{value}']") ->
         {string_key, %{value: value, type: :wsdl}}
+
       xpath(wsdl, ~x"//wsdl:types/#{schema_namespace}:schema/#{schema_namespace}:import[@namespace='#{value}']") ->
         {string_key, %{value: value, type: :xsd}}
+
       true ->
         {string_key, %{value: value, type: :soap}}
     end
@@ -102,13 +107,13 @@ defmodule Soap.Wsdl do
   defp get_schema_attributes(wsdl) do
     wsdl
     |> xpath(
-       ~x"//wsdl:types/*[local-name() = 'schema']",
-       target_namespace: ~x"./@targetNamespace"s,
-       element_form_default: ~x"./@elementFormDefault"s
-     )
+      ~x"//wsdl:types/*[local-name() = 'schema']",
+      target_namespace: ~x"./@targetNamespace"s,
+      element_form_default: ~x"./@elementFormDefault"s
+    )
   end
 
-  @spec process_operations_extractor_result(list(), String.t) :: list()
+  @spec process_operations_extractor_result(list(), String.t()) :: list()
   defp process_operations_extractor_result([], wsdl), do: get_operations(wsdl, "1.1")
   defp process_operations_extractor_result(result, _wsdl), do: result
 
