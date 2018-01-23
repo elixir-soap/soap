@@ -14,6 +14,7 @@ defmodule Soap.Response do
           status_code: pos_integer()
         }
 
+  @spec parse_body(String.t()) :: map()
   def parse_body(""), do: %{}
   def parse_body(body), do: Parser.parse(body)
 end
