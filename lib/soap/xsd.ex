@@ -4,12 +4,21 @@ defmodule Soap.Xsd do
   # TODO: Implement in version 0.2
   """
 
+  alias Soap.Type
+
+  @spec parse_from_file(String.t()) :: {:ok, map()} | {:error, atom()}
   def parse_from_file(path) do
-    {:ok, wsdl} = File.read(path)
-    parse(wsdl)
+    case File.read(path) do
+      {:ok, xsd} -> parse(xsd)
+      error_response -> error_response
+    end
   end
 
-  def parse(wsdl) do
-    wsdl
+  @spec parse(String.t()) :: {:ok, map()}
+  def parse(xsd) do
+    parsed_response = %{
+      complex_types: Type.get_complex_types(xsd, "//xsd:schema/xsd:complexType")
+    }
+    {:ok, parsed_response}
   end
 end

@@ -93,7 +93,7 @@ defmodule Soap.WsdlTest do
   end
 
   test "#parse returns {:ok, wsdl}" do
-    assert Wsdl.parse(@wsdl) == {:ok, @parsed_wsdl}
+    assert Wsdl.parse(@wsdl, "SendService.wsdl") == {:ok, @parsed_wsdl}
   end
 
   test "#get_namespaces returns correctly namespaces list" do
@@ -125,6 +125,6 @@ defmodule Soap.WsdlTest do
   end
 
   test "#get_validation_types returns validation struct" do
-    assert Wsdl.get_validation_types(@wsdl) == @parsed_wsdl.validation_types
+    assert Wsdl.get_validation_types(@wsdl, "SendService.wsdl") == @parsed_wsdl.validation_types
   end
 end
