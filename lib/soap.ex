@@ -3,10 +3,7 @@ defmodule Soap do
   Provides a functions for send SOAP requests.
   """
 
-  alias Soap.Wsdl
-  alias Soap.Request
-  alias Soap.Response
-  alias Soap.Response.Parser
+  alias Soap.{Wsdl, Response, Request}
 
   @doc """
   Initialization of a WSDL model. Response a map of parsed data from file.
@@ -65,8 +62,7 @@ defmodule Soap do
   defp handle_response(
          {:ok, %HTTPoison.Response{body: body, headers: headers, request_url: request_url, status_code: status_code}}
        ) do
-    parsed_body = Parser.parse(body)
-    {:ok, %Response{body: parsed_body, headers: headers, request_url: request_url, status_code: status_code}}
+    {:ok, %Response{body: body, headers: headers, request_url: request_url, status_code: status_code}}
   end
 
   defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do

@@ -9,10 +9,6 @@ defmodule Soap.Response.ParserTest do
     assert Parser.parse(xml_body) == correctly_parsed_response
   end
 
-  test "when response is empty" do
-    assert Parser.parse("") == %{}
-  end
-
   test "when response not include response-tag" do
     fault_xml = Fixtures.load_xml("send_service/SendMessageFault.xml")
     assert Parser.parse(fault_xml) == %{}

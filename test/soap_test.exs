@@ -12,7 +12,7 @@ defmodule SoapTest do
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: response_xml, headers: [], request_url: nil}}
 
     with_mock HTTPoison, post: fn _, _, _ -> http_poison_result end do
-      soap_response = %Response{status_code: 200, body: %{message: "Hello!"}, headers: [], request_url: nil}
+      soap_response = %Response{status_code: 200, body: response_xml, headers: [], request_url: nil}
       assert(Soap.call(wsdl, @operation, @request_params) == {:ok, soap_response})
     end
   end
@@ -23,7 +23,7 @@ defmodule SoapTest do
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 500, body: fault_xml, request_url: nil, headers: []}}
 
     with_mock HTTPoison, post: fn _, _, _ -> http_poison_result end do
-      soap_response = %Response{status_code: 500, body: %{}, headers: [], request_url: nil}
+      soap_response = %Response{status_code: 500, body: fault_xml, headers: [], request_url: nil}
       assert(Soap.call(wsdl, @operation, @request_params) == {:ok, soap_response})
     end
   end

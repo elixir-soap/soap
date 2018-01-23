@@ -1,13 +1,16 @@
 defmodule Soap.Response.Parser do
   @moduledoc """
-  Executing with xml response body and list with tag names.
-  If a list is empty then parse/2 returns full parsed response structure into map.
+  Provides a functions for parse an xml-like response body.
   """
 
   import SweetXml, only: [xpath: 2, sigil_x: 2]
 
   @spec parse(String.t()):: map()
 
+  @doc """
+  Executing with xml response body.
+  If a list is empty then parse/1 returns full parsed response structure into map.
+  """
   def parse(xml_response) do
     xml_response
     |> xpath(~x"//response/*"l)
@@ -27,15 +30,15 @@ defmodule Soap.Response.Parser do
   defp parse_elements(elements) when is_tuple(elements), do: parse_record(elements)
 
   defp parse_elements(elements) when is_list(elements) do
-    parsed_elements = Enum.map(elements, &parse_record/1)
-    list_with_maps = Enum.all?(elements, &is_map/1)
-
-    handle_elements_list(parsed_elements, list_with_maps)
+    elements
+    |> Enum.map(&parse_record/1)
+    |> parse_element_values
   end
 
-  @spec handle_elements_list(list(), boolean()) :: map()
-  defp handle_elements_list(elements, true), do: Enum.reduce(elements, &Map.merge/2)
-  defp handle_elements_list(elements, false), do: extract_value_from_list(elements)
+  @spec parse_element_values(list()) :: any()
+  defp parse_element_values(elements) do
+    if Enum.all?(elements, &is_map/1), do: Enum.reduce(elements, &Map.merge/2), else: extract_value_from_list(elements)
+  end
 
   @spec extract_value_from_list(list()) :: any()
   defp extract_value_from_list(elements) do
