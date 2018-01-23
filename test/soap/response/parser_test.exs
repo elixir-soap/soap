@@ -1,6 +1,4 @@
 defmodule Soap.Response.ParserTest do
-  @moduledoc false
-
   use ExUnit.Case
   alias Soap.Response.Parser
 

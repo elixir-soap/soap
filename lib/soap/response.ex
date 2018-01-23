@@ -3,6 +3,8 @@ defmodule Soap.Response do
   Documentation for Soap.Response.
   """
 
+  alias Soap.Response.Parser
+
   defstruct body: nil, headers: [], request_url: nil, status_code: nil
 
   @type t :: %__MODULE__{
@@ -11,4 +13,7 @@ defmodule Soap.Response do
           request_url: String.t(),
           status_code: pos_integer()
         }
+
+  def parse(""), do: %{}
+  def parse(body), do: Parser.parse(body)
 end

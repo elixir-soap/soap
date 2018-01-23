@@ -7,7 +7,6 @@ defmodule Soap.Response.Parser do
   import SweetXml, only: [xpath: 2, sigil_x: 2]
 
   @spec parse(String.t()):: map()
-  def parse(""), do: %{}
 
   def parse(xml_response) do
     xml_response

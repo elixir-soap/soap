@@ -1,6 +1,4 @@
 defmodule Soap.Request.ParamsTest do
-  @moduledoc false
-
   use ExUnit.Case
   doctest Soap.Request.Params
   alias Soap.{Request.Params, Wsdl}

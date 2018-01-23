@@ -1,6 +1,4 @@
 defmodule Soap.RequestTest do
-  @moduledoc false
-
   use ExUnit.Case
   import Mock
   doctest Soap.Request
