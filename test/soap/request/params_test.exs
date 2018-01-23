@@ -56,7 +56,6 @@ defmodule Soap.Request.ParamsTest do
   end
 
   test "#build_body returns wrong date format errors" do
-    xml_body = Fixtures.load_xml("send_service/#{@operation}.xml")
     parameters = %{"date" => "09:00:00"}
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
     function_result = Params.build_body wsdl, @operation, parameters
