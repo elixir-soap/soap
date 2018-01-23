@@ -36,4 +36,4 @@ params = %{recipient: "1", body: ""}
 %Soap.Response{body: body, headers: headers, request_url: url, status_code: code} = Soap.call(wsdl, action, params)
 
 # Parse body
-%Soap.Response.parse(body)
+%Soap.Response.parse_body(body)
