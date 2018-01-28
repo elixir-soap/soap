@@ -42,6 +42,6 @@ defmodule Soap.Response.Parser do
 
   @spec extract_value_from_list(list()) :: any()
   defp extract_value_from_list(elements) do
-    if Enum.count(elements) > 1, do: elements, else: List.first(elements)
+    if Enum.count(elements) == 1, do: List.first(elements), else: elements
   end
 end
