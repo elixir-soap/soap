@@ -11,4 +11,13 @@ defmodule Soap.Response do
           request_url: String.t(),
           status_code: pos_integer()
         }
+
+  alias Soap.Response.Parser
+
+  @doc """
+  Executing with xml response body as string.
+  If body is an empty then parse/1 returns a full parsed response structure as map.
+  """
+  @spec parse_body(String.t()) :: map()
+  def parse_body(body), do: Parser.parse(body)
 end
