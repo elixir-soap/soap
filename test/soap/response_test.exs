@@ -8,7 +8,7 @@ defmodule Soap.ResponseTest do
     xml_body = Fixtures.load_xml("send_service/SendMessageResponse.xml")
     correctly_parsed_response = %{message: "Hello!"}
 
-    assert Response.parse(xml_body, :success) == correctly_parsed_response
+    assert Response.parse(xml_body, 200) == correctly_parsed_response
   end
 
   test "#parse response, when response contains fault" do
