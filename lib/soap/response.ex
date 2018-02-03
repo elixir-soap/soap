@@ -19,5 +19,6 @@ defmodule Soap.Response do
   parse/1 returns a full parsed response structure as map.
   """
   @spec parse(String.t(), integer()) :: map()
-  def parse(body, status_code), do: Parser.parse(body, status_code)
+  def parse(body, status_code) when status_code >= 400, do: Parser.parse(body, :fault)
+  def parse(body, _status_code), do: Parser.parse(body, :successful)
 end

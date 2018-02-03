@@ -6,11 +6,6 @@ defmodule Soap.Response.ParserTest do
     xml_body = Fixtures.load_xml("send_service/SendMessageResponse.xml")
     correctly_parsed_response = %{message: "Hello!"}
 
-    assert Parser.parse(xml_body) == correctly_parsed_response
-  end
-
-  test "when response not include response-tag" do
-    fault_xml = Fixtures.load_xml("send_service/SendMessageFault.xml")
-    assert Parser.parse(fault_xml) == %{}
+    assert Parser.parse(xml_body, :success) == correctly_parsed_response
   end
 end

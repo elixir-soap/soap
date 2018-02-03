@@ -14,7 +14,7 @@ defmodule Soap.Response.Parser do
   If a list is empty then parse/1 returns full parsed response structure into map.
   """
   @spec parse(String.t(), integer()) :: map()
-  def parse(xml_response, status_code) when status_code >= 400 do
+  def parse(xml_response, :fault) do
     fault_tag = get_fault_tag(xml_response)
 
     xml_response
@@ -22,7 +22,7 @@ defmodule Soap.Response.Parser do
     |> parse_elements
   end
 
-  def parse(xml_response, _status_code) do
+  def parse(xml_response, _response_type) do
     xml_response
     |> xpath(~x"//response/*"l)
     |> parse_elements
