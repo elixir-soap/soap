@@ -26,11 +26,15 @@ end
 
 ```elixir
 wsdl_path = "https://git.io/vNCWd"
-action = "sendMessage"
+action = "SendMessage"
 params = %{recipient: "1", body: ""}
 
 # Parse wsdl file for execution of action on its basis
 {:ok, wsdl} = Soap.init_model(wsdl_path, :url)
 
 # Call action
-Soap.call(wsdl, action, params)
+%Soap.Response{body: body, headers: headers, request_url: url, status_code: code} = Soap.call(wsdl, action, params)
+
+# Parse body
+Soap.Response.parse_body(body)
+```

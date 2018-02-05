@@ -3,9 +3,7 @@ defmodule Soap do
   Provides a functions for send SOAP requests.
   """
 
-  alias Soap.Wsdl
-  alias Soap.Request
-  alias Soap.Response
+  alias Soap.{Wsdl, Response, Request}
 
   @doc """
   Initialization of a WSDL model. Response a map of parsed data from file.
