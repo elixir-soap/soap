@@ -42,7 +42,7 @@ defmodule Soap.Response.Parser do
   defp transform_record_value(value) when is_binary(value), do: value |> String.trim()
 
   @spec parse_elements(list() | tuple()) :: map()
-  defp parse_elements(%{}), do: %{}
+  defp parse_elements([]), do: %{}
   defp parse_elements(elements) when is_tuple(elements), do: parse_record(elements)
 
   defp parse_elements(elements) when is_list(elements) do
