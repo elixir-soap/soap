@@ -18,7 +18,7 @@ defmodule Soap.Response.Parser do
     fault_tag = get_fault_tag(xml_response)
 
     xml_response
-    |> xpath(~x"//#{fault_tag}"l)
+    |> xpath(~x"//#{fault_tag}/*"l)
     |> parse_elements()
   end
 
@@ -67,7 +67,7 @@ defmodule Soap.Response.Parser do
   defp unique_tags?(elements) do
     keys = elements
       |> Enum.map(&Map.keys/1)
-      |> List.flatten
+      |> List.flatten()
 
     Enum.uniq(keys) == keys
   end
