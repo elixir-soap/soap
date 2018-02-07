@@ -35,11 +35,14 @@ defmodule Soap.Response.Parser do
     %{tag_name => parse_elements(elements)}
   end
 
-  defp parse_record({:xmlText, _, _, _, value, _}) when is_list(value), do: value |> List.to_string() |> String.trim()
-  defp parse_record({:xmlText, _, _, _, value, _}) when is_binary(value), do: value |> String.trim()
+  defp parse_record({:xmlText, _, _, _, value, _}), do: transform_record_value(value)
+
+  defp transform_record_value(nil), do: nil
+  defp transform_record_value(value) when is_list(value), do: value |> to_string() |> String.trim()
+  defp transform_record_value(value) when is_binary(value), do: value |> String.trim()
 
   @spec parse_elements(list() | tuple()) :: map()
-  defp parse_elements([]), do: []
+  defp parse_elements(%{}), do: %{}
   defp parse_elements(elements) when is_tuple(elements), do: parse_record(elements)
 
   defp parse_elements(elements) when is_list(elements) do

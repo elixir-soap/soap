@@ -6,7 +6,7 @@ defmodule Soap.ResponseTest do
 
   test "#parse response, when request was successful" do
     xml_body = Fixtures.load_xml("send_service/SendMessageResponse.xml")
-    correctly_parsed_response = %{message: "Hello!"}
+    correctly_parsed_response = %{response: %{message: "Hello!"}}
 
     assert Response.parse(xml_body, 200) == correctly_parsed_response
   end

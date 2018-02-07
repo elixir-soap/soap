@@ -1,7 +1,1 @@
-<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
-  <env:Body>
-    <response>
-      <message>Hello!</message>
-    </response>
-  </env:Body>
-</env:Envelope>
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body><response><message>Hello!</message></response></env:Body></env:Envelope>
