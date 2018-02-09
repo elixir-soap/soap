@@ -58,38 +58,4 @@ defmodule Soap.WsdlTest do
       assert Wsdl.parse_from_url("any_url") == {:ok, @parsed_wsdl}
     end
   end
-
-  test "#parse returns {:ok, wsdl}" do
-    assert Wsdl.parse(@wsdl) == {:ok, @parsed_wsdl}
-  end
-
-  test "#get_namespaces returns correctly namespaces list" do
-    schema_namespace = Wsdl.get_schema_namespace(@wsdl)
-
-    namespaces_list = %{
-      "soap" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap/"},
-      "soap12" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap12/"},
-      "tns" => %{type: :wsdl, value: "com.esendex.ems.soapinterface"},
-      "wsdl" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/"}
-    }
-
-    assert Wsdl.get_namespaces(@wsdl, schema_namespace) == namespaces_list
-  end
-
-  test "#get_endpoint returns correctly endpoint" do
-    assert Wsdl.get_endpoint(@wsdl) == "http://localhost:8080/soap/SendService"
-  end
-
-  test "#get_complex_types returns list of types" do
-    schema_namespace = Wsdl.get_schema_namespace(@wsdl)
-
-    types = [
-      %{name: "sendMessageMultipleRecipientsResponse", type: "tns:sendMessageMultipleRecipientsResponse"},
-      %{name: "sendMessageMultipleRecipients", type: "tns:sendMessageMultipleRecipients"},
-      %{name: "sendMessageResponse", type: "tns:sendMessageResponse"},
-      %{name: "sendMessage", type: "tns:sendMessage"}
-    ]
-
-    assert Wsdl.get_complex_types(@wsdl, schema_namespace) == types
-  end
 end
