@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.0
+## v0.1.1
 * Now `Soap.call/4` returns its own response structure `%Soap.Response{body: nil, headers: [], request_url: nil, status_code: nil}`
 
 ## v0.1.0
