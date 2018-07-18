@@ -11,9 +11,21 @@ defmodule SoapTest do
     response_xml = Fixtures.load_xml("send_service/SendMessageResponse.xml")
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: response_xml, headers: [], request_url: nil}}
 
-    with_mock HTTPoison, post: fn _, _, _ -> http_poison_result end do
+    with_mock HTTPoison, post: fn _, _, _, _ -> http_poison_result end do
       soap_response = %Response{status_code: 200, body: response_xml, headers: [], request_url: nil}
       assert(Soap.call(wsdl, @operation, @request_params) == {:ok, soap_response})
+    end
+  end
+
+  test "#call can take request options" do
+    {_, wsdl} = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Wsdl.parse_from_file()
+    response_xml = Fixtures.load_xml("send_service/SendMessageResponse.xml")
+    http_poison_result = {:ok, %HTTPoison.Response{status_code: 200, body: response_xml, headers: [], request_url: nil}}
+    hackney = [basic_auth: {"user", "pass"}]
+
+    with_mock HTTPoison, post: fn _, _, _, [hackney: ^hackney] -> http_poison_result end do
+      soap_response = %Response{status_code: 200, body: response_xml, headers: [], request_url: nil}
+      assert(Soap.call(wsdl, @operation, @request_params, [], hackney: hackney) == {:ok, soap_response})
     end
   end
 
@@ -22,7 +34,7 @@ defmodule SoapTest do
     fault_xml = Fixtures.load_xml("send_service/SendMessageFault.xml")
     http_poison_result = {:ok, %HTTPoison.Response{status_code: 500, body: fault_xml, request_url: nil, headers: []}}
 
-    with_mock HTTPoison, post: fn _, _, _ -> http_poison_result end do
+    with_mock HTTPoison, post: fn _, _, _, _ -> http_poison_result end do
       soap_response = %Response{status_code: 500, body: fault_xml, headers: [], request_url: nil}
       assert(Soap.call(wsdl, @operation, @request_params) == {:ok, soap_response})
     end
@@ -32,7 +44,7 @@ defmodule SoapTest do
     {_, wsdl} = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Wsdl.parse_from_file()
     http_poison_result = {:error, %HTTPoison.Error{reason: :something_wrong}}
 
-    with_mock HTTPoison, post: fn _, _, _ -> http_poison_result end do
+    with_mock HTTPoison, post: fn _, _, _, _ -> http_poison_result end do
       assert(Soap.call(wsdl, @operation, @request_params) == {:error, :something_wrong})
     end
   end
