@@ -2,7 +2,7 @@ defmodule Soap.Request.Params do
   @moduledoc """
   Documentation for Soap.Request.Options.
   """
-  import XmlBuilder, only: [element: 3, doc: 1]
+  import XmlBuilder, only: [element: 3, document: 1, generate: 2]
 
   @schema_types %{
     "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
@@ -45,7 +45,8 @@ defmodule Soap.Request.Params do
     |> add_action_tag_wrapper(wsdl, operation)
     |> add_body_tag_wrapper
     |> add_envelope_tag_wrapper(wsdl, operation)
-    |> doc
+    |> document
+    |> generate(format: :none)
     |> String.replace(["\n", "\t"], "")
   end
 
