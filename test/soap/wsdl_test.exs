@@ -105,11 +105,11 @@ defmodule Soap.WsdlTest do
       "wsdl" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/"}
     }
 
-    assert Wsdl.get_namespaces(@wsdl, schema_namespace) == namespaces_list
+    assert Wsdl.get_namespaces(@wsdl, schema_namespace, "wsdl") == namespaces_list
   end
 
   test "#get_endpoint returns correctly endpoint" do
-    assert Wsdl.get_endpoint(@wsdl) == "http://localhost:8080/soap/SendService"
+    assert Wsdl.get_endpoint(@wsdl, "wsdl") == "http://localhost:8080/soap/SendService"
   end
 
   test "#get_complex_types returns list of types" do
@@ -121,10 +121,10 @@ defmodule Soap.WsdlTest do
       %{name: "sendMessage", type: "tns:sendMessage"}
     ]
 
-    assert Wsdl.get_complex_types(@wsdl, schema_namespace) == types
+    assert Wsdl.get_complex_types(@wsdl, schema_namespace, "wsdl") == types
   end
 
   test "#get_validation_types returns validation struct" do
-    assert Wsdl.get_validation_types(@wsdl, "SendService.wsdl") == @parsed_wsdl.validation_types
+    assert Wsdl.get_validation_types(@wsdl, "SendService.wsdl", "wsdl") == @parsed_wsdl.validation_types
   end
 end
