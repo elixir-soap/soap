@@ -22,6 +22,7 @@ defmodule Soap.Xsd do
       simple_types: get_simple_types(xsd),
       complex_types: Type.get_complex_types(xsd, "//xsd:schema/xsd:complexType")
     }
+
     {:ok, parsed_response}
   end
 
