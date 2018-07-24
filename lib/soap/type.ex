@@ -13,21 +13,26 @@ defmodule Soap.Type do
 
   @spec parse_types(map(), map()) :: map()
   defp parse_types(type_node, complex_type_acc) do
-    types_map = xpath(type_node, ~x"./xsd:sequence/xsd:element"l)
-    |> Enum.reduce(%{}, &parse_type_attributes/2)
-    Map.put(complex_type_acc, type_node |> xpath(~x"./@name"s) |> String.downcase, types_map)
+    types_map =
+      xpath(type_node, ~x"./xsd:sequence/xsd:element"l)
+      |> Enum.reduce(%{}, &parse_type_attributes/2)
+
+    Map.put(complex_type_acc, type_node |> xpath(~x"./@name"s) |> String.downcase(), types_map)
   end
 
   @spec parse_type_attributes(map(), map()) :: map()
   defp parse_type_attributes(inner_node, element_acc) do
-    result_map = [:nillable, :minOccurs, :maxOccurs]
-    |> Enum.reduce(%{type: inner_node |> xpath(~x"./@type"s)}, fn(attr, init_map_acc) ->
-      attr_val = inner_node |> xpath(~x"./@#{attr}"s)
-      case attr_val do
-        "" -> init_map_acc
-        _ -> Map.put(init_map_acc, attr, attr_val)
-      end
-    end)
+    result_map =
+      [:nillable, :minOccurs, :maxOccurs]
+      |> Enum.reduce(%{type: inner_node |> xpath(~x"./@type"s)}, fn attr, init_map_acc ->
+        attr_val = inner_node |> xpath(~x"./@#{attr}"s)
+
+        case attr_val do
+          "" -> init_map_acc
+          _ -> Map.put(init_map_acc, attr, attr_val)
+        end
+      end)
+
     Map.put(element_acc, inner_node |> xpath(~x"./@name"s), result_map)
   end
 end

@@ -45,6 +45,7 @@ defmodule Soap.Request.Params do
     case params |> construct_xml_request_body |> validate_params(wsdl, operation) do
       {:error, messages} ->
         messages
+
       validated_params ->
         validated_params
         |> add_action_tag_wrapper(wsdl, operation)
@@ -67,12 +68,14 @@ defmodule Soap.Request.Params do
 
   @spec validate_params(params :: list(), wsdl :: map(), operation :: String.t()) :: list()
   def validate_params(params, wsdl, operation) do
-    errors = params
-    |> Enum.map(&(validate_param(&1, wsdl, operation)))
+    errors =
+      params
+      |> Enum.map(&validate_param(&1, wsdl, operation))
 
-    case Enum.any? errors do
+    case Enum.any?(errors) do
       true ->
         {:error, Enum.reject(errors, &is_nil/1)}
+
       _ ->
         params
     end
@@ -81,12 +84,20 @@ defmodule Soap.Request.Params do
   @spec validate_param(param :: tuple(), wsdl :: map(), operation :: String.t()) :: String.t() | nil
   def validate_param(param, wsdl, operation) do
     {k, _, v} = param
+
     case val_map = wsdl.validation_types[String.downcase(operation)] do
-      nil -> nil
+      nil ->
+        nil
+
       _ ->
         case Map.has_key?(val_map, k) do
-          true -> validate_param_attributes(val_map, k, v)
-          _ -> "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{Enum.join(Map.keys(val_map), ", ")}} is expected."
+          true ->
+            validate_param_attributes(val_map, k, v)
+
+          _ ->
+            "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{
+              Enum.join(Map.keys(val_map), ", ")
+            }} is expected."
         end
     end
   end
@@ -94,7 +105,8 @@ defmodule Soap.Request.Params do
   @spec validate_param_attributes(val_map :: map(), k :: String.t(), v :: String.t()) :: String.t() | nil
   def validate_param_attributes(val_map, k, v) do
     attributes = val_map[k]
-    [_, type] = String.split attributes.type, ":"
+    [_, type] = String.split(attributes.type, ":")
+
     case Integer.parse(v) do
       {number, ""} -> validate_type(k, number, type)
       _ -> validate_type(k, v, type)
@@ -113,6 +125,7 @@ defmodule Soap.Request.Params do
       _ -> format_error_message(k, @date_type_regex)
     end
   end
+
   def validate_type(k, _v, type = "date"), do: type_error_message(k, type)
 
   def validate_type(k, v, "dateTime") when is_binary(v) do
@@ -120,8 +133,10 @@ defmodule Soap.Request.Params do
       true -> nil
       _ -> format_error_message(k, @date_time_type_regex)
     end
+
     nil
   end
+
   def validate_type(k, _v, type = "dateTime"), do: type_error_message(k, type)
 
   defp type_error_message(k, type) do

@@ -15,7 +15,7 @@ defmodule Soap.Wsdl do
 
   @spec parse_from_url(String.t()) :: {:ok, map()}
   def parse_from_url(path) do
-    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], [follow_redirect: true, max_redirect: 5])
+    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], follow_redirect: true, max_redirect: 5)
     parse(wsdl, path)
   end
 
@@ -97,7 +97,7 @@ defmodule Soap.Wsdl do
       wsdl
       |> get_full_paths(file_path, protocol_ns)
       |> get_imported_types
-      |> Enum.reduce(%{}, &(Map.merge(&2, &1)))
+      |> Enum.reduce(%{}, &Map.merge(&2, &1))
     )
   end
 
@@ -115,7 +115,8 @@ defmodule Soap.Wsdl do
 
   @spec get_imported_types(list()) :: list(map())
   defp get_imported_types(xsd_paths) do
-    xsd_paths |> Enum.map(fn xsd_path ->
+    xsd_paths
+    |> Enum.map(fn xsd_path ->
       case Xsd.parse_from_file(xsd_path) do
         {:ok, xsd} -> xsd.complex_types
         _ -> %{}
