@@ -111,7 +111,7 @@ defmodule Soap.Wsdl do
   defp get_full_paths(wsdl, path, protocol_ns) do
     wsdl
     |> get_schema_imports(protocol_ns)
-    |> Enum.map(&(path |> Path.dirname |> Path.join(&1.schema_location)))
+    |> Enum.map(&(path |> Path.dirname() |> Path.join(&1.schema_location)))
   end
 
   @spec get_imported_types(list()) :: list(map())
@@ -124,9 +124,6 @@ defmodule Soap.Wsdl do
       end
     end)
   end
-
-  @spec get_operations(String.t()) :: list()
-  defp get_operations(wsdl), do: get_operations(wsdl, soap_version())
 
   @spec get_operations(String.t(), String.t()) :: list()
   defp get_operations(wsdl, protocol_ns), do: get_operations(wsdl, soap_version(), protocol_ns)
@@ -157,7 +154,7 @@ defmodule Soap.Wsdl do
   defp get_protocol_namespace(wsdl) do
     wsdl
     |> xpath(~x"//namespace::*"l)
-    |> Enum.find(fn({_, _, _, _, url}) -> url == :"http://schemas.xmlsoap.org/wsdl/" end)
+    |> Enum.find(fn {_, _, _, _, url} -> url == :"http://schemas.xmlsoap.org/wsdl/" end)
     |> elem(3)
   end
 
