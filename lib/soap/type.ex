@@ -7,14 +7,16 @@ defmodule Soap.Type do
 
   @spec get_complex_types(String.t(), String.t()) :: list()
   def get_complex_types(wsdl, x_path) do
-    xpath(wsdl, ~x"#{x_path}"l)
+    wsdl
+    |> xpath(~x"#{x_path}"l)
     |> Enum.reduce(%{}, &parse_types/2)
   end
 
   @spec parse_types(map(), map()) :: map()
   defp parse_types(type_node, complex_type_acc) do
     types_map =
-      xpath(type_node, ~x"./xsd:sequence/xsd:element"l)
+      type_node
+      |> xpath(~x"./xsd:sequence/xsd:element"l)
       |> Enum.reduce(%{}, &parse_type_attributes/2)
 
     Map.put(complex_type_acc, type_node |> xpath(~x"./@name"s) |> String.downcase(), types_map)

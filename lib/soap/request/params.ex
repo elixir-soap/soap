@@ -90,14 +90,12 @@ defmodule Soap.Request.Params do
         nil
 
       _ ->
-        case Map.has_key?(val_map, k) do
-          true ->
-            validate_param_attributes(val_map, k, v)
-
-          _ ->
-            "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{
-              Enum.join(Map.keys(val_map), ", ")
-            }} is expected."
+        if Map.has_key?(val_map, k) do
+          validate_param_attributes(val_map, k, v)
+        else
+          "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{
+            Enum.join(Map.keys(val_map), ", ")
+          }} is expected."
         end
     end
   end
