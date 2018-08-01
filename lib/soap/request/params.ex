@@ -12,6 +12,8 @@ defmodule Soap.Request.Params do
     "1.1" => "http://schemas.xmlsoap.org/soap/envelope/",
     "1.2" => "http://www.w3.org/2003/05/soap-envelope"
   }
+  @date_type_regex "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+  @date_time_type_regex "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}"
 
   @doc """
   Headers generator by soap action and custom headers.
@@ -40,14 +42,19 @@ defmodule Soap.Request.Params do
 
   @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map()) :: String.t()
   def build_body(wsdl, operation, params) do
-    params
-    |> construct_xml_request_body
-    |> add_action_tag_wrapper(wsdl, operation)
-    |> add_body_tag_wrapper
-    |> add_envelope_tag_wrapper(wsdl, operation)
-    |> document
-    |> generate(format: :none)
-    |> String.replace(["\n", "\t"], "")
+    case params |> construct_xml_request_body |> validate_params(wsdl, operation) do
+      {:error, messages} ->
+        messages
+
+      validated_params ->
+        validated_params
+        |> add_action_tag_wrapper(wsdl, operation)
+        |> add_body_tag_wrapper
+        |> add_envelope_tag_wrapper(wsdl, operation)
+        |> document
+        |> generate(format: :none)
+        |> String.replace(["\n", "\t"], "")
+    end
   end
 
   @spec base_headers(String.t()) :: list()
@@ -58,6 +65,85 @@ defmodule Soap.Request.Params do
   @spec extract_headers(String.t(), list()) :: list()
   defp extract_headers(soap_action, []), do: base_headers(soap_action)
   defp extract_headers(_, custom_headers), do: custom_headers
+
+  @spec validate_params(params :: list(), wsdl :: map(), operation :: String.t()) :: list()
+  def validate_params(params, wsdl, operation) do
+    errors =
+      params
+      |> Enum.map(&validate_param(&1, wsdl, operation))
+
+    case Enum.any?(errors) do
+      true ->
+        {:error, Enum.reject(errors, &is_nil/1)}
+
+      _ ->
+        params
+    end
+  end
+
+  @spec validate_param(param :: tuple(), wsdl :: map(), operation :: String.t()) :: String.t() | nil
+  def validate_param(param, wsdl, operation) do
+    {k, _, v} = param
+
+    case val_map = wsdl.validation_types[String.downcase(operation)] do
+      nil ->
+        nil
+
+      _ ->
+        if Map.has_key?(val_map, k) do
+          validate_param_attributes(val_map, k, v)
+        else
+          "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{
+            Enum.join(Map.keys(val_map), ", ")
+          }} is expected."
+        end
+    end
+  end
+
+  @spec validate_param_attributes(val_map :: map(), k :: String.t(), v :: String.t()) :: String.t() | nil
+  def validate_param_attributes(val_map, k, v) do
+    attributes = val_map[k]
+    [_, type] = String.split(attributes.type, ":")
+
+    case Integer.parse(v) do
+      {number, ""} -> validate_type(k, number, type)
+      _ -> validate_type(k, v, type)
+    end
+  end
+
+  def validate_type(_k, v, "string") when is_binary(v), do: nil
+  def validate_type(k, _v, type = "string"), do: type_error_message(k, type)
+
+  def validate_type(_k, v, "decimal") when is_number(v), do: nil
+  def validate_type(k, _v, type = "decimal"), do: type_error_message(k, type)
+
+  def validate_type(k, v, "date") when is_binary(v) do
+    case Regex.match?(~r/#{@date_type_regex}/, v) do
+      true -> nil
+      _ -> format_error_message(k, @date_type_regex)
+    end
+  end
+
+  def validate_type(k, _v, type = "date"), do: type_error_message(k, type)
+
+  def validate_type(k, v, "dateTime") when is_binary(v) do
+    case Regex.match?(~r/#{@date_time_type_regex}/, v) do
+      true -> nil
+      _ -> format_error_message(k, @date_time_type_regex)
+    end
+
+    nil
+  end
+
+  def validate_type(k, _v, type = "dateTime"), do: type_error_message(k, type)
+
+  defp type_error_message(k, type) do
+    "Element #{k} has wrong type. Expects #{type} type."
+  end
+
+  defp format_error_message(k, regex) do
+    "Element #{k} has wrong format. Expects #{regex} format."
+  end
 
   @spec construct_xml_request_body(params :: map() | list()) :: list()
   defp construct_xml_request_body(params) when is_map(params) or is_list(params) do
