@@ -22,11 +22,12 @@ defmodule Soap.Wsdl do
   @spec parse(String.t(), String.t()) :: {:ok, map()}
   def parse(wsdl, file_path) do
     protocol_namespace = get_protocol_namespace(wsdl)
+    soap_namespace = get_soap_namespace(wsdl)
     schema_namespace = get_schema_namespace(wsdl)
 
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
-      endpoint: get_endpoint(wsdl, protocol_namespace),
+      endpoint: get_endpoint(wsdl, protocol_namespace, soap_namespace),
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
       operations: get_operations(wsdl, protocol_namespace),
       schema_attributes: get_schema_attributes(wsdl, protocol_namespace),
@@ -75,10 +76,10 @@ defmodule Soap.Wsdl do
     end
   end
 
-  @spec get_endpoint(String.t(), String.t()) :: String.t()
-  def get_endpoint(wsdl, protocol_ns) do
+  @spec get_endpoint(String.t(), String.t(), String.t()) :: String.t()
+  def get_endpoint(wsdl, protocol_ns, soap_ns) do
     wsdl
-    |> xpath(~x"//#{protocol_ns}:definitions/#{protocol_ns}:service/#{protocol_ns}:port/soap:address/@location"s)
+    |> xpath(~x"//#{protocol_ns}:definitions/#{protocol_ns}:service/#{protocol_ns}:port/#{soap_ns}:address/@location"s)
   end
 
   @spec get_complex_types(String.t(), String.t(), String.t()) :: list()
@@ -131,30 +132,32 @@ defmodule Soap.Wsdl do
   @spec get_operations(String.t(), String.t(), String.t()) :: list()
   defp get_operations(wsdl, "1.2", protocol_ns) do
     wsdl
-    |> xpath(
-      ~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
+    |> xpath(~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
       name: ~x"./@name"s,
       soap_action: ~x"./soap12:operation/@soapAction"s
     )
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
     |> process_operations_extractor_result(wsdl)
   end
 
   defp get_operations(wsdl, _soap_version, protocol_ns) do
     wsdl
-    |> xpath(
-      ~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
+    |> xpath(~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
       name: ~x"./@name"s,
       soap_action: ~x"./soap:operation/@soapAction"s
     )
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()
-  defp get_protocol_namespace(wsdl) do
+  defp get_protocol_namespace(wsdl), do: get_namespace(wsdl, "http://schemas.xmlsoap.org/wsdl/")
+
+  @spec get_soap_namespace(String.t()) :: String.t()
+  defp get_soap_namespace(wsdl), do: get_namespace(wsdl, "http://schemas.xmlsoap.org/wsdl/soap/")
+
+  @spec get_namespace(String.t(), String.t()) :: String.t()
+  defp get_namespace(wsdl, url) do
     wsdl
     |> xpath(~x"//namespace::*"l)
-    |> Enum.find(fn {_, _, _, _, url} -> url == :"http://schemas.xmlsoap.org/wsdl/" end)
+    |> Enum.find(fn {_, _, _, _, namespace_url} -> namespace_url == :"#{url}" end)
     |> elem(3)
   end
 
