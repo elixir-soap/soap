@@ -168,18 +168,21 @@ defmodule Soap.Request.Params do
 
   @spec add_action_tag_wrapper(list(), map(), String.t()) :: list()
   defp add_action_tag_wrapper(body, wsdl, operation) do
-    action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes])
+    namespace = "ns0"
+    action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes], namespace)
 
     action_tag =
       wsdl
       |> get_action_with_namespace(operation)
       |> prepare_action_tag(operation)
 
-    [element(action_tag, action_tag_attributes, body)]
+    [element(:"#{namespace}:#{action_tag}", action_tag_attributes, body)]
   end
 
-  defp handle_element_form_default(%{target_namespace: ns, element_form_default: "qualified"}), do: %{xmlns: ns}
-  defp handle_element_form_default(_schema_attributes), do: %{}
+  defp handle_element_form_default(%{target_namespace: ns, element_form_default: "qualified"}, namespace) do
+    %{"xmlns:#{namespace}": ns}
+  end
+  defp handle_element_form_default(_schema_attributes, _), do: %{}
 
   defp prepare_action_tag("", operation), do: operation
   defp prepare_action_tag(action_tag, _operation), do: action_tag
