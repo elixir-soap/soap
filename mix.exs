@@ -50,7 +50,7 @@ defmodule Soap.MixProject do
       {:inch_ex, "~> 0.2", only: [:dev, :docs]},
 
       # Http && XML
-      {:httpoison, "~> 1.0"},
+      {:httpoison, "~> 1.3"},
       {:xml_builder, "~> 2.1"},
 
       # Mocks for tests
