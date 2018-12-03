@@ -66,7 +66,9 @@ defmodule Soap.Request.Params do
   defp extract_headers(soap_action, []), do: base_headers(soap_action)
   defp extract_headers(_, custom_headers), do: custom_headers
 
-  @spec validate_params(params :: list(), wsdl :: map(), operation :: String.t()) :: list()
+  @spec validate_params(params :: any(), wsdl :: map(), operation :: String.t()) :: any()
+  def validate_params(params, _wsdl, _operation) when is_binary(params), do: params
+
   def validate_params(params, wsdl, operation) do
     errors =
       params
