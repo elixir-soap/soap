@@ -43,7 +43,8 @@ defmodule Soap.WsdlTest do
       }
     ],
     schema_attributes: %{
-      element_form_default: "qualified", target_namespace: "com.esendex.ems.soapinterface"
+      element_form_default: "qualified",
+      target_namespace: "com.esendex.ems.soapinterface"
     },
     validation_types: %{
       "recipients" => %{
@@ -81,6 +82,31 @@ defmodule Soap.WsdlTest do
     }
   }
 
+  @parsed_root_namespace_wsdl %{
+    complex_types: [
+      %{name: "TradePriceRequest", type: ""},
+      %{name: "TradePrice", type: ""}
+    ],
+    endpoint: "http://example.com/stockquote",
+    namespaces: %{
+      "" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/"},
+      "soap" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap/"},
+      "tns" => %{type: :wsdl, value: "http://example.com/stockquote.wsdl"},
+      "xsd1" => %{type: :soap, value: "http://example.com/stockquote.xsd"}
+    },
+    operations: [
+      %{
+        name: "GetLastTradePrice",
+        soap_action: "http://example.com/GetLastTradePrice"
+      }
+    ],
+    schema_attributes: %{
+      element_form_default: "",
+      target_namespace: "http://example.com/stockquote.xsd"
+    },
+    validation_types: %{}
+  }
+
   test "#parse_from_file returns {:ok, wsdl}" do
     wsdl_path = Fixtures.get_file_path("wsdl/SendService.wsdl")
     assert(Wsdl.parse_from_file(wsdl_path) == {:ok, @parsed_wsdl})
@@ -98,6 +124,7 @@ defmodule Soap.WsdlTest do
 
   test "#get_namespaces returns correctly namespaces list" do
     schema_namespace = Wsdl.get_schema_namespace(@wsdl)
+
     namespaces_list = %{
       "soap" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap/"},
       "soap12" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap12/"},
@@ -114,6 +141,7 @@ defmodule Soap.WsdlTest do
 
   test "#get_complex_types returns list of types" do
     schema_namespace = Wsdl.get_schema_namespace(@wsdl)
+
     types = [
       %{name: "sendMessageMultipleRecipientsResponse", type: "tns:sendMessageMultipleRecipientsResponse"},
       %{name: "sendMessageMultipleRecipients", type: "tns:sendMessageMultipleRecipients"},
@@ -126,5 +154,10 @@ defmodule Soap.WsdlTest do
 
   test "#get_validation_types returns validation struct" do
     assert Wsdl.get_validation_types(@wsdl, "SendService.wsdl", "wsdl") == @parsed_wsdl.validation_types
+  end
+
+  test "support for root namespaces" do
+    wsdl_path = Fixtures.get_file_path("wsdl/RootNamespace.wsdl")
+    assert(Wsdl.parse_from_file(wsdl_path) == {:ok, @parsed_root_namespace_wsdl})
   end
 end
