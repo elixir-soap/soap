@@ -49,7 +49,7 @@ defmodule Soap.Wsdl do
   @spec get_namespaces(String.t(), String.t(), String.t()) :: map()
   def get_namespaces(wsdl, schema_namespace, protocol_ns) do
     wsdl
-    |> xpath(~x"//#{protocol_ns}:definitions/namespace::*"l)
+    |> xpath(~x"//#{ns("definitions", protocol_ns)}/namespace::*"l)
     |> Enum.map(&get_namespace(&1, wsdl, schema_namespace, protocol_ns))
     |> Enum.into(%{})
   end
@@ -61,12 +61,12 @@ defmodule Soap.Wsdl do
     value = Atom.to_string(value)
 
     cond do
-      xpath(wsdl, ~x"//#{protocol_ns}:definitions[@targetNamespace='#{value}']") ->
+      xpath(wsdl, ~x"//#{ns("definitions", protocol_ns)}[@targetNamespace='#{value}']") ->
         {string_key, %{value: value, type: :wsdl}}
 
       xpath(
         wsdl,
-        ~x"//#{protocol_ns}:types/#{schema_namespace}:schema/#{schema_namespace}:import[@namespace='#{value}']"
+        ~x"//#{ns("types", protocol_ns)}/#{schema_namespace}:schema/#{schema_namespace}:import[@namespace='#{value}']"
       ) ->
         {string_key, %{value: value, type: :xsd}}
 
@@ -78,14 +78,16 @@ defmodule Soap.Wsdl do
   @spec get_endpoint(String.t(), String.t()) :: String.t()
   def get_endpoint(wsdl, protocol_ns) do
     wsdl
-    |> xpath(~x"//#{protocol_ns}:definitions/#{protocol_ns}:service/#{protocol_ns}:port/soap:address/@location"s)
+    |> xpath(
+      ~x"//#{ns("definitions", protocol_ns)}/#{ns("service", protocol_ns)}/#{ns("port", protocol_ns)}/soap:address/@location"s
+    )
   end
 
   @spec get_complex_types(String.t(), String.t(), String.t()) :: list()
   def get_complex_types(wsdl, namespace, protocol_ns) do
     xpath(
       wsdl,
-      ~x"//#{protocol_ns}:types/#{namespace}:schema/#{namespace}:element"l,
+      ~x"//#{ns("types", protocol_ns)}/#{ns("schema", namespace)}/#{ns("element", namespace)}"l,
       name: ~x"./@name"s,
       type: ~x"./@type"s
     )
@@ -132,7 +134,7 @@ defmodule Soap.Wsdl do
   defp get_operations(wsdl, "1.2", protocol_ns) do
     wsdl
     |> xpath(
-      ~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
+      ~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l,
       name: ~x"./@name"s,
       soap_action: ~x"./soap12:operation/@soapAction"s
     )
@@ -143,7 +145,7 @@ defmodule Soap.Wsdl do
   defp get_operations(wsdl, _soap_version, protocol_ns) do
     wsdl
     |> xpath(
-      ~x"//#{protocol_ns}:definitions/#{protocol_ns}:binding/#{protocol_ns}:operation"l,
+      ~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l,
       name: ~x"./@name"s,
       soap_action: ~x"./soap:operation/@soapAction"s
     )
@@ -162,7 +164,7 @@ defmodule Soap.Wsdl do
   defp get_schema_attributes(wsdl, protocol_ns) do
     wsdl
     |> xpath(
-      ~x"//#{protocol_ns}:types/*[local-name() = 'schema']",
+      ~x"//#{ns("types", protocol_ns)}/*[local-name() = 'schema']",
       target_namespace: ~x"./@targetNamespace"s,
       element_form_default: ~x"./@elementFormDefault"s
     )
@@ -173,4 +175,7 @@ defmodule Soap.Wsdl do
   defp process_operations_extractor_result(result, _wsdl), do: result
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+
+  defp ns(name, []), do: "#{name}"
+  defp ns(name, namespace), do: "#{namespace}:#{name}"
 end
