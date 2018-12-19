@@ -85,7 +85,19 @@ defmodule Soap.WsdlTest do
         "dateTime" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:dateTime"}
       }
     },
-    soap_version: "1.1"
+    soap_version: "1.1",
+    messages: [
+      %{name: "SendMessageSoapIn", parts: [%{element: "tns:sendMessage", name: "parameters"}]},
+      %{name: "SendMessageSoapOut", parts: [%{element: "tns:sendMessageResponse", name: "parameters"}]},
+      %{
+        name: "SendMessageMultipleRecipientsSoapIn",
+        parts: [%{element: "tns:sendMessageMultipleRecipients", name: "parameters"}]
+      },
+      %{
+        name: "SendMessageMultipleRecipientsSoapOut",
+        parts: [%{element: "tns:sendMessageMultipleRecipientsResponse", name: "parameters"}]
+      }
+    ]
   }
 
   @parsed_wsdl_soap12 %{
@@ -167,7 +179,19 @@ defmodule Soap.WsdlTest do
         "dateTime" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:dateTime"}
       }
     },
-    soap_version: "1.2"
+    soap_version: "1.2",
+    messages: [
+      %{name: "SendMessageSoapIn", parts: [%{element: "tns:sendMessage", name: "parameters"}]},
+      %{name: "SendMessageSoapOut", parts: [%{element: "tns:sendMessageResponse", name: "parameters"}]},
+      %{
+        name: "SendMessageMultipleRecipientsSoapIn",
+        parts: [%{element: "tns:sendMessageMultipleRecipients", name: "parameters"}]
+      },
+      %{
+        name: "SendMessageMultipleRecipientsSoapOut",
+        parts: [%{element: "tns:sendMessageMultipleRecipientsResponse", name: "parameters"}]
+      }
+    ]
   }
 
   @parsed_root_namespace_wsdl %{
@@ -194,7 +218,11 @@ defmodule Soap.WsdlTest do
       target_namespace: "http://example.com/stockquote.xsd"
     },
     validation_types: %{},
-    soap_version: "1.1"
+    soap_version: "1.1",
+    messages: [
+      %{name: "GetLastTradePriceInput", parts: [%{element: "xsd1:TradePriceRequest", name: "body"}]},
+      %{name: "GetLastTradePriceOutput", parts: [%{element: "xsd1:TradePrice", name: "body"}]}
+    ]
   }
 
   @parsed_soap_headers_wsdl %{
@@ -219,7 +247,12 @@ defmodule Soap.WsdlTest do
     ],
     schema_attributes: %{element_form_default: "qualified", target_namespace: "http://test.com"},
     soap_version: "1.1",
-    validation_types: %{}
+    validation_types: %{},
+    messages: [
+      %{name: "HelloHeader", parts: [%{element: "tns:sayHelloHeader", name: "Authentication"}]},
+      %{name: "HelloMessage", parts: [%{element: "tns:sayHello", name: "parameters"}]},
+      %{name: "HelloMessageResponse", parts: [%{element: "tns:sayHelloResponse", name: "parameters"}]}
+    ]
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
