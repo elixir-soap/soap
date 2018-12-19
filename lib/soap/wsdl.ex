@@ -36,7 +36,8 @@ defmodule Soap.Wsdl do
       operations: get_operations(wsdl, protocol_namespace, soap_namespace),
       schema_attributes: get_schema_attributes(wsdl, protocol_namespace),
       validation_types: get_validation_types(wsdl, file_path, protocol_namespace),
-      soap_version: soap_version(opts)
+      soap_version: soap_version(opts),
+      messages: get_messages(wsdl, protocol_namespace)
     }
 
     {:ok, parsed_response}
@@ -158,6 +159,20 @@ defmodule Soap.Wsdl do
           header: xpath(header_node, ~x".", message: ~x"./@message"s, part: ~x"./@part"s)
         }
     end
+  end
+
+  defp get_messages(wsdl, protocol_ns) do
+    wsdl
+    |> xpath(~x"//#{ns("definitions", protocol_ns)}/#{ns("message", protocol_ns)}"l)
+    |> Enum.map(fn node ->
+      node
+      |> xpath(~x".", name: ~x"./@name"s)
+      |> Map.put(:parts, get_message_parts(node, protocol_ns))
+    end)
+  end
+
+  defp get_message_parts(element, protocol_ns) do
+    xpath(element, ~x"./#{ns("part", protocol_ns)}"l, name: ~x"./@name"s, element: ~x"./@element"s)
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()
