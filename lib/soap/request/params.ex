@@ -215,16 +215,16 @@ defmodule Soap.Request.Params do
   defp add_envelope_tag_wrapper(body, wsdl, operation) do
     envelop_attributes =
       @schema_types
-      |> Map.merge(build_soap_version_attribute())
+      |> Map.merge(build_soap_version_attribute(wsdl))
       |> Map.merge(build_action_attribute(wsdl, operation))
       |> Map.merge(custom_namespaces())
 
     [element(:"#{env_namespace()}:Envelope", envelop_attributes, body)]
   end
 
-  @spec build_soap_version_attribute() :: map()
-  defp build_soap_version_attribute do
-    soap_version = soap_version() |> to_string
+  @spec build_soap_version_attribute(Map.t()) :: map()
+  defp build_soap_version_attribute(wsdl) do
+    soap_version = soap_version(wsdl) |> to_string
     %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
   end
 
@@ -246,7 +246,10 @@ defmodule Soap.Request.Params do
     Enum.find(wsdl[:operations], fn x -> x[:name] == operation end)[:soap_action]
   end
 
-  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  defp soap_version(wsdl) do
+    Map.get(wsdl, :soap_version, Application.fetch_env!(:soap, :globals)[:version])
+  end
+
   defp env_namespace, do: Application.fetch_env!(:soap, :globals)[:env_namespace] || :env
   defp custom_namespaces, do: Application.fetch_env!(:soap, :globals)[:custom_namespaces] || %{}
 end
