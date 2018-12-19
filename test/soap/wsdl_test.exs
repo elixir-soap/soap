@@ -36,10 +36,15 @@ defmodule Soap.WsdlTest do
       }
     },
     operations: [
-      %{name: "SendMessage", soap_action: "com.esendex.ems.soapinterface/SendMessage"},
+      %{
+        name: "SendMessage",
+        soap_action: "com.esendex.ems.soapinterface/SendMessage",
+        input: %{body: nil, header: nil}
+      },
       %{
         name: "SendMessageMultipleRecipients",
-        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients"
+        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients",
+        input: %{body: nil, header: nil}
       }
     ],
     schema_attributes: %{
@@ -113,10 +118,15 @@ defmodule Soap.WsdlTest do
       }
     },
     operations: [
-      %{name: "SendMessage", soap_action: "com.esendex.ems.soapinterface/SendMessage12"},
+      %{
+        name: "SendMessage",
+        soap_action: "com.esendex.ems.soapinterface/SendMessage12",
+        input: %{body: nil, header: nil}
+      },
       %{
         name: "SendMessageMultipleRecipients",
-        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients12"
+        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients12",
+        input: %{body: nil, header: nil}
       }
     ],
     schema_attributes: %{
@@ -175,7 +185,8 @@ defmodule Soap.WsdlTest do
     operations: [
       %{
         name: "GetLastTradePrice",
-        soap_action: "http://example.com/GetLastTradePrice"
+        soap_action: "http://example.com/GetLastTradePrice",
+        input: %{body: nil, header: nil}
       }
     ],
     schema_attributes: %{
@@ -184,6 +195,31 @@ defmodule Soap.WsdlTest do
     },
     validation_types: %{},
     soap_version: "1.1"
+  }
+
+  @parsed_soap_headers_wsdl %{
+    complex_types: [
+      %{name: "sayHelloResponse", type: "tns:sayHelloResponse"},
+      %{name: "sayHello", type: "tns:sayHello"},
+      %{name: "sayHelloHeader", type: "tns:sayHelloHeader"}
+    ],
+    endpoint: "http://localhost:8888/hello-service/hello-service",
+    namespaces: %{
+      "soap" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/soap/"},
+      "tns" => %{type: :wsdl, value: "http://test.com"},
+      "" => %{type: :soap, value: "http://schemas.xmlsoap.org/wsdl/"},
+      "xsd" => %{type: :soap, value: "http://www.w3.org/2001/XMLSchema"}
+    },
+    operations: [
+      %{
+        input: %{body: nil, header: %{message: "tns:HelloHeader", part: "Authentication"}},
+        name: "sayHello",
+        soap_action: "http://example.com/sayHello"
+      }
+    ],
+    schema_attributes: %{element_form_default: "qualified", target_namespace: "http://test.com"},
+    soap_version: "1.1",
+    validation_types: %{}
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
@@ -243,5 +279,10 @@ defmodule Soap.WsdlTest do
   test "custom SOAP version on WSDL level" do
     wsdl_path = Fixtures.get_file_path("wsdl/SendService.wsdl")
     assert(Wsdl.parse_from_file(wsdl_path, soap_version: "1.2") == {:ok, @parsed_wsdl_soap12})
+  end
+
+  test "header definitions are loaded" do
+    wsdl_path = Fixtures.get_file_path("wsdl/SoapHeader.wsdl")
+    assert(Wsdl.parse_from_file(wsdl_path) == {:ok, @parsed_soap_headers_wsdl})
   end
 end

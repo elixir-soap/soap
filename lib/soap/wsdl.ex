@@ -135,12 +135,29 @@ defmodule Soap.Wsdl do
 
   defp get_operations(wsdl, protocol_ns, soap_ns) do
     wsdl
-    |> xpath(
-      ~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l,
-      name: ~x"./@name"s,
-      soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s
-    )
+    |> xpath(~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l)
+    |> Enum.map(fn node ->
+      node
+      |> xpath(~x".", name: ~x"./@name"s, soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s)
+      |> Map.put(:input, get_operation_input(node, protocol_ns, soap_ns))
+    end)
     |> Enum.reject(fn x -> x[:soap_action] == "" end)
+  end
+
+  defp get_operation_input(element, protocol_ns, soap_ns) do
+    case xpath(element, ~x"./#{ns("input", protocol_ns)}/#{ns("header", soap_ns)}") do
+      nil ->
+        %{
+          body: nil,
+          header: nil
+        }
+
+      header_node ->
+        %{
+          body: nil,
+          header: xpath(header_node, ~x".", message: ~x"./@message"s, part: ~x"./@part"s)
+        }
+    end
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()

@@ -106,7 +106,6 @@
       <soap:operation soapAction="com.esendex.ems.soapinterface/SendMessageMultipleRecipients" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
-        <soap:header message="tns:SendMessageMultipleRecipientsMessengerHeader" part="MessengerHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap:body use="literal" />
@@ -122,9 +121,6 @@
         style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
-        <soap12:header
-          message="tns:SendMessageMessengerHeader"
-          part="MessengerHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
@@ -136,9 +132,6 @@
         style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
-        <soap12:header
-          message="tns:SendMessageMultipleRecipientsMessengerHeader"
-          part="MessengerHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
