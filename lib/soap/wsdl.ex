@@ -138,7 +138,7 @@ defmodule Soap.Wsdl do
       name: ~x"./@name"s,
       soap_action: ~x"./soap12:operation/@soapAction"s
     )
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+    # |> Enum.reject(fn x -> x[:soap_action] == "" end)
     |> process_operations_extractor_result(wsdl)
   end
 
