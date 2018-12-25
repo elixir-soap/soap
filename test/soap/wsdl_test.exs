@@ -79,7 +79,85 @@ defmodule Soap.WsdlTest do
       "datetimes" => %{
         "dateTime" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:dateTime"}
       }
-    }
+    },
+    soap_version: "1.1"
+  }
+
+  @parsed_wsdl_soap12 %{
+    complex_types: [
+      %{
+        name: "sendMessageMultipleRecipientsResponse",
+        type: "tns:sendMessageMultipleRecipientsResponse"
+      },
+      %{
+        name: "sendMessageMultipleRecipients",
+        type: "tns:sendMessageMultipleRecipients"
+      },
+      %{name: "sendMessageResponse", type: "tns:sendMessageResponse"},
+      %{name: "sendMessage", type: "tns:sendMessage"}
+    ],
+    endpoint: "http://localhost:8080/soap/SendService",
+    namespaces: %{
+      "soap" => %{
+        type: :soap,
+        value: "http://schemas.xmlsoap.org/wsdl/soap/"
+      },
+      "soap12" => %{
+        type: :soap,
+        value: "http://schemas.xmlsoap.org/wsdl/soap12/"
+      },
+      "tns" => %{type: :wsdl, value: "com.esendex.ems.soapinterface"},
+      "wsdl" => %{
+        type: :soap,
+        value: "http://schemas.xmlsoap.org/wsdl/"
+      }
+    },
+    operations: [
+      %{name: "SendMessage", soap_action: "com.esendex.ems.soapinterface/SendMessage12"},
+      %{
+        name: "SendMessageMultipleRecipients",
+        soap_action: "com.esendex.ems.soapinterface/SendMessageMultipleRecipients12"
+      }
+    ],
+    schema_attributes: %{
+      element_form_default: "qualified",
+      target_namespace: "com.esendex.ems.soapinterface"
+    },
+    validation_types: %{
+      "recipients" => %{
+        "recipient" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:string"}
+      },
+      "results" => %{
+        "result" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:string"}
+      },
+      "sendmessage" => %{
+        "body" => %{minOccurs: "0", type: "xsd:string"},
+        "recipient" => %{minOccurs: "0", type: "xsd:string"},
+        "type" => %{type: "xsd:string"},
+        "date" => %{type: "xsd:date"},
+        "dateTime" => %{type: "xsd:dateTime"}
+      },
+      "sendmessagemultiplerecipients" => %{
+        "body" => %{minOccurs: "0", type: "xsd:string"},
+        "recipients" => %{minOccurs: "0", type: "tns:recipients"},
+        "type" => %{type: "xsd:string"},
+        "dateTimes" => %{minOccurs: "0", type: "tns:dateTimes"},
+        "dates" => %{minOccurs: "0", type: "tns:dates"}
+      },
+      "sendmessagemultiplerecipientsresponse" => %{
+        "results" => %{minOccurs: "0", type: "tns:results"}
+      },
+      "sendmessageresponse" => %{
+        "sendMessageResult" => %{minOccurs: "0", type: "xsd:string"}
+      },
+      "dates" => %{
+        "date" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:date"}
+      },
+      "datetimes" => %{
+        "dateTime" => %{maxOccurs: "unbounded", minOccurs: "0", type: "xsd:dateTime"}
+      }
+    },
+    soap_version: "1.2"
   }
 
   @parsed_root_namespace_wsdl %{
@@ -104,7 +182,8 @@ defmodule Soap.WsdlTest do
       element_form_default: "",
       target_namespace: "http://example.com/stockquote.xsd"
     },
-    validation_types: %{}
+    validation_types: %{},
+    soap_version: "1.1"
   }
 
   test "#parse_from_file returns {:ok, wsdl}" do
@@ -159,5 +238,10 @@ defmodule Soap.WsdlTest do
   test "support for root namespaces" do
     wsdl_path = Fixtures.get_file_path("wsdl/RootNamespace.wsdl")
     assert(Wsdl.parse_from_file(wsdl_path) == {:ok, @parsed_root_namespace_wsdl})
+  end
+
+  test "custom SOAP version on WSDL level" do
+    wsdl_path = Fixtures.get_file_path("wsdl/SendService.wsdl")
+    assert(Wsdl.parse_from_file(wsdl_path, soap_version: "1.2") == {:ok, @parsed_wsdl_soap12})
   end
 end
