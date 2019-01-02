@@ -2,35 +2,41 @@ defmodule Soap.Wsdl do
   @moduledoc """
   Provides functions for parsing wsdl file
   """
+  @soap_version_namespaces %{
+    "1.1" => :"http://schemas.xmlsoap.org/wsdl/soap/",
+    "1.2" => :"http://schemas.xmlsoap.org/wsdl/soap12/"
+  }
 
   import SweetXml, except: [parse: 1, parse: 2]
 
   alias Soap.{Xsd, Type}
 
   @spec parse_from_file(String.t()) :: {:ok, map()}
-  def parse_from_file(path) do
+  def parse_from_file(path, opts \\ []) do
     {:ok, wsdl} = File.read(path)
-    parse(wsdl, path)
+    parse(wsdl, path, opts)
   end
 
   @spec parse_from_url(String.t()) :: {:ok, map()}
-  def parse_from_url(path) do
+  def parse_from_url(path, opts \\ []) do
     %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], follow_redirect: true, max_redirect: 5)
-    parse(wsdl, path)
+    parse(wsdl, path, opts)
   end
 
   @spec parse(String.t(), String.t()) :: {:ok, map()}
-  def parse(wsdl, file_path) do
+  def parse(wsdl, file_path, opts \\ []) do
     protocol_namespace = get_protocol_namespace(wsdl)
+    soap_namespace = get_soap_namespace(wsdl, opts)
     schema_namespace = get_schema_namespace(wsdl)
 
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
       endpoint: get_endpoint(wsdl, protocol_namespace),
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
-      operations: get_operations(wsdl, protocol_namespace),
+      operations: get_operations(wsdl, protocol_namespace, soap_namespace),
       schema_attributes: get_schema_attributes(wsdl, protocol_namespace),
-      validation_types: get_validation_types(wsdl, file_path, protocol_namespace)
+      validation_types: get_validation_types(wsdl, file_path, protocol_namespace),
+      soap_version: soap_version(opts)
     }
 
     {:ok, parsed_response}
@@ -127,29 +133,14 @@ defmodule Soap.Wsdl do
     end)
   end
 
-  @spec get_operations(String.t(), String.t()) :: list()
-  defp get_operations(wsdl, protocol_ns), do: get_operations(wsdl, soap_version(), protocol_ns)
-
-  @spec get_operations(String.t(), String.t(), String.t()) :: list()
-  defp get_operations(wsdl, "1.2", protocol_ns) do
+  defp get_operations(wsdl, protocol_ns, soap_ns) do
     wsdl
     |> xpath(
       ~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l,
       name: ~x"./@name"s,
-      soap_action: ~x"./soap12:operation/@soapAction"s
+      soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s
     )
-    # |> Enum.reject(fn x -> x[:soap_action] == "" end)
-    |> process_operations_extractor_result(wsdl)
-  end
-
-  defp get_operations(wsdl, _soap_version, protocol_ns) do
-    wsdl
-    |> xpath(
-      ~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l,
-      name: ~x"./@name"s,
-      soap_action: ~x"./soap:operation/@soapAction"s
-    )
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+        #|> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()
@@ -157,6 +148,17 @@ defmodule Soap.Wsdl do
     wsdl
     |> xpath(~x"//namespace::*"l)
     |> Enum.find(fn {_, _, _, _, url} -> url == :"http://schemas.xmlsoap.org/wsdl/" end)
+    |> elem(3)
+  end
+
+  @spec get_soap_namespace(String.t(), list()) :: String.t()
+  defp get_soap_namespace(wsdl, opts) when is_list(opts) do
+    version = soap_version(opts)
+    namespace = @soap_version_namespaces[version]
+
+    wsdl
+    |> xpath(~x"//namespace::*"l)
+    |> Enum.find(fn {_, _, _, _, url} -> url == namespace end)
     |> elem(3)
   end
 
@@ -170,11 +172,8 @@ defmodule Soap.Wsdl do
     )
   end
 
-  @spec process_operations_extractor_result(list(), String.t()) :: list()
-  defp process_operations_extractor_result([], wsdl), do: get_operations(wsdl, "1.1")
-  defp process_operations_extractor_result(result, _wsdl), do: result
-
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  defp soap_version(opts) when is_list(opts), do: Keyword.get(opts, :soap_version, soap_version())
 
   defp ns(name, []), do: "#{name}"
   defp ns(name, namespace), do: "#{namespace}:#{name}"
