@@ -140,7 +140,7 @@ defmodule Soap.Wsdl do
       name: ~x"./@name"s,
       soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s
     )
-        #|> Enum.reject(fn x -> x[:soap_action] == "" end)
+    # |> Enum.reject(fn x -> x[:soap_action] == "" end)
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()
