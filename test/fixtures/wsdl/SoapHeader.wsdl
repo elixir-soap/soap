@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://test.com" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://test.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://test.com">
+        <xsd:element type="tns:sayHelloResponse" name="sayHelloResponse"/>
+        <xsd:element type="tns:sayHello" name="sayHello"/>
+        <xsd:element type="tns:sayHelloHeader" name="sayHelloHeader"/>
+        <xsd:complexType name="sayHello">
+          <xsd:sequence>
+            <xsd:element type="xsd:string" name="body"/>
+          </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="sayHelloHeader">
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" type="xsd:string" name="token"/>
+          </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="sayHelloResponse">
+          <xsd:sequence>
+            <xsd:element type="xsd:string" name="body"/>
+          </xsd:sequence>
+        </xsd:complexType>
+    </xsd:schema>
+  </types>
+  <message name="HelloHeader">
+    <part name="Authentication" element="tns:sayHelloHeader" />
+  </message>
+  <message name="HelloMessage">
+    <part name="parameters" element="tns:sayHello" />
+  </message>
+  <message name="HelloMessageResponse">
+    <part name="parameters" element="tns:sayHelloResponse" />
+  </message>
+  <portType name="HelloPortType">
+    <operation name="sayHello">
+      <input message="tns:HelloMessage"/>
+      <output message="tns:HelloMessageResponse"/>
+    </operation>
+  </portType>
+  <binding name="HelloBinding" type="tns:HelloPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="sayHello">
+      <soap:operation soapAction="http://example.com/sayHello"/>
+      <input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:HelloHeader" part="Authentication" use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="HelloService">
+    <port name="HelloPort" binding="tns:HelloBinding">
+      <soap:address location="http://localhost:8888/hello-service/hello-service"/>
+    </port>
+  </service>
+</definitions>
