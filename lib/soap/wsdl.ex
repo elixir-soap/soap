@@ -28,12 +28,13 @@ defmodule Soap.Wsdl do
     protocol_namespace = get_protocol_namespace(wsdl)
     soap_namespace = get_soap_namespace(wsdl, opts)
     schema_namespace = get_schema_namespace(wsdl)
+    port_type = get_port_type(wsdl, protocol_namespace)
 
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
       endpoint: get_endpoint(wsdl, protocol_namespace, soap_namespace),
-      complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
-      operations: get_operations(wsdl, protocol_namespace, soap_namespace),
+      elements: get_elements(wsdl, schema_namespace, protocol_namespace),
+      operations: get_operations(wsdl, port_type, protocol_namespace, soap_namespace),
       schema_attributes: get_schema_attributes(wsdl, protocol_namespace),
       validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace),
       soap_version: soap_version(opts),
@@ -41,6 +42,24 @@ defmodule Soap.Wsdl do
     }
 
     {:ok, parsed_response}
+  end
+
+  defp get_port_type(wsdl, protocol_ns) do
+    wsdl
+    |> xpath(~x"//#{ns("portType", protocol_ns)}/#{ns("operation", protocol_ns)}"l)
+    |> Enum.map(fn node ->
+        name = node |> xpath(~x"@name"s)
+        input_message = node |> xpath(~x"#{ns("input", protocol_ns)}/@message"s)
+        output_message = node |> xpath(~x"#{ns("output", protocol_ns)}/@message"s)
+
+        faults = node |> xpath(~x"#{ns("fault", protocol_ns)}"l)
+                      |> Enum.map(fn fault_node ->
+                                      fault_node |> xpath(~x".", message: ~x"./@message"s, name: ~x"./@name"s)
+                                  end)
+
+        {name, %{input_message: input_message, output_message: output_message, faults: faults}}
+    end)
+    |> Map.new
   end
 
   @spec get_schema_namespace(String.t()) :: String.t()
@@ -90,8 +109,8 @@ defmodule Soap.Wsdl do
     )
   end
 
-  @spec get_complex_types(String.t(), String.t(), String.t()) :: list()
-  def get_complex_types(wsdl, namespace, protocol_ns) do
+  @spec get_elements(String.t(), String.t(), String.t()) :: list()
+  def get_elements(wsdl, namespace, protocol_ns) do
     xpath(
       wsdl,
       ~x"//#{ns("types", protocol_ns)}/#{ns("schema", namespace)}/#{ns("element", namespace)}"l,
@@ -134,15 +153,20 @@ defmodule Soap.Wsdl do
     end)
   end
 
-  defp get_operations(wsdl, protocol_ns, soap_ns) do
+  defp get_operations(wsdl, port_type, protocol_ns, soap_ns) do
     wsdl
     |> xpath(~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l)
     |> Enum.map(fn node ->
       node
       |> xpath(~x".", name: ~x"./@name"s, soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s)
       |> Map.put(:input, get_operation_input(node, protocol_ns, soap_ns))
+      |> put_port_type(port_type)
     end)
     |> Enum.reject(fn x -> x[:soap_action] == "" end)
+  end
+
+  defp put_port_type(%{name: name} = node, port_type) do
+    Map.put(node, :port_type, port_type[name])
   end
 
   defp get_operation_input(element, protocol_ns, soap_ns) do
@@ -172,7 +196,7 @@ defmodule Soap.Wsdl do
   end
 
   defp get_message_parts(element, protocol_ns) do
-    xpath(element, ~x"./#{ns("part", protocol_ns)}"l, name: ~x"./@name"s, element: ~x"./@element"s)
+    xpath(element, ~x"./#{ns("part", protocol_ns)}"l, name: ~x"./@name"s, element: ~x"./@element"s, type: ~x"./@type"s)
   end
 
   @spec get_protocol_namespace(String.t()) :: String.t()
