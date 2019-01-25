@@ -38,3 +38,9 @@ params = %{recipient: "1", body: ""}
 # Parse body
 Soap.Response.parse_body(body)
 ```
+
+To add SOAP headers, pass in a `{headers, params}` tuple instead of just params.
+
+```elixir
+%Soap.Response{} = Soap.call(wsdl, action, {%{Token: "foo"}, params})
+```
