@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0
+* Add MIT license [#53]
+* Feat/soap headers [#50]
+* Support for different SOAP version for different WSDL files [#49]
+* Support WSDL files with WSDL namespace being root [#46]
+* Skip params validation if prebuilt XML given [#45]
+
+## v0.1.2
+* Update HTTPoison [#44]
+
 ## v0.1.1
 * Now `Soap.call/4` returns its own response structure `%Soap.Response{body: nil, headers: [], request_url: nil, status_code: nil}`
 
