@@ -46,8 +46,7 @@ defmodule Soap.MixProject do
       {:credo, "~> 0.5", only: :dev},
 
       # Docs
-      {:ex_doc, "~> 0.16", only: [:dev, :docs], runtime: false},
-      {:inch_ex, "~> 0.2", only: [:dev, :docs]},
+      {:ex_doc, "~>  0.19.3", only: [:dev, :docs], runtime: false},
 
       # Http && XML
       {:httpoison, "~> 1.3"},
