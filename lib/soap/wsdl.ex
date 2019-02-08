@@ -127,7 +127,7 @@ defmodule Soap.Wsdl do
   defp get_imported_types(xsd_paths) do
     xsd_paths
     |> Enum.map(fn xsd_path ->
-      case Xsd.parse_from_file(xsd_path) do
+      case Xsd.parse(xsd_path) do
         {:ok, xsd} -> xsd.complex_types
         _ -> %{}
       end

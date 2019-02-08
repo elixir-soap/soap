@@ -8,16 +8,31 @@ defmodule Soap.Xsd do
 
   alias Soap.Type
 
+  def parse(path) do
+    if URI.parse(path).scheme do
+      parse_from_url(path)
+    else
+      parse_from_file(path)
+    end
+  end
+
   @spec parse_from_file(String.t()) :: {:ok, map()} | {:error, atom()}
   def parse_from_file(path) do
     case File.read(path) do
-      {:ok, xsd} -> parse(xsd)
+      {:ok, xsd} -> parse_xsd(xsd)
       error_response -> error_response
     end
   end
 
+  @spec parse_from_url(String.t()) :: {:ok, map()}
+  def parse_from_url(path) do
+    path
+    |> HTTPoison.get!([], follow_redirect: true, max_redirect: 5)
+    |> parse_xsd()
+  end
+
   @spec parse(String.t()) :: {:ok, map()}
-  def parse(xsd) do
+  def parse_xsd(xsd) do
     parsed_response = %{
       simple_types: get_simple_types(xsd),
       complex_types: Type.get_complex_types(xsd, "//xsd:schema/xsd:complexType")
