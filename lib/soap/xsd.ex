@@ -8,6 +8,7 @@ defmodule Soap.Xsd do
 
   alias Soap.Type
 
+  @spec parse(String.t()) :: {:ok, map()} | {:error, atom()}
   def parse(path) do
     if URI.parse(path).scheme do
       parse_from_url(path)
@@ -24,11 +25,13 @@ defmodule Soap.Xsd do
     end
   end
 
-  @spec parse_from_url(String.t()) :: {:ok, map()}
+  @spec parse_from_url(String.t()) :: {:ok, map()} | {:error, atom()}
   def parse_from_url(path) do
-    path
-    |> HTTPoison.get!([], follow_redirect: true, max_redirect: 5)
-    |> parse_xsd()
+    case HTTPoison.get(path, [], follow_redirect: true, max_redirect: 5) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} -> {:ok, body}
+      {:ok, %HTTPoison.Response{status_code: 404}} -> {:error, :not_found}
+      {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
+    end
   end
 
   @spec parse(String.t()) :: {:ok, map()}

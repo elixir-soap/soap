@@ -34,7 +34,7 @@ defmodule Soap.Wsdl do
       endpoint: get_endpoint(wsdl, protocol_namespace),
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
       operations: get_operations(wsdl, protocol_namespace, soap_namespace),
-      schema_attributes: get_schema_attributes(wsdl, protocol_namespace),
+      schema_attributes: get_schema_attributes(wsdl),
       validation_types: get_validation_types(wsdl, file_path, protocol_namespace),
       soap_version: soap_version(opts),
       messages: get_messages(wsdl, protocol_namespace)
@@ -194,8 +194,8 @@ defmodule Soap.Wsdl do
     |> elem(3)
   end
 
-  @spec get_schema_attributes(String.t(), String.t()) :: map()
-  defp get_schema_attributes(wsdl, protocol_ns) do
+  @spec get_schema_attributes(String.t()) :: map()
+  defp get_schema_attributes(wsdl) do
     wsdl
     |> xpath(
       ~x"//*[local-name() = 'schema']",
