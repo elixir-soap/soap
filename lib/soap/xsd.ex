@@ -28,8 +28,8 @@ defmodule Soap.Xsd do
   @spec parse_from_url(String.t()) :: {:ok, map()} | {:error, atom()}
   def parse_from_url(path) do
     case HTTPoison.get(path, [], follow_redirect: true, max_redirect: 5) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} -> {:ok, body}
       {:ok, %HTTPoison.Response{status_code: 404}} -> {:error, :not_found}
+      {:ok, %HTTPoison.Response{body: body}} -> parse_xsd(body)
       {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
     end
   end

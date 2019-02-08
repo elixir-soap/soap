@@ -13,4 +13,9 @@ defmodule Fixtures do
     get_file_path("wsdl/#{file}")
     |> File.read!()
   end
+
+  def load_xsd(file) do
+    get_file_path("xsd/#{file}")
+    |> File.read!
+  end
 end
