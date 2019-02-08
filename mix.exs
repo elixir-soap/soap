@@ -53,7 +53,7 @@ defmodule Soap.MixProject do
       {:xml_builder, "~> 2.1"},
 
       # Mocks for tests
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.2", only: :test}
     ]
   end
 end
