@@ -198,7 +198,7 @@ defmodule Soap.Wsdl do
   defp get_schema_attributes(wsdl, protocol_ns) do
     wsdl
     |> xpath(
-      ~x"//#{ns("types", protocol_ns)}/*[local-name() = 'schema']",
+      ~x"//*[local-name() = 'schema']",
       target_namespace: ~x"./@targetNamespace"s,
       element_form_default: ~x"./@elementFormDefault"s
     )
