@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.1
+* Fix crash in parsing by reason of incorrect expression [#56]
+* Update library dependencies [#55]
+
 ## v0.2.0
 * Add MIT license [#53]
 * Feat/soap headers [#50]
