@@ -52,7 +52,7 @@ defmodule Soap.Request.Params do
   end
 
   @spec validate_param(param :: tuple(), wsdl :: map(), operation :: String.t()) :: String.t() | nil
-  def validate_param(param, wsdl, operation) do
+  defp validate_param(param, wsdl, operation) do
     {k, _, v} = param
 
     case val_map = wsdl.validation_types[String.downcase(operation)] do
@@ -71,7 +71,7 @@ defmodule Soap.Request.Params do
   end
 
   @spec validate_param_attributes(val_map :: map(), k :: String.t(), v :: String.t()) :: String.t() | nil
-  def validate_param_attributes(val_map, k, v) do
+  defp validate_param_attributes(val_map, k, v) do
     attributes = val_map[k]
     [_, type] = String.split(attributes.type, ":")
 
@@ -81,22 +81,22 @@ defmodule Soap.Request.Params do
     end
   end
 
-  def validate_type(_k, v, "string") when is_binary(v), do: nil
-  def validate_type(k, _v, type = "string"), do: type_error_message(k, type)
+  defp validate_type(_k, v, "string") when is_binary(v), do: nil
+  defp validate_type(k, _v, type = "string"), do: type_error_message(k, type)
 
-  def validate_type(_k, v, "decimal") when is_number(v), do: nil
-  def validate_type(k, _v, type = "decimal"), do: type_error_message(k, type)
+  defp validate_type(_k, v, "decimal") when is_number(v), do: nil
+  defp validate_type(k, _v, type = "decimal"), do: type_error_message(k, type)
 
-  def validate_type(k, v, "date") when is_binary(v) do
+  defp validate_type(k, v, "date") when is_binary(v) do
     case Regex.match?(~r/#{@date_type_regex}/, v) do
       true -> nil
       _ -> format_error_message(k, @date_type_regex)
     end
   end
 
-  def validate_type(k, _v, type = "date"), do: type_error_message(k, type)
+  defp validate_type(k, _v, type = "date"), do: type_error_message(k, type)
 
-  def validate_type(k, v, "dateTime") when is_binary(v) do
+  defp validate_type(k, v, "dateTime") when is_binary(v) do
     case Regex.match?(~r/#{@date_time_type_regex}/, v) do
       true -> nil
       _ -> format_error_message(k, @date_time_type_regex)
@@ -105,7 +105,7 @@ defmodule Soap.Request.Params do
     nil
   end
 
-  def validate_type(k, _v, type = "dateTime"), do: type_error_message(k, type)
+  defp validate_type(k, _v, type = "dateTime"), do: type_error_message(k, type)
 
   defp build_soap_body(wsdl, operation, params) do
     case params |> construct_xml_request_body |> validate_params(wsdl, operation) do

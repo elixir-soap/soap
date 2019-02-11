@@ -26,7 +26,7 @@ defmodule Soap.Request do
   Returns endpoint url from wsdl.
   """
   @spec get_url(wsdl :: map()) :: String.t()
-  def get_url(wsdl) do
+  defp get_url(wsdl) do
     wsdl.endpoint
   end
 end
