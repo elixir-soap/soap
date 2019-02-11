@@ -1,4 +1,8 @@
 defmodule OperationError do
+  @moduledoc """
+  Defines an exception that handles an inaccessible wsdl operations.
+  """
+
   defexception [:message]
 
   def exception(soap_operation) do
