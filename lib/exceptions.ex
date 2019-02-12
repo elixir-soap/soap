@@ -1,6 +1,6 @@
 defmodule OperationError do
   @moduledoc """
-  Defines an exception that handles an inaccessible wsdl operations.
+  Defines an exception that handles not described WSDL operations.
   """
 
   defexception [:message]
