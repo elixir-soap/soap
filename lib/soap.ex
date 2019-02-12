@@ -45,7 +45,7 @@ defmodule Soap do
   def init_model(path, :url), do: Wsdl.parse_from_url(path)
 
   @doc """
-  Send a request to the SOAP server based on the passed wsdl, action and parameters.
+  Send a request to the SOAP server based on the passed WSDL file, action and parameters.
   Returns `{:ok, %Soap.Response{}}` if the request is successful, {:error, reason} otherwise.
 
   ## Parameters
