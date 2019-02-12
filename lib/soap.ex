@@ -51,7 +51,7 @@ defmodule Soap do
   ## Parameters
 
   - `wsdl`: Wsdl model from `Soap.init_model/2` function.
-  - `action`: Soap action to be called.
+  - `action`: Soap action to be called. Use `Soap.operation/1` to get a list of available actions 
   - `params`: Parameters to build the body of a SOAP request.
   - `headers`: Custom request headers.
   - `opts`: HTTPoison options.
