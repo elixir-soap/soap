@@ -54,7 +54,7 @@ defmodule Soap do
   - `action`: Soap action to be called.
   - `params`: Parameters to build the body of a SOAP request.
   - `headers`: Custom request headers.
-  - `opts`: HTTPoison options
+  - `opts`: HTTPoison options.
 
   ## Examples
 
