@@ -12,6 +12,7 @@ defmodule Soap.MixProject do
       description: description(),
       name: "Soap",
       source_url: "https://github.com/potok-digital/soap",
+      docs: [main: "Soap", extras: ["README.md"]],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -33,7 +34,7 @@ defmodule Soap.MixProject do
 
   defp description do
     """
-    Pure Elixir implementation of SOAP client
+    SOAP client for Elixir programming language
     """
   end
 
