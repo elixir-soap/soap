@@ -11,7 +11,7 @@ defmodule Soap.MixProject do
       package: package(),
       description: description(),
       name: "Soap",
-      source_url: "https://github.com/potok-digital/soap",
+      source_url: "https://github.com/elixir-soap/soap",
       docs: [main: "Soap", extras: ["README.md"]],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
@@ -28,7 +28,7 @@ defmodule Soap.MixProject do
       files: ["lib", "mix.exs", "README.md", "LICENSE*"],
       maintainers: ["Petr Stepchenko", "Roman Kakorin"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/potok-digital/soap"}
+      links: %{"GitHub" => "https://github.com/elixir-soap/soap"}
     ]
   end
 

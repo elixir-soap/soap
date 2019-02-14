@@ -1,6 +1,6 @@
 # Soap
-[![Build Status](https://travis-ci.org/potok-digital/soap.svg?branch=master)](https://travis-ci.org/potok-digital/soap)
-[![Code coverage](https://img.shields.io/coveralls/github/potok-digital/soap.svg?style=flat)](https://coveralls.io/github/potok-digital/soap)
+[![Build Status](https://travis-ci.org/elixir-soap/soap.svg?branch=master)](https://travis-ci.org/elixir-soap/soap)
+[![Code coverage](https://img.shields.io/coveralls/github/elixir-soap/soap.svg?style=flat)](https://coveralls.io/github/elixir-soap/soap)
 [![Hex version](https://img.shields.io/hexpm/v/soap.svg?style=flat)](https://hex.pm/packages/soap)
 [![Hex license](https://img.shields.io/hexpm/l/soap.svg?style=flat)](https://hex.pm/packages/soap)
 [![Hex downloads](https://img.shields.io/hexpm/dt/soap.svg?style=flat)](https://hex.pm/packages/soap)
@@ -97,10 +97,10 @@ To add SOAP headers, pass in a `{headers, params}` tuple instead of just params:
 ```
 
 ## Contributing
-We appreciate any contribution and open to [future requests](https://github.com/potok-digital/soap/pulls).
+We appreciate any contribution and open to [future requests](https://github.com/elixir-soap/soap/pulls).
 
-You can find a list of features and bugs in the [issue tracker](https://github.com/potok-digital/soap/issues).
+You can find a list of features and bugs in the [issue tracker](https://github.com/elixir-soap/soap/issues).
 
 ## License
 
-Soap is released under the MIT license, see the [LICENSE](https://github.com/potok-digital/soap/blob/master/LICENSE) file.
+Soap is released under the MIT license, see the [LICENSE](https://github.com/elixir-soap/soap/blob/master/LICENSE) file.
