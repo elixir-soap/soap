@@ -25,18 +25,18 @@ end
 ## Usage
 
 ```elixir
-wsdl_path = "https://git.io/vNCWd"
-action = "SendMessage"
-params = %{recipient: "1", body: ""}
+wsdl_path = "http://www.dneonline.com/calculator.asmx?WSDL"
+action = "Add"
+params = %{intA: 1, intB: 2}
 
 # Parse wsdl file for execution of action on its basis
 {:ok, wsdl} = Soap.init_model(wsdl_path, :url)
 
 # Call action
-%Soap.Response{body: body, headers: headers, request_url: url, status_code: code} = Soap.call(wsdl, action, params)
+{:ok, %Soap.Response{body: body, headers: headers, request_url: url, status_code: code}} = Soap.call(wsdl, action, params)
 
 # Parse body
-Soap.Response.parse_body(body)
+Soap.Response.parse(body, code)
 ```
 
 To add SOAP headers, pass in a `{headers, params}` tuple instead of just params.
