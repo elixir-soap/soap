@@ -11,6 +11,7 @@ defmodule Soap.ResponseTest do
       request_url: "",
       status_code: 200
     }
+
     correctly_parsed_response = %{response: %{message: "Hello!"}}
 
     assert Response.parse(response) == correctly_parsed_response

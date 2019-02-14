@@ -14,7 +14,7 @@ defmodule Soap.MixProject do
       source_url: "https://github.com/potok-digital/soap",
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        "coveralls": :test,
+        coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
@@ -54,11 +54,10 @@ defmodule Soap.MixProject do
       {:xml_builder, "~> 2.1"},
 
       # Code style
-      {:credo, "~> 0.5", only: :dev},
+      {:credo, "~> 1.0", only: [:dev, :test]},
 
       # Docs
       {:ex_doc, "~>  0.19.3", only: [:dev, :docs], runtime: false},
-
 
       # Testing
       {:mock, "~> 0.3.0", only: :test},
