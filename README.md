@@ -24,6 +24,13 @@ def application do
 end
 ```
 
+## Configuration
+
+Configure version of SOAP protocol. Supported versions `1.1`(default) and `1.2`.
+```elixir
+config :soap, :globals, version: "1.1"
+```
+
 ## Usage
 
 The documentation is available on [HexDocs](https://hexdocs.pm/soap/api-reference.html).
