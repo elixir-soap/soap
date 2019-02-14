@@ -5,4 +5,7 @@ elixir:
   - 1.8.1
 env:
   - MIX_ENV=test
-script: mix coveralls.travis
+script:
+  - mix coveralls.travis
+  - mix credo --strict
+  - mix format --check-formatted
