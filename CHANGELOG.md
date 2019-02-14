@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.1
+### 🧰 Maintenance
+* Improve documentation [#66]
+
 ## v1.0.0 🎉🎉🎉
 ### 🚀 Features
 * Add `Soap.Response.parse/1` [#61]
