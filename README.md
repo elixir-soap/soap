@@ -97,9 +97,9 @@ To add SOAP headers, pass in a `{headers, params}` tuple instead of just params:
 ```
 
 ## Contributing
-We appreciate any contribution and open to future requests.
+We appreciate any contribution and open to [future requests](https://github.com/potok-digital/soap/pulls).
 
-We usually keep a list of features and bugs in the issue tracker.
+We usually keep a list of features and bugs in the [issue tracker](https://github.com/potok-digital/soap/issues).
 
 ## License
 
