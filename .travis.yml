@@ -3,7 +3,6 @@ elixir:
   - 1.6.6
   - 1.7.4
   - 1.8.1
-otp_release: '20.0'
-notifications:
-  recipients:
-    - nitrinodev@gmail.com
+env:
+  - MIX_ENV=test
+script: mix coveralls.travis

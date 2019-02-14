@@ -1,5 +1,6 @@
 # Soap
 [![Build Status](https://travis-ci.org/potok-digital/soap.svg?branch=master)](https://travis-ci.org/potok-digital/soap)
+[![Code coverage](https://img.shields.io/coveralls/github/potok-digital/soap.svg?style=flat)](https://coveralls.io/github/potok-digital/soap)
 
 Pure Elixir implementation of SOAP client
 
