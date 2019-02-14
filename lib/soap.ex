@@ -42,7 +42,7 @@ defmodule Soap do
   See `call/5` for more details on how to issue requests to soap services
   """
 
-  alias Soap.{Wsdl, Response, Request}
+  alias Soap.{Request, Response, Wsdl}
 
   @doc """
   Initialization of a WSDL model. Response a map of parsed data from file.

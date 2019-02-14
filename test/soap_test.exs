@@ -1,7 +1,7 @@
 defmodule SoapTest do
   use ExUnit.Case
   import Mock
-  alias Soap.{Wsdl, Response}
+  alias Soap.{Response, Wsdl}
 
   @operation "SendMessage"
   @request_params %{inCommonParms: [{"userID", "WSPB"}]}

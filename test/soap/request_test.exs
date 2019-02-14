@@ -2,9 +2,9 @@ defmodule Soap.RequestTest do
   use ExUnit.Case
   import Mock
   doctest Soap.Request
-  alias Soap.{Wsdl, Request}
+  alias Soap.{Request, Wsdl}
 
-  @request_with_header """
+  @request_with_header ~S"""
                        <?xml version="1.0" encoding="UTF-8"?>
                        <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://test.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                          <env:Header>

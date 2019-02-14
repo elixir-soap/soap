@@ -1,5 +1,5 @@
 defmodule Soap.Request.Headers do
-  @doc """
+  @moduledoc """
   Headers generator by soap action and custom headers.
 
   ## Examples
@@ -9,6 +9,7 @@ defmodule Soap.Request.Headers do
       [{"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"}, {"Content-Type", "text/xml;charset=utf-8"}]
 
   """
+
   @spec build(map(), String.t(), list()) :: list()
   def build(wsdl, operation, custom_headers) do
     wsdl

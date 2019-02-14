@@ -250,7 +250,8 @@ defmodule Soap.Request.Params do
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, operation) do
-    get_action_with_namespace(wsdl, operation)
+    wsdl
+    |> get_action_with_namespace(operation)
     |> String.split(":")
     |> List.first()
   end
@@ -274,7 +275,7 @@ defmodule Soap.Request.Params do
 
   @spec build_soap_version_attribute(Map.t()) :: map()
   defp build_soap_version_attribute(wsdl) do
-    soap_version = soap_version(wsdl) |> to_string
+    soap_version = wsdl |> soap_version() |> to_string
     %{"xmlns:#{env_namespace()}" => @soap_version_namespaces[soap_version]}
   end
 

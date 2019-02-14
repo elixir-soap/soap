@@ -9,7 +9,7 @@ defmodule Soap.Wsdl do
 
   import SweetXml, except: [parse: 1, parse: 2]
 
-  alias Soap.{Xsd, Type}
+  alias Soap.{Type, Xsd}
 
   @spec parse_from_file(String.t()) :: {:ok, map()}
   def parse_from_file(path, opts \\ []) do
@@ -57,8 +57,7 @@ defmodule Soap.Wsdl do
   defp get_namespaces(wsdl, schema_namespace, protocol_ns) do
     wsdl
     |> xpath(~x"//#{ns("definitions", protocol_ns)}/namespace::*"l)
-    |> Enum.map(&get_namespace(&1, wsdl, schema_namespace, protocol_ns))
-    |> Enum.into(%{})
+    |> Enum.into(%{}, &get_namespace(&1, wsdl, schema_namespace, protocol_ns))
   end
 
   @spec get_namespace(map(), String.t(), String.t(), String.t()) :: tuple()
