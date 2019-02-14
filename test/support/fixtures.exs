@@ -19,6 +19,6 @@ defmodule Fixtures do
   def load_xsd(file) do
     "xsd/#{file}"
     |> get_file_path()
-    |> File.read!
+    |> File.read!()
   end
 end

@@ -56,8 +56,10 @@ defmodule Soap.Response.Parser do
     cond do
       Enum.all?(elements, &is_map/1) && unique_tags?(elements) ->
         Enum.reduce(elements, &Map.merge/2)
+
       Enum.all?(elements, &is_map/1) ->
         elements |> Enum.map(&Map.to_list/1) |> List.flatten()
+
       true ->
         extract_value_from_list(elements)
     end
@@ -68,7 +70,8 @@ defmodule Soap.Response.Parser do
   defp extract_value_from_list(elements), do: elements
 
   defp unique_tags?(elements) do
-    keys = elements
+    keys =
+      elements
       |> Enum.map(&Map.keys/1)
       |> List.flatten()
 

@@ -72,7 +72,9 @@ defmodule Soap.Wsdl do
 
       xpath(
         wsdl,
-        ~x"//#{ns("types", protocol_ns)}/#{ns("schema", schema_namespace)}/#{ns("import", schema_namespace)}[@namespace='#{value}']"
+        ~x"//#{ns("types", protocol_ns)}/#{ns("schema", schema_namespace)}/#{ns("import", schema_namespace)}[@namespace='#{
+          value
+        }']"
       ) ->
         {string_key, %{value: value, type: :xsd}}
 
@@ -85,7 +87,9 @@ defmodule Soap.Wsdl do
   def get_endpoint(wsdl, protocol_ns, soap_ns) do
     wsdl
     |> xpath(
-      ~x"//#{ns("definitions", protocol_ns)}/#{ns("service", protocol_ns)}/#{ns("port", protocol_ns)}/#{ns("address", soap_ns)}/@location"s
+      ~x"//#{ns("definitions", protocol_ns)}/#{ns("service", protocol_ns)}/#{ns("port", protocol_ns)}/#{
+        ns("address", soap_ns)
+      }/@location"s
     )
   end
 
