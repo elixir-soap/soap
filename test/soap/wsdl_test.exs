@@ -247,7 +247,17 @@ defmodule Soap.WsdlTest do
     ],
     schema_attributes: %{element_form_default: "qualified", target_namespace: "http://test.com"},
     soap_version: "1.1",
-    validation_types: %{},
+    validation_types: %{
+      "sayhello" => %{
+        "body" => %{type: "xsd:string"}
+      },
+      "sayhelloheader" => %{
+        "token" => %{maxOccurs: "1", minOccurs: "1", type: "xsd:string"}
+      },
+      "sayhelloresponse" => %{
+        "body" => %{type: "xsd:string"}
+      }
+    },
     messages: [
       %{name: "HelloHeader", parts: [%{element: "tns:sayHelloHeader", name: "Authentication"}]},
       %{name: "HelloMessage", parts: [%{element: "tns:sayHello", name: "parameters"}]},
