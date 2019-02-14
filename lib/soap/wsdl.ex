@@ -44,7 +44,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_schema_namespace(String.t()) :: String.t()
-  def get_schema_namespace(wsdl) do
+  defp get_schema_namespace(wsdl) do
     {_, _, _, schema_namespace, _} =
       wsdl
       |> xpath(~x"//namespace::*"l)
@@ -54,7 +54,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_namespaces(String.t(), String.t(), String.t()) :: map()
-  def get_namespaces(wsdl, schema_namespace, protocol_ns) do
+  defp get_namespaces(wsdl, schema_namespace, protocol_ns) do
     wsdl
     |> xpath(~x"//#{ns("definitions", protocol_ns)}/namespace::*"l)
     |> Enum.map(&get_namespace(&1, wsdl, schema_namespace, protocol_ns))
@@ -83,7 +83,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_endpoint(String.t(), String.t()) :: String.t()
-  def get_endpoint(wsdl, protocol_ns) do
+  defp get_endpoint(wsdl, protocol_ns) do
     wsdl
     |> xpath(
       ~x"//#{ns("definitions", protocol_ns)}/#{ns("service", protocol_ns)}/#{ns("port", protocol_ns)}/soap:address/@location"s
@@ -91,7 +91,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_complex_types(String.t(), String.t(), String.t()) :: list()
-  def get_complex_types(wsdl, namespace, protocol_ns) do
+  defp get_complex_types(wsdl, namespace, protocol_ns) do
     xpath(
       wsdl,
       ~x"//#{ns("types", protocol_ns)}/#{ns("schema", namespace)}/#{ns("element", namespace)}"l,
@@ -101,7 +101,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_validation_types(String.t(), String.t(), String.t()) :: map()
-  def get_validation_types(wsdl, file_path, protocol_ns) do
+  defp get_validation_types(wsdl, file_path, protocol_ns) do
     Map.merge(
       Type.get_complex_types(wsdl, "//#{protocol_ns}:types/xsd:schema/xsd:complexType"),
       wsdl
@@ -112,7 +112,7 @@ defmodule Soap.Wsdl do
   end
 
   @spec get_schema_imports(String.t(), String.t()) :: list()
-  def get_schema_imports(wsdl, protocol_ns) do
+  defp get_schema_imports(wsdl, protocol_ns) do
     xpath(wsdl, ~x"//#{protocol_ns}:types/xsd:schema/xsd:import"l, schema_location: ~x"./@schemaLocation"s)
   end
 

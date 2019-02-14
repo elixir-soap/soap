@@ -91,7 +91,7 @@ defmodule Soap.Response.Parser do
     |> apply_namespace_to_tag("Fault")
   end
 
-  def get_body_tag(xml_response) do
+  defp get_body_tag(xml_response) do
     xml_response
     |> get_envelope_namespace()
     |> List.to_string()
