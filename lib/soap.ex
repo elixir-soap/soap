@@ -21,6 +21,7 @@ defmodule Soap do
     for validation parameters when we build request body.
 
   The `Soap` module can be used to parse WSDL files:
+  ```
   iex> Soap.init_model("https://git.io/vNCWd", :url)
   {:ok, %{
     complex_types: [...],
@@ -33,10 +34,12 @@ defmodule Soap do
     validation_types: %{...}
     }
   }
-
+  ```
   And send requests:
+  ```elixir
   iex> Soap.call(wsdl, action, params)
   {:ok, %Soap.Response{}}
+  ```
 
   It's very common to use Soap in order to wrap APIs.
   See `call/5` for more details on how to issue requests to soap services
@@ -65,7 +68,8 @@ defmodule Soap do
 
   @doc """
   Send a request to the SOAP server based on the passed WSDL file, action and parameters.
-  Returns `{:ok, %Soap.Response{}}` if the request is successful, {:error, reason} otherwise.
+
+  Returns `{:ok, %Soap.Response{}}` if the request is successful, `{:error, reason}` otherwise.
 
   ## Parameters
 
