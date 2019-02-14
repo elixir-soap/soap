@@ -16,7 +16,8 @@ defmodule Soap.Response do
 
   @doc """
   Executing with xml response body as string.
-  parse/1 returns a full parsed response structure as map.
+
+  Function `parse/1` returns a full parsed response structure as map.
   """
   @spec parse(__MODULE__.t() | String.t(), integer()) :: map()
   def parse(%Soap.Response{body: body, status_code: status_code}), do: parse(body, status_code)

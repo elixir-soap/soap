@@ -11,7 +11,8 @@ defmodule Soap.Response.Parser do
   }
   @doc """
   Executing with xml response body.
-  If a list is empty then parse/1 returns full parsed response structure into map.
+
+  If a list is empty then `parse/1` returns full parsed response structure into map.
   """
   @spec parse(String.t(), integer()) :: map()
   def parse(xml_response, :fault) do
