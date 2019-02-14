@@ -1,6 +1,25 @@
 defmodule Soap do
   @moduledoc """
   The SOAP client for Elixir based on HTTPoison (for send requests) and SweetXml (for xml parsing).
+  Soap contains 5 main modules:
+
+    * `Soap.Wsdl` - Build wsdl components data map. Can parse raw wsdl file from external url or local path.
+    Wsdl which is prepared this module are using for send requests.
+
+    * `Soap.Request` - Provides functionality for build and calling requests. Contains Request.Headers and Soap.Params
+    submodules for build headers and build body with parameters validation respectively.
+    This module is a wrapper over HTTPoison. It send requests and handle them.
+
+    * `Soap.Response` - Handle soap response and handle them. It provides functionality for parsing xml-like body
+    and transform it to comfortable structure. Structure for this module returns with necessary data after send
+    a request.
+
+    * `Soap.Xsd` - This module have same functionality as Soap.Wsdl module, but only for Xsd-files. It allows to parse
+    xsd files from external resources or local path and convert it to map.
+
+    * `Soap.Type` - Provides a functionality for find and parse complex types from raw xsd file. It uses in library
+    for validation parameters when we build request body.
+
   The `Soap` module can be used to parse WSDL files:
   iex> Soap.init_model("https://git.io/vNCWd", :url)
   {:ok, %{
@@ -51,7 +70,7 @@ defmodule Soap do
   ## Parameters
 
   - `wsdl`: Wsdl model from `Soap.init_model/2` function.
-  - `action`: Soap action to be called. Use `Soap.operation/1` to get a list of available actions 
+  - `action`: Soap action to be called. Use `Soap.operation/1` to get a list of available actions
   - `params`: Parameters to build the body of a SOAP request.
   - `headers`: Custom request headers.
   - `opts`: HTTPoison options.
