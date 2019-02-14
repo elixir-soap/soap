@@ -54,7 +54,7 @@ defmodule Soap.MixProject do
       {:xml_builder, "~> 2.1"},
 
       # Code style
-      {:credo, "~> 0.5", only: :dev},
+      {:credo, "~> 1.0", only: :dev},
 
       # Docs
       {:ex_doc, "~>  0.19.3", only: [:dev, :docs], runtime: false},
