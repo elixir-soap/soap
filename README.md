@@ -13,7 +13,7 @@ SOAP client for Elixir programming language
 
 ```elixir
 def deps do
-  [{:soap, "~> 0.2"}]
+  [{:soap, "~> 1.0"}]
 end
 ```
 2) Add `soap` to the list of application dependencies(or just use extra_applications):

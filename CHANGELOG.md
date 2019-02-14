@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.0.0 🎉🎉🎉
+### 🚀 Features
+* Add `Soap.Response.parse/1` [#61]
+* Add xsd parsing from external resources [#57]
+
+### 🐛 Bug Fixes
+* Fix bug when namespaces is empty [#60]
+
+### 🧰 Maintenance
+* Improve readme and documentation [#64]
+* Code improvements (dependencies, credo, formatter) [#63]
+* Add code coverage [#62]
+* Add more documentation and maked some functions as private [#59]
+* Add latest major versions elixir to CI [#58]
+
 ## v0.2.1
 * Fix crash in parsing by reason of incorrect expression [#56]
 * Update library dependencies [#55]
