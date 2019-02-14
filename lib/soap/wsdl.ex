@@ -214,6 +214,6 @@ defmodule Soap.Wsdl do
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
   defp soap_version(opts) when is_list(opts), do: Keyword.get(opts, :soap_version, soap_version())
 
-  def ns(name, []), do: "#{name}"
-  def ns(name, namespace), do: "#{namespace}:#{name}"
+  defp ns(name, []), do: "#{name}"
+  defp ns(name, namespace), do: "#{namespace}:#{name}"
 end
