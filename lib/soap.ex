@@ -55,16 +55,17 @@ defmodule Soap do
 
   - `path`: Path for wsdl file.
   - `type`: Atom that represents the type of path for WSDL file. Can be `:file` or `url`. Default: `:file`.
+  - `opts`: HTTPoison options or `:soap_version`.
 
   ## Examples
 
       iex> {:ok, wsdl} = Soap.init_model("https://git.io/vNCWd", :url)
       {:ok, %{...}}
   """
-  @spec init_model(String.t(), :file | :url) :: {:ok, map()}
-  def init_model(path, type \\ :file)
-  def init_model(path, :file), do: Wsdl.parse_from_file(path)
-  def init_model(path, :url), do: Wsdl.parse_from_url(path)
+  @spec init_model(String.t(), :file | :url, list()) :: {:ok, map()}
+  def init_model(path, type \\ :file, opts \\ [])
+  def init_model(path, :file, opts), do: Wsdl.parse_from_file(path, opts)
+  def init_model(path, :url, opts), do: Wsdl.parse_from_url(path, opts)
 
   @doc """
   Send a request to the SOAP server based on the passed WSDL file, action and parameters.
