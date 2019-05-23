@@ -55,4 +55,17 @@ defmodule SoapTest do
 
     assert_raise OperationError, fn -> Soap.call(wsdl, operation, @request_params) end
   end
+
+  test "#init_model with :url type can take request options" do
+    wsdl_path = Fixtures.get_file_path("wsdl/SoapHeader.wsdl")
+    {:ok, wsdl_body} = File.read(wsdl_path)
+    {_, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
+    http_poison_result = %HTTPoison.Response{status_code: 200, body: wsdl_body, headers: [], request_url: nil}
+    opts = [recv_timeout: 1000]
+    opts_with_defaults = [follow_redirect: true, max_redirect: 5, recv_timeout: 1000]
+
+    with_mock HTTPoison, get!: fn _, _, ^opts_with_defaults -> http_poison_result end do
+      assert(Soap.init_model(wsdl_path, :url, opts) == {:ok, parsed_wsdl})
+    end
+  end
 end
