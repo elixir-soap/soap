@@ -5,7 +5,7 @@
 [![Hex license](https://img.shields.io/hexpm/l/soap.svg?style=flat)](https://hex.pm/packages/soap)
 [![Hex downloads](https://img.shields.io/hexpm/dt/soap.svg?style=flat)](https://hex.pm/packages/soap)
 
-SOAP client for Elixir programming language
+SOAP client for Elixir programming language (MIRS)
 
 ## Installation
 

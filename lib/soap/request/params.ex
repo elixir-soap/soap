@@ -193,7 +193,7 @@ defmodule Soap.Request.Params do
       |> get_action_with_namespace(operation)
       |> prepare_action_tag(operation)
 
-    [element(action_tag, action_tag_attributes, body)]
+    [element(Application.fetch_env!(:soap, :globals)[:special_operation_tag]<>action_tag, action_tag_attributes, body)]
   end
 
   @spec add_header_part_tag_wrapper(list(), map(), String.t()) :: list()
