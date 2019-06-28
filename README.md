@@ -28,7 +28,13 @@ end
 
 Configure version of SOAP protocol. Supported versions `1.1`(default) and `1.2`.
 ```elixir
-config :soap, :globals, version: "1.1"
+config :soap, :globals, 
+        version: "1.1",
+        ignore_schema_attribute: "yes", # yes or no
+        special_operation_tag: "xxx:",
+        custom_namespaces: %{"xmlns:tem" => "http://tempuri.org/"},
+        additional_headers: [{"more_header1","value1"}
+                             {"more_header2","value2"}]
 ```
 
 ## Usage
