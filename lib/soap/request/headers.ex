@@ -28,6 +28,8 @@ defmodule Soap.Request.Headers do
 
   @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
-    [{"SOAPAction", soap_action}, {"Content-Type", "text/xml;charset=utf-8"}]
+    base = [{"SOAPAction", soap_action}, {"Content-Type", "text/xml;charset=utf-8"}]
+    add = Application.fetch_env!(:soap, :globals)[:additional_headers]
+    base ++ add
   end
 end
