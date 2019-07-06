@@ -153,7 +153,9 @@ defmodule Soap.Wsdl do
       |> xpath(~x".", name: ~x"./@name"s, soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s)
       |> Map.put(:input, get_operation_input(node, protocol_ns, soap_ns))
     end)
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+    |> Enum.reject(fn x -> Application.fetch_env!(:soap, :globals)[:allow_soap_action_null]==false end)
+    #|> Enum.reject(fn x -> x[:soap_action] == "" and Application.fetch_env!(:soap, :globals)[:allow_soap_action_null]==false end)
+
   end
 
   defp get_operation_input(element, protocol_ns, soap_ns) do
