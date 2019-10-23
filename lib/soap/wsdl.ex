@@ -224,10 +224,7 @@ defmodule Soap.Wsdl do
   defp soap_version(opts) when is_list(opts), do: Keyword.get(opts, :soap_version, soap_version())
 
   defp allow_empty_soap_action do
-    case Application.fetch_env!(:soap, :globals)[:allow_empty_soap_action] do
-      nil -> false
-      otherwise -> otherwise
-    end
+    Application.fetch_env!(:soap, :globals)[:allow_empty_soap_action] || false
   end
 
   defp ns(name, []), do: "#{name}"
