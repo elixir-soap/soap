@@ -31,6 +31,16 @@ Configure version of SOAP protocol. Supported versions `1.1`(default) and `1.2`.
 config :soap, :globals, version: "1.1"
 ```
 
+Allow empty `soapAction` attribute in operation definition
+```elixir
+config :soap, :globals, allow_empty_soap_action: true
+```
+
+In case of `schema_namespace` is not present in types definitions
+```elixir
+config :soap, :globals, absent_schema_namespace: true
+```
+
 ## Usage
 
 The documentation is available on [HexDocs](https://hexdocs.pm/soap/api-reference.html).
