@@ -217,9 +217,15 @@ defmodule Soap.Request.Params do
 
   @spec get_action_with_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_with_namespace(wsdl, operation) do
-    wsdl[:complex_types]
-    |> Enum.find(fn x -> x[:name] == operation end)
-    |> handle_action_extractor_result(wsdl, operation)
+    case wsdl[:complex_types] do
+      [] ->
+        ""
+
+      _ ->
+        wsdl[:complex_types]
+        |> Enum.find(fn x -> x[:name] == operation end)
+        |> handle_action_extractor_result(wsdl, operation)
+    end
   end
 
   @spec get_header_with_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
