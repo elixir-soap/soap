@@ -358,4 +358,10 @@ defmodule Soap.WsdlTest do
       end
     end
   end
+
+  test "#parse WSDl without schema attributes" do
+    wsdl_path = Fixtures.get_file_path("wsdl/InitPaymentWithoutSchemaAttributes.wsdl")
+    {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
+    assert parsed_wsdl.schema_attributes == %{}
+  end
 end
