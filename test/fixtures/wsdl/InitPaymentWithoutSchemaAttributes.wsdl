@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" 
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+  xmlns:tns="urn:Foo" 
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="urn:Foo" 
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types />
+  <wsdl:message name="RequestTokenSoapIn">
+    <wsdl:part name="TermID" type="s:string" />
+    <wsdl:part name="ResNum" type="s:string" />
+    <wsdl:part name="TotalAmount" type="s:long" />
+    <wsdl:part name="SegAmount1" type="s:long" />
+    <wsdl:part name="SegAmount2" type="s:long" />
+    <wsdl:part name="SegAmount3" type="s:long" />
+    <wsdl:part name="SegAmount4" type="s:long" />
+    <wsdl:part name="SegAmount5" type="s:long" />
+    <wsdl:part name="SegAmount6" type="s:long" />
+    <wsdl:part name="AdditionalData1" type="s:string" />
+    <wsdl:part name="AdditionalData2" type="s:string" />
+    <wsdl:part name="Wage" type="s:long" />
+  </wsdl:message>
+  <wsdl:message name="RequestTokenSoapOut">
+    <wsdl:part name="result" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RequestMultiSettleTypeTokenSoapIn">
+    <wsdl:part name="TermID" type="s:string" />
+    <wsdl:part name="ResNum" type="s:string" />
+    <wsdl:part name="Amounts" type="s:string" />
+    <wsdl:part name="TotalAmount" type="s:long" />
+    <wsdl:part name="SegAmount1" type="s:long" />
+    <wsdl:part name="SegAmount2" type="s:long" />
+    <wsdl:part name="SegAmount3" type="s:long" />
+    <wsdl:part name="SegAmount4" type="s:long" />
+    <wsdl:part name="SegAmount5" type="s:long" />
+    <wsdl:part name="SegAmount6" type="s:long" />
+    <wsdl:part name="AdditionalData1" type="s:string" />
+    <wsdl:part name="AdditionalData2" type="s:string" />
+    <wsdl:part name="Wage" type="s:long" />
+  </wsdl:message>
+  <wsdl:message name="RequestMultiSettleTypeTokenSoapOut">
+    <wsdl:part name="result" type="s:string" />
+  </wsdl:message>
+  <wsdl:portType name="PaymentIFBindingSoap">
+    <wsdl:operation name="RequestToken">
+      <wsdl:input message="tns:RequestTokenSoapIn" />
+      <wsdl:output message="tns:RequestTokenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestMultiSettleTypeToken">
+      <wsdl:input message="tns:RequestMultiSettleTypeTokenSoapIn" />
+      <wsdl:output message="tns:RequestMultiSettleTypeTokenSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PaymentIFBindingSoap" type="tns:PaymentIFBindingSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="RequestToken">
+      <soap:operation soapAction="RequestToken" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Foo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Foo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestMultiSettleTypeToken">
+      <soap:operation soapAction="RequestMultiSettleTypeToken" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Foo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Foo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PaymentIFBindingSoap12" type="tns:PaymentIFBindingSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="RequestToken">
+      <soap12:operation soapAction="RequestToken" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="urn:Foo" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="urn:Foo" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestMultiSettleTypeToken">
+      <soap12:operation soapAction="RequestMultiSettleTypeToken" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="urn:Foo" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="urn:Foo" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PaymentIFBinding">
+    <wsdl:port name="PaymentIFBindingSoap" binding="tns:PaymentIFBindingSoap">
+      <soap:address location="http://banktest.ir/gateway/saman/Payments/InitPayment" />
+    </wsdl:port>
+    <wsdl:port name="PaymentIFBindingSoap12" binding="tns:PaymentIFBindingSoap12">
+      <soap12:address location="http://banktest.ir/gateway/saman/Payments/InitPayment" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -222,12 +222,16 @@ defmodule Soap.Wsdl do
 
   @spec get_schema_attributes(String.t()) :: map()
   defp get_schema_attributes(wsdl) do
-    wsdl
-    |> xpath(
-      ~x"//*[local-name() = 'schema']",
-      target_namespace: ~x"./@targetNamespace"s,
-      element_form_default: ~x"./@elementFormDefault"s
-    )
+    case xpath(wsdl, ~x"//*[local-name() = 'schema']") do
+      nil ->
+        %{}
+
+      schema ->
+        xpath(schema, ~x".",
+          target_namespace: ~x"./@targetNamespace"s,
+          element_form_default: ~x"./@elementFormDefault"s
+        )
+    end
   end
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]

@@ -25,3 +25,4 @@ soap-*.tar
 .elixir_ls
 /priv
 /.DS_Store
+.DS_Store
