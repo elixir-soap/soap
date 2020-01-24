@@ -294,4 +294,68 @@ defmodule Soap.WsdlTest do
     wsdl_path = Fixtures.get_file_path("wsdl/SoapHeader.wsdl")
     assert(Wsdl.parse_from_file(wsdl_path) == {:ok, @parsed_soap_headers_wsdl})
   end
+
+  describe "#parse with different type of import scheme" do
+    setup do
+      xsd_types = %{
+        "purchaseordertype" => %{
+          "BillTo" => %{type: "tns:USAddress"},
+          "ShipTo" => %{maxOccurs: "2", type: "tns:USAddress"}
+        },
+        "usaddress" => %{
+          "city" => %{type: "xsd:string"},
+          "name" => %{type: "xsd:string"},
+          "state" => %{type: "xsd:string"},
+          "street" => %{type: "xsd:string"},
+          "zip" => %{type: "xsd:integer"}
+        }
+      }
+
+      raw_xsd = Fixtures.load_xsd("example.xsd")
+      {:ok, xsd_types: xsd_types, raw_xsd: raw_xsd}
+    end
+
+    test "#parse_from_file with WSDL containing URL schema import", %{xsd_types: xsd_types, raw_xsd: raw_xsd} do
+      wsdl_path = Fixtures.get_file_path("wsdl/CyberSourceTransactionWithURLImportSchema.wsdl")
+      xsd_path = "https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.147.xsd"
+
+      with_mock HTTPoison, get: fn ^xsd_path, _, _ -> {:ok, %HTTPoison.Response{body: raw_xsd, status_code: 200}} end do
+        {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
+        assert parsed_wsdl.validation_types == xsd_types
+      end
+    end
+
+    test "#parse_from_file with WSDL containing file schema import", %{xsd_types: xsd_types} do
+      wsdl_path = Fixtures.get_file_path("wsdl/CyberSourceTransactionWithFileImportSchema.wsdl")
+
+      {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
+      assert parsed_wsdl.validation_types == xsd_types
+    end
+
+    test "#parse_from_url with WSDL containing file schema import", %{xsd_types: xsd_types, raw_xsd: raw_xsd} do
+      wsdl_path = "https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.147.wsdl"
+      xsd_path = "https://ics2wsa.ic3.com:443/commerce/1.x/transactionProcessor/example.xsd"
+      raw_wsdl = Fixtures.load_wsdl("CyberSourceTransactionWithFileImportSchema.wsdl")
+
+      with_mock HTTPoison,
+        get!: fn ^wsdl_path, _, _ -> %HTTPoison.Response{body: raw_wsdl, status_code: 200} end,
+        get: fn ^xsd_path, _, _ -> {:ok, %HTTPoison.Response{body: raw_xsd, status_code: 200}} end do
+        {:ok, parsed_wsdl} = Wsdl.parse_from_url(wsdl_path)
+        assert parsed_wsdl.validation_types == xsd_types
+      end
+    end
+
+    test "#parse_from_url with WSDL containing URL schema import", %{xsd_types: xsd_types, raw_xsd: raw_xsd} do
+      wsdl_path = "https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.147.wsdl"
+      xsd_path = "https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.147.xsd"
+      raw_wsdl = Fixtures.load_wsdl("CyberSourceTransactionWithURLImportSchema.wsdl")
+
+      with_mock HTTPoison,
+        get!: fn ^wsdl_path, _, _ -> %HTTPoison.Response{body: raw_wsdl, status_code: 200} end,
+        get: fn ^xsd_path, _, _ -> {:ok, %HTTPoison.Response{body: raw_xsd, status_code: 200}} end do
+        {:ok, parsed_wsdl} = Wsdl.parse_from_url(wsdl_path)
+        assert parsed_wsdl.validation_types == xsd_types
+      end
+    end
+  end
 end

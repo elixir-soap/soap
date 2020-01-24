@@ -8,7 +8,7 @@
    xmlns:data="urn:schemas-cybersource-com:transaction-data-1.147">
    <wsdl:types>
       <xsd:schema>
-         <xsd:import namespace="urn:schemas-cybersource-com:transaction-data-1.147" schemaLocation="CyberSourceTransaction_1.147.xsd"/>
+         <xsd:import namespace="urn:schemas-cybersource-com:transaction-data-1.147" schemaLocation="https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.147.xsd"/>
       </xsd:schema>
    </wsdl:types>
    <wsdl:message name="messageIn">
