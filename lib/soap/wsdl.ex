@@ -24,19 +24,20 @@ defmodule Soap.Wsdl do
     parse(wsdl, path, opts)
   end
 
-  @spec parse(String.t(), String.t()) :: {:ok, map()}
+  @spec parse(String.t(), String.t(), map()) :: {:ok, map()}
   def parse(wsdl, file_path, opts \\ []) do
     protocol_namespace = get_protocol_namespace(wsdl)
     soap_namespace = get_soap_namespace(wsdl, opts)
     schema_namespace = get_schema_namespace(wsdl)
+    endpoint = get_endpoint(wsdl, protocol_namespace, soap_namespace)
 
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
-      endpoint: get_endpoint(wsdl, protocol_namespace, soap_namespace),
+      endpoint: endpoint,
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
       operations: get_operations(wsdl, protocol_namespace, soap_namespace),
       schema_attributes: get_schema_attributes(wsdl),
-      validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace),
+      validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace, endpoint),
       soap_version: soap_version(opts),
       messages: get_messages(wsdl, protocol_namespace)
     }
@@ -104,15 +105,15 @@ defmodule Soap.Wsdl do
     )
   end
 
-  @spec get_validation_types(String.t(), String.t(), String.t(), String.t()) :: map()
-  def get_validation_types(wsdl, file_path, protocol_ns, schema_ns) do
+  @spec get_validation_types(String.t(), String.t(), String.t(), String.t(), String.t()) :: map()
+  def get_validation_types(wsdl, file_path, protocol_ns, schema_ns, endpoint) do
     Map.merge(
       Type.get_complex_types(
         wsdl,
         "//#{ns("types", protocol_ns)}/#{ns("schema", schema_ns)}/#{ns("complexType", schema_ns)}"
       ),
       wsdl
-      |> get_full_paths(file_path, protocol_ns, schema_ns)
+      |> get_full_paths(file_path, protocol_ns, schema_ns, endpoint)
       |> get_imported_types
       |> Enum.reduce(%{}, &Map.merge(&2, &1))
     )
@@ -127,11 +128,25 @@ defmodule Soap.Wsdl do
     )
   end
 
-  @spec get_full_paths(String.t(), String.t(), String.t(), String.t()) :: list(String.t())
-  defp get_full_paths(wsdl, path, protocol_ns, schema_namespace) do
+  @spec get_full_paths(String.t(), String.t(), String.t(), String.t(), String.t()) :: list(String.t())
+  defp get_full_paths(wsdl, path, protocol_ns, schema_namespace, endpoint) do
     wsdl
     |> get_schema_imports(protocol_ns, schema_namespace)
-    |> Enum.map(&(path |> Path.dirname() |> Path.join(&1.schema_location)))
+    |> Enum.map(&resolve_schema_imports(path, &1.schema_location, endpoint))
+  end
+
+  @spec resolve_schema_imports(String.t(), String.t(), String.t()) :: String.t()
+  defp resolve_schema_imports(path, location, endpoint) do
+    case URI.parse(location) do
+      %URI{scheme: nil} ->
+        case URI.parse(path) do
+          %URI{scheme: nil} -> path |> Path.dirname() |> Path.join(location)
+          _ -> Path.join(endpoint, location)
+        end
+
+      _ ->
+        location
+    end
   end
 
   @spec get_imported_types(list()) :: list(map())
