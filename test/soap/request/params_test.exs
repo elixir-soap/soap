@@ -53,4 +53,12 @@ defmodule Soap.Request.ParamsTest do
              "Element date has wrong format. Expects [0-9]{4}-[0-9]{2}-[0-9]{2} format."
            ]
   end
+
+  test "#build_body without complex types" do
+    xml_body = Fixtures.load_xml("cyber_source_transaction/runTransactionRequest.xml")
+    {_, wsdl} = Wsdl.parse_from_file(Fixtures.get_file_path("wsdl/CyberSourceTransaction.wsdl"))
+    function_result = Params.build_body(wsdl, "runTransaction", %{}, nil)
+
+    assert function_result == xml_body
+  end
 end
