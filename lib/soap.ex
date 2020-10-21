@@ -55,7 +55,10 @@ defmodule Soap do
 
   - `path`: Path for wsdl file.
   - `type`: Atom that represents the type of path for WSDL file. Can be `:file` or `url`. Default: `:file`.
-  - `opts`: HTTPoison options or `:soap_version`.
+  - `opts`: any options for `HTTPoison.Request` and the following parsing options:
+
+    * `:soap_version` - Specifies SOAP version for parsing.
+    * `:allow_empty_soap_actions` - Allows SOAP operations with an empty `soapAction` attribute. This may be required for APIs that do not set a `soapAction` for each operation.
 
   ## Examples
 
