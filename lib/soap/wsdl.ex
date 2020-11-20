@@ -35,7 +35,7 @@ defmodule Soap.Wsdl do
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
       endpoint: endpoint,
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
-      operations: get_operations(wsdl, protocol_namespace, soap_namespace),
+      operations: get_operations(wsdl, protocol_namespace, soap_namespace, opts),
       schema_attributes: get_schema_attributes(wsdl),
       validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace, endpoint),
       soap_version: soap_version(opts),
@@ -160,7 +160,7 @@ defmodule Soap.Wsdl do
     end)
   end
 
-  defp get_operations(wsdl, protocol_ns, soap_ns) do
+  defp get_operations(wsdl, protocol_ns, soap_ns, opts) do
     wsdl
     |> xpath(~x"//#{ns("definitions", protocol_ns)}/#{ns("binding", protocol_ns)}/#{ns("operation", protocol_ns)}"l)
     |> Enum.map(fn node ->
@@ -168,7 +168,7 @@ defmodule Soap.Wsdl do
       |> xpath(~x".", name: ~x"./@name"s, soap_action: ~x"./#{ns("operation", soap_ns)}/@soapAction"s)
       |> Map.put(:input, get_operation_input(node, protocol_ns, soap_ns))
     end)
-    |> Enum.reject(fn x -> x[:soap_action] == "" end)
+    |> Enum.reject(fn x -> x[:soap_action] == "" && !opts[:allow_empty_soap_actions] end)
   end
 
   defp get_operation_input(element, protocol_ns, soap_ns) do

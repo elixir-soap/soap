@@ -364,4 +364,13 @@ defmodule Soap.WsdlTest do
     {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
     assert parsed_wsdl.schema_attributes == %{}
   end
+
+  test "#parse WSDL allowing blank soap actions" do
+    wsdl_path = Fixtures.get_file_path("wsdl/StockServiceMinusAction.wsdl")
+    {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path)
+    assert Enum.empty?(parsed_wsdl.operations) == true
+
+    {:ok, parsed_wsdl} = Wsdl.parse_from_file(wsdl_path, allow_empty_soap_actions: true)
+    assert Enum.empty?(parsed_wsdl.operations) == false
+  end
 end
