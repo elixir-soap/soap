@@ -294,6 +294,8 @@ defmodule Soap.Request.Params do
 
   defp prepare_action_attribute(_action_attribute_namespace, nil), do: %{}
 
+  defp prepare_action_attribute("", _action_attribute_value), do: %{}
+
   defp prepare_action_attribute(action_attribute_namespace, action_attribute_value) do
     %{"xmlns:#{action_attribute_namespace}" => action_attribute_value}
   end
