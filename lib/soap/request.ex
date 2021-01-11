@@ -22,12 +22,13 @@ defmodule Soap.Request do
   def call(wsdl, operation, params, request_headers, opts),
     do: call(wsdl, operation, {nil, params}, request_headers, opts)
 
+  @spec get_http_client() :: HTTPoison.Base
+  def get_http_client do
+    Application.get_env(:soap, :globals)[:http_client] || HTTPoison
+  end
+
   @spec get_url(wsdl :: map()) :: String.t()
   defp get_url(wsdl) do
     wsdl.endpoint
-  end
-
-  defp get_http_client do
-    Application.get_env(:soap, :globals)[:http_client] || HTTPoison
   end
 end

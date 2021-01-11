@@ -9,7 +9,7 @@ defmodule Soap.Wsdl do
 
   import SweetXml, except: [parse: 1, parse: 2]
 
-  alias Soap.{Type, Xsd}
+  alias Soap.{Request, Type, Xsd}
 
   @spec parse_from_file(String.t()) :: {:ok, map()}
   def parse_from_file(path, opts \\ []) do
@@ -20,7 +20,7 @@ defmodule Soap.Wsdl do
   @spec parse_from_url(String.t()) :: {:ok, map()}
   def parse_from_url(path, opts \\ []) do
     request_opts = Keyword.merge([follow_redirect: true, max_redirect: 5], opts)
-    %HTTPoison.Response{body: wsdl} = HTTPoison.get!(path, [], request_opts)
+    %HTTPoison.Response{body: wsdl} = Request.get_http_client().get!(path, [], request_opts)
     parse(wsdl, path, opts)
   end
 
