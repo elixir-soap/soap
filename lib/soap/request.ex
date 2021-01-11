@@ -28,6 +28,6 @@ defmodule Soap.Request do
   end
 
   defp get_http_client do
-    Application.get_env(:soap, :http_client, HTTPoison)
+    Application.get_env(:soap, :globals)[:http_client] || HTTPoison
   end
 end
