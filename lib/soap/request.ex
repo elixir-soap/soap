@@ -16,11 +16,16 @@ defmodule Soap.Request do
     request_headers = Headers.build(wsdl, operation, request_headers)
     body = Params.build_body(wsdl, operation, params, soap_headers)
 
-    HTTPoison.post(url, body, request_headers, opts)
+    get_http_client().post(url, body, request_headers, opts)
   end
 
   def call(wsdl, operation, params, request_headers, opts),
     do: call(wsdl, operation, {nil, params}, request_headers, opts)
+
+  @spec get_http_client() :: HTTPoison.Base
+  def get_http_client do
+    Application.get_env(:soap, :globals)[:http_client] || HTTPoison
+  end
 
   @spec get_url(wsdl :: map()) :: String.t()
   defp get_url(wsdl) do
