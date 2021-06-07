@@ -14,7 +14,7 @@ defmodule Soap.Response.Parser do
 
   If a list is empty then `parse/1` returns full parsed response structure into map.
   """
-  @spec parse(String.t(), integer()) :: map()
+  @spec parse(String.t(), atom()) :: map()
   def parse(xml_response, :fault) do
     fault_tag = get_fault_tag(xml_response)
 
@@ -102,7 +102,7 @@ defmodule Soap.Response.Parser do
     |> apply_namespace_to_tag("Body")
   end
 
-  defp apply_namespace_to_tag(nil, tag), do: tag
+  defp apply_namespace_to_tag("", tag), do: tag
   defp apply_namespace_to_tag(env_namespace, tag), do: env_namespace <> ":" <> tag
 
   defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]

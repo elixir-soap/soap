@@ -33,7 +33,7 @@ defmodule Soap.Xsd do
     end
   end
 
-  @spec parse(String.t()) :: {:ok, map()}
+  @spec parse_xsd(String.t()) :: {:ok, map()}
   defp parse_xsd(xsd) do
     parsed_response = %{
       simple_types: get_simple_types(xsd),

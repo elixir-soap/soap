@@ -20,7 +20,7 @@ defmodule Soap.Request do
   end
 
   def call(wsdl, operation, params, request_headers, opts),
-    do: call(wsdl, operation, {nil, params}, request_headers, opts)
+    do: call(wsdl, operation, {%{}, params}, request_headers, opts)
 
   @spec get_http_client() :: HTTPoison.Base
   def get_http_client do
