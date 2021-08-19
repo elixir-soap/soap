@@ -1,6 +1,6 @@
 defmodule Soap.Xsd do
   @moduledoc """
-  Provides functions for parsing xsd file
+  Provides functions for parsing xsd file.
   """
 
   import SweetXml, except: [parse: 1]

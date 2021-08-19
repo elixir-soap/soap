@@ -1,6 +1,6 @@
 defmodule Soap.Wsdl do
   @moduledoc """
-  Provides functions for parsing wsdl file
+  Provides functions for parsing wsdl file.
   """
   @soap_version_namespaces %{
     "1.1" => :"http://schemas.xmlsoap.org/wsdl/soap/",

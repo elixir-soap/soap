@@ -6,6 +6,7 @@ defmodule Soap.Request do
 
   @doc """
   Executing with parsed wsdl and headers with body map.
+
   Calling HTTPoison request by Map with method, url, body, headers, options keys.
   """
   @spec call(wsdl :: map(), operation :: String.t(), params :: any(), headers :: any(), opts :: any()) :: any()

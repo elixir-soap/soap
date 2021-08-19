@@ -17,7 +17,8 @@ defmodule Soap.Request.Params do
 
   @doc """
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
-  Returns xml-like string.
+
+  Returns XML-like string.
   """
 
   @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map(), headers :: map()) :: String.t()
