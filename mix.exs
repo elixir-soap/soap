@@ -48,7 +48,7 @@ defmodule Soap.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:sweet_xml, "~> 0.6.5"},
+      {:sweet_xml, "~> 0.6"},
 
       # Http && XML
       {:httpoison, "~> 1.3"},
@@ -58,7 +58,7 @@ defmodule Soap.MixProject do
       {:credo, "~> 1.0", only: [:dev, :test]},
 
       # Docs
-      {:ex_doc, "~>  0.19.3", only: [:dev, :docs], runtime: false},
+      {:ex_doc, "~>  0.19", only: [:dev, :docs], runtime: false},
 
       # Testing
       {:mock, "~> 0.3.0", only: :test},
