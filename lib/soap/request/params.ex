@@ -75,10 +75,7 @@ defmodule Soap.Request.Params do
     attributes = val_map[k]
     [_, type] = String.split(attributes.type, ":")
 
-    case Integer.parse(v) do
-      {number, ""} -> validate_type(k, number, type)
-      _ -> validate_type(k, v, type)
-    end
+    validate_type(k, v, type)
   end
 
   defp validate_type(_k, v, "string") when is_binary(v), do: nil
@@ -160,8 +157,8 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_body(params :: String.t() | atom() | number()) :: String.t()
-  defp construct_xml_request_body(params) when is_atom(params) or is_number(params), do: params |> to_string
-  defp construct_xml_request_body(params) when is_binary(params), do: params
+  defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string()
+  defp construct_xml_request_body(params) when is_binary(params) or is_number(params), do: params
 
   @spec construct_xml_request_header(params :: map() | list()) :: list()
   defp construct_xml_request_header(params) when is_map(params) or is_list(params) do

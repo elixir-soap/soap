@@ -44,6 +44,18 @@ defmodule Soap.Request.ParamsTest do
            ]
   end
 
+  test "string type params can be all digits" do
+    xml_body =
+      Fixtures.load_xml("send_service/SendMessageRequest.xml")
+      |> String.replace("WSPB", "123")
+
+    parameters = %{recipient: "123", body: "BODY", type: "TYPE", date: "2018-01-19"}
+    {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
+    function_result = Params.build_body(wsdl, @operation, parameters, nil)
+
+    assert function_result == xml_body
+  end
+
   test "#build_body returns wrong date format errors" do
     parameters = %{"date" => "09:00:00"}
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
