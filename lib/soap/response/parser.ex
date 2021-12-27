@@ -1,6 +1,6 @@
 defmodule Soap.Response.Parser do
   @moduledoc """
-  Provides a functions for parse an xml-like response body.
+  Provides a functions for parse an XML-like response body.
   """
 
   import SweetXml, only: [xpath: 2, sigil_x: 2]
@@ -10,7 +10,7 @@ defmodule Soap.Response.Parser do
     "1.2" => :"http://www.w3.org/2003/05/soap-envelope"
   }
   @doc """
-  Executing with xml response body.
+  Executing with XML response body.
 
   If a list is empty then `parse/1` returns full parsed response structure into map.
   """
