@@ -73,4 +73,40 @@ defmodule Soap.Request.ParamsTest do
 
     assert function_result == xml_body
   end
+
+  test "using tuple params to set xml attributes" do
+    xml_body =
+      "runTransaction-template.xml"
+      |> Fixtures.load_xml()
+      |> String.replace("{{BODY}}", ~s{<test foo="bar"/>})
+
+    {_, wsdl} = Wsdl.parse_from_file(Fixtures.get_file_path("wsdl/CyberSourceTransaction.wsdl"))
+    function_result = Params.build_body(wsdl, "runTransaction", {:test, %{foo: "bar"}, []}, nil)
+
+    assert function_result == xml_body
+  end
+
+  test "using tuple params to set xml attributes (nested)" do
+    xml_body =
+      "runTransaction-template.xml"
+      |> Fixtures.load_xml()
+      |> String.replace("{{BODY}}", ~s{<test><Person id="something"><firstName>Joe</firstName><lastName>Dirt</lastName></Person></test>})
+
+    {_, wsdl} = Wsdl.parse_from_file(Fixtures.get_file_path("wsdl/CyberSourceTransaction.wsdl"))
+    function_result = Params.build_body(wsdl, "runTransaction", %{test: {:Person, %{id: "something"}, %{firstName: "Joe", lastName: "Dirt"}}}, nil)
+
+    assert function_result == xml_body
+  end
+
+  test "using tuple params to set xml attributes (list)" do
+    xml_body =
+      "runTransaction-template.xml"
+      |> Fixtures.load_xml()
+      |> String.replace("{{BODY}}", ~s{<one num="1"/><two num="2"/>})
+
+    {_, wsdl} = Wsdl.parse_from_file(Fixtures.get_file_path("wsdl/CyberSourceTransaction.wsdl"))
+    function_result = Params.build_body(wsdl, "runTransaction", [{:one, %{num: 1}, []}, {:two, %{num: 2}, []}], nil)
+
+    assert function_result == xml_body
+  end
 end
