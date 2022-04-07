@@ -71,6 +71,7 @@ defmodule Soap do
     * `:allow_empty_soap_actions` - Allows SOAP operations with an empty
       `soapAction` attribute. This may be required for APIs that do not set a
       `soapAction` for each operation.
+    * `:skip_type_imports` - Prevents fetching external XSDs for importing types.
 
   ## Examples
 

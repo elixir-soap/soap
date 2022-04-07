@@ -151,6 +151,16 @@ defmodule Soap.Wsdl do
 
   @spec get_imported_types(list(), keyword()) :: list(map())
   defp get_imported_types(xsd_paths, opts) do
+    opts
+    |> Keyword.get(:skip_type_imports, false)
+    |> case do
+      true -> %{}
+      _ -> do_get_imported_types(xsd_paths, opts)
+    end
+  end
+
+  @spec do_get_imported_types(list(), keyword()) :: list(map())
+  defp do_get_imported_types(xsd_paths, opts) do
     xsd_paths
     |> Enum.map(fn xsd_path ->
       case Xsd.parse(xsd_path, opts) do
