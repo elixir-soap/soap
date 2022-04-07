@@ -7,10 +7,10 @@ defmodule Soap.Xsd do
 
   alias Soap.{Request, Type}
 
-  @spec parse(String.t()) :: {:ok, map()} | {:error, atom()}
-  def parse(path) do
+  @spec parse(String.t(), keyword()) :: {:ok, map()} | {:error, atom()}
+  def parse(path, opts \\ []) do
     if URI.parse(path).scheme do
-      parse_from_url(path)
+      parse_from_url(path, opts)
     else
       parse_from_file(path)
     end
@@ -24,9 +24,10 @@ defmodule Soap.Xsd do
     end
   end
 
-  @spec parse_from_url(String.t()) :: {:ok, map()} | {:error, atom()}
-  def parse_from_url(path) do
-    case Request.get_http_client().get(path, [], follow_redirect: true, max_redirect: 5) do
+  @spec parse_from_url(String.t(), keyword()) :: {:ok, map()} | {:error, atom()}
+  def parse_from_url(path, opts \\ []) do
+    request_opts = Keyword.merge([follow_redirect: true, max_redirect: 5], opts)
+    case Request.get_http_client().get(path, [], request_opts) do
       {:ok, %HTTPoison.Response{status_code: 404}} -> {:error, :not_found}
       {:ok, %HTTPoison.Response{body: body}} -> parse_xsd(body)
       {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
@@ -41,6 +42,9 @@ defmodule Soap.Xsd do
     }
 
     {:ok, parsed_response}
+  catch
+    :exit, err ->
+      {:error, err}
   end
 
   @spec get_simple_types(String.t()) :: list()

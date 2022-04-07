@@ -37,7 +37,7 @@ defmodule Soap.Wsdl do
       complex_types: get_complex_types(wsdl, schema_namespace, protocol_namespace),
       operations: get_operations(wsdl, protocol_namespace, soap_namespace, opts),
       schema_attributes: get_schema_attributes(wsdl),
-      validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace, endpoint),
+      validation_types: get_validation_types(wsdl, file_path, protocol_namespace, schema_namespace, endpoint, opts),
       soap_version: soap_version(opts),
       messages: get_messages(wsdl, protocol_namespace)
     }
@@ -105,8 +105,8 @@ defmodule Soap.Wsdl do
     )
   end
 
-  @spec get_validation_types(String.t(), String.t(), String.t(), String.t(), String.t()) :: map()
-  def get_validation_types(wsdl, file_path, protocol_ns, schema_ns, endpoint) do
+  @spec get_validation_types(String.t(), String.t(), String.t(), String.t(), String.t(), keyword()) :: map()
+  def get_validation_types(wsdl, file_path, protocol_ns, schema_ns, endpoint, opts \\ []) do
     Map.merge(
       Type.get_complex_types(
         wsdl,
@@ -114,7 +114,7 @@ defmodule Soap.Wsdl do
       ),
       wsdl
       |> get_full_paths(file_path, protocol_ns, schema_ns, endpoint)
-      |> get_imported_types
+      |> get_imported_types(opts)
       |> Enum.reduce(%{}, &Map.merge(&2, &1))
     )
   end
@@ -149,11 +149,11 @@ defmodule Soap.Wsdl do
     end
   end
 
-  @spec get_imported_types(list()) :: list(map())
-  defp get_imported_types(xsd_paths) do
+  @spec get_imported_types(list(), keyword()) :: list(map())
+  defp get_imported_types(xsd_paths, opts) do
     xsd_paths
     |> Enum.map(fn xsd_path ->
-      case Xsd.parse(xsd_path) do
+      case Xsd.parse(xsd_path, opts) do
         {:ok, xsd} -> xsd.complex_types
         _ -> %{}
       end
