@@ -9,7 +9,7 @@ defmodule Soap.MixProject do
       app: :soap,
       name: "Soap",
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: docs(),
