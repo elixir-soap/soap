@@ -26,6 +26,8 @@ defmodule Soap.Wsdl do
 
   @spec parse(String.t(), String.t(), map()) :: {:ok, map()}
   def parse(wsdl, file_path, opts \\ []) do
+    wsdl = SweetXml.parse(wsdl)
+
     protocol_namespace = get_protocol_namespace(wsdl)
     soap_namespace = get_soap_namespace(wsdl, opts)
     schema_namespace = get_schema_namespace(wsdl)
