@@ -21,7 +21,7 @@ defmodule Soap.Request.Params do
   Returns XML-like string.
   """
 
-  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map(), headers :: map()) :: String.t()
+  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map()) :: String.t()
   def build_body(wsdl, operation, params, headers) do
     with {:ok, body} <- build_soap_body(wsdl, operation, params),
          {:ok, header} <- build_soap_header(wsdl, operation, headers) do
@@ -38,6 +38,13 @@ defmodule Soap.Request.Params do
   @spec validate_params(params :: any(), wsdl :: map(), operation :: String.t()) :: any()
   def validate_params(params, _wsdl, _operation) when is_binary(params), do: params
 
+  def validate_params({_tag, _attrs, _nested} = param, wsdl, operation) do
+    case validate_param(param, wsdl, operation) do
+      nil -> param
+      error -> {:error, error}
+    end
+  end
+
   def validate_params(params, wsdl, operation) do
     errors =
       params
@@ -53,6 +60,10 @@ defmodule Soap.Request.Params do
   end
 
   @spec validate_param(param :: tuple(), wsdl :: map(), operation :: String.t()) :: String.t() | nil
+  defp validate_param([param], wsdl, operation) do
+    validate_param(param, wsdl, operation)
+  end
+
   defp validate_param(param, wsdl, operation) do
     {k, _, v} = param
 
@@ -149,6 +160,10 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_body(params :: tuple()) :: tuple()
+  defp construct_xml_request_body({tag, attrs, nested}) do
+    [{to_string(tag), attrs, construct_xml_request_body(nested)}]
+  end
+
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
     |> Tuple.to_list()

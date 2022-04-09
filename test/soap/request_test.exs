@@ -62,4 +62,14 @@ defmodule Soap.RequestTest do
       assert(Request.call(wsdl, operation, params) == @request_with_header)
     end
   end
+
+  test "#call takes a params tuple to add attributes" do
+    {_, wsdl} = Fixtures.get_file_path("wsdl/SoapHeader.wsdl") |> Wsdl.parse_from_file()
+    operation = "sayHello"
+    params = {%{token: "barbaz"}, {:body, %{foo: "bar"}, "Hello John"}}
+
+    with_mock HTTPoison, post: fn _, body, _, _ -> body end do
+      assert Request.call(wsdl, operation, params) == String.replace(@request_with_header, "<body>", ~s{<body foo="bar">})
+    end
+  end
 end
