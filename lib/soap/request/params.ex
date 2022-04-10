@@ -17,10 +17,11 @@ defmodule Soap.Request.Params do
 
   @doc """
   Parsing parameters map and generate body xml by given soap action name and body params(Map).
-  Returns xml-like string.
+
+  Returns XML-like string.
   """
 
-  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map(), headers :: map()) :: String.t()
+  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map()) :: String.t()
   def build_body(wsdl, operation, params, headers) do
     with {:ok, body} <- build_soap_body(wsdl, operation, params),
          {:ok, header} <- build_soap_header(wsdl, operation, headers) do
@@ -37,6 +38,13 @@ defmodule Soap.Request.Params do
   @spec validate_params(params :: any(), wsdl :: map(), operation :: String.t()) :: any()
   def validate_params(params, _wsdl, _operation) when is_binary(params), do: params
 
+  def validate_params({_tag, _attrs, _nested} = param, wsdl, operation) do
+    case validate_param(param, wsdl, operation) do
+      nil -> param
+      error -> {:error, error}
+    end
+  end
+
   def validate_params(params, wsdl, operation) do
     errors =
       params
@@ -52,6 +60,10 @@ defmodule Soap.Request.Params do
   end
 
   @spec validate_param(param :: tuple(), wsdl :: map(), operation :: String.t()) :: String.t() | nil
+  defp validate_param([param], wsdl, operation) do
+    validate_param(param, wsdl, operation)
+  end
+
   defp validate_param(param, wsdl, operation) do
     {k, _, v} = param
 
@@ -75,10 +87,7 @@ defmodule Soap.Request.Params do
     attributes = val_map[k]
     [_, type] = String.split(attributes.type, ":")
 
-    case Integer.parse(v) do
-      {number, ""} -> validate_type(k, number, type)
-      _ -> validate_type(k, v, type)
-    end
+    validate_type(k, v, type)
   end
 
   defp validate_type(_k, v, "string") when is_binary(v), do: nil
@@ -151,6 +160,10 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_body(params :: tuple()) :: tuple()
+  defp construct_xml_request_body({tag, attrs, nested}) do
+    [{to_string(tag), attrs, construct_xml_request_body(nested)}]
+  end
+
   defp construct_xml_request_body(params) when is_tuple(params) do
     params
     |> Tuple.to_list()
@@ -160,8 +173,8 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_body(params :: String.t() | atom() | number()) :: String.t()
-  defp construct_xml_request_body(params) when is_atom(params) or is_number(params), do: params |> to_string
-  defp construct_xml_request_body(params) when is_binary(params), do: params
+  defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string()
+  defp construct_xml_request_body(params) when is_binary(params) or is_number(params), do: params
 
   @spec construct_xml_request_header(params :: map() | list()) :: list()
   defp construct_xml_request_header(params) when is_map(params) or is_list(params) do
