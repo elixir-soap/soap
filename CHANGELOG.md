@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧰 Maintenance
 
-- Add tests for Elixir v1.9.4 and drop v1.6.6
+- Add tests for Elixir v1.9.4 and drop versions older than v1.9
 - Relax dependencies [#97]
 - Misc doc changes [#95]
 - Switch from deprecated Mix.Config to Config [#100]
