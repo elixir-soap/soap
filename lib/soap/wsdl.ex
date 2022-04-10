@@ -24,7 +24,7 @@ defmodule Soap.Wsdl do
     parse(wsdl, path, opts)
   end
 
-  @spec parse(String.t(), String.t(), map()) :: {:ok, map()}
+  @spec parse(String.t(), String.t(), Keyword.t()) :: {:ok, map()}
   def parse(wsdl, file_path, opts \\ []) do
     wsdl = SweetXml.parse(wsdl)
 
@@ -64,7 +64,7 @@ defmodule Soap.Wsdl do
     |> Enum.into(%{}, &get_namespace(&1, wsdl, schema_namespace, protocol_ns))
   end
 
-  @spec get_namespace(map(), String.t(), String.t(), String.t()) :: tuple()
+  @spec get_namespace(tuple(), String.t(), String.t(), String.t()) :: tuple()
   defp get_namespace(namespaces_node, wsdl, schema_namespace, protocol_ns) do
     {_, _, _, key, value} = namespaces_node
     string_key = key |> to_string
