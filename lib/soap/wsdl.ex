@@ -31,7 +31,7 @@ defmodule Soap.Wsdl do
     protocol_namespace = get_protocol_namespace(wsdl)
     soap_namespace = get_soap_namespace(wsdl, opts)
     schema_namespace = get_schema_namespace(wsdl)
-    endpoint = opts |> Keyword.get(:endpoint, get_endpoint(wsdl, protocol_namespace, soap_namespace))
+    endpoint = Keyword.get(opts, :endpoint, get_endpoint(wsdl, protocol_namespace, soap_namespace))
 
     parsed_response = %{
       namespaces: get_namespaces(wsdl, schema_namespace, protocol_namespace),
