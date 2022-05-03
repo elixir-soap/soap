@@ -56,6 +56,20 @@ defmodule Soap.Request.ParamsTest do
     assert function_result == xml_body
   end
 
+  test "values can be marked as safe" do
+    xml_body =
+      Fixtures.load_xml("send_service/MarkedAsSafeRequest.xml")
+      |> String.replace("WSPB", "123")
+
+    parameters = %{type: {:__safe, "TY&PE"}}
+    {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
+    # This will be an invalid XML file, but we need to test that XmlBuilder
+    # sends the value straight through
+    function_result = Params.build_body(wsdl, @operation, parameters, nil)
+
+    assert function_result == xml_body
+  end
+
   test "#build_body returns wrong date format errors" do
     parameters = %{"date" => "09:00:00"}
     {_, wsdl} = Wsdl.parse_from_file(@wsdl_path)
