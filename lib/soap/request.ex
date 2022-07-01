@@ -31,6 +31,6 @@ defmodule Soap.Request do
   @spec get_url(wsdl :: map()) :: String.t()
   defp get_url(wsdl) do
     wsdl.endpoint
-    |> String.repalce("http://", "https://")
+    |> String.replace("http://", "https://")
   end
 end
