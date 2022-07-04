@@ -10,9 +10,10 @@ defmodule Soap.Request do
   Calling HTTPoison request by Map with method, url, body, headers, options keys.
   """
   @spec call(wsdl :: map(), operation :: String.t(), params :: any(), headers :: any(), opts :: any()) :: any()
-  def call(wsdl, operation, soap_headers_and_params, https? \\ force_https?(), request_headers \\ [], opts \\ [])
+  def call(wsdl, operation, soap_headers_and_params, https?, request_headers \\ [], opts \\ [])
 
   def call(wsdl, operation, {soap_headers, params}, https?, request_headers, opts) do
+    https? = if is_nil(https?), do: force_https?(), else: https?
     url = get_url(wsdl, https?)
     request_headers = Headers.build(wsdl, operation, request_headers)
     body = Params.build_body(wsdl, operation, params, soap_headers)
@@ -21,7 +22,7 @@ defmodule Soap.Request do
   end
 
   def call(wsdl, operation, params, https?, request_headers, opts),
-    do: call(wsdl, operation, {%{}, params}, https?, request_headers, opts)
+      do: call(wsdl, operation, {%{}, params}, https?, request_headers, opts)
 
   @spec get_http_client() :: HTTPoison.Base
   def get_http_client do
