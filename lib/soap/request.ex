@@ -20,7 +20,7 @@ defmodule Soap.Request do
     body = Params.build_body(wsdl, operation, params, soap_headers)
 
     if flags[:debug] do
-      Logger.debug("soap-call-debug", %{url: url, body: body, request_headers: request_headers, opts: opts})
+      Logger.debug(%{log_id: "soap-call-debug", url: url, body: body, request_headers: request_headers, opts: opts})
     end
 
     get_http_client().post(url, body, request_headers, opts)
