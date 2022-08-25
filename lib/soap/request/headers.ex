@@ -10,6 +10,11 @@ defmodule Soap.Request.Headers do
 
   """
 
+  @content_types %{
+    "1.1" => "text/xml; charset=utf-8",
+    "1.2" => "application/soap+xml; charset=utf-8",
+  }
+
   @spec build(map(), String.t(), list()) :: list()
   def build(wsdl, operation, custom_headers) do
     wsdl
@@ -30,7 +35,7 @@ defmodule Soap.Request.Headers do
   defp base_headers(soap_action, wsdl) do
     uri = URI.parse(wsdl[:endpoint])
     [
-      {"Content-Type", "text/xml; charset=utf-8"},
+      {"Content-Type", Map.get(@content_types, wsdl[:soap_version])},
       {"User-Agent", "strong-soap/3.4.0"},
       {"Accept", "text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"},
       {"Accept-Encoding", "none"},
@@ -38,7 +43,7 @@ defmodule Soap.Request.Headers do
       {"Connection", "close"},
       {"GET", "#{uri.path} HTTP/1.1}"},
       {"Host", uri.host},
-      {"SOAPAction", soap_action},
+      {"SOAPAction", "\"#{soap_action}\""},
       {"referer", wsdl[:endpoint]},
     ]
   end
