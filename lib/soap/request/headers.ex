@@ -30,11 +30,12 @@ defmodule Soap.Request.Headers do
   defp base_headers(soap_action, wsdl) do
     uri = URI.parse(wsdl[:endpoint])
     [
-      {"Content-Type", "text/xml;charset=utf-8"},
+      {"Content-Type", "text/xml; charset=utf-8"},
       {"User-Agent", "strong-soap/3.4.0"},
       {"Accept", "text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"},
       {"Accept-Encoding", "none"},
       {"Accept-Charset", "utf-8"},
+      {"Connection", "close"},
       {"GET", "#{uri.path} HTTP/1.1}"},
       {"Host", uri.host},
       {"SOAPAction", soap_action},
