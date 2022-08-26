@@ -16,8 +16,8 @@ defmodule Soap.Request do
 
   def call(wsdl, operation, {soap_headers, params}, request_headers, opts, flags) do
     url = get_url(wsdl, force_https?())
-    request_headers = Headers.build(wsdl, operation, request_headers)
     body = Params.build_body(wsdl, operation, params, soap_headers)
+    request_headers = Headers.build(wsdl, operation, request_headers, body)
 
     if flags[:debug] do
       Logger.debug(%{log_id: "soap-call-debug", url: url, body: body, request_headers: request_headers, opts: opts})

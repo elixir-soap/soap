@@ -15,11 +15,11 @@ defmodule Soap.Request.Headers do
     "1.2" => "application/soap+xml; charset=utf-8",
   }
 
-  @spec build(map(), String.t(), list()) :: list()
-  def build(wsdl, operation, custom_headers) do
+  @spec build(map(), String.t(), list(), String.t()) :: list()
+  def build(wsdl, operation, custom_headers, body) do
     wsdl
     |> extract_soap_action_by_operation(operation)
-    |> extract_headers(custom_headers, wsdl)
+    |> extract_headers(custom_headers, wsdl, body)
   end
 
   @spec extract_soap_action_by_operation(map(), String.t()) :: String.t()
@@ -27,14 +27,15 @@ defmodule Soap.Request.Headers do
     Enum.find(wsdl[:operations], fn x -> x[:name] == operation end)[:soap_action]
   end
 
-  @spec extract_headers(String.t(), list(), map()) :: list()
-  defp extract_headers(soap_action, [], wsdl), do: base_headers(soap_action, wsdl)
-  defp extract_headers(_, custom_headers, _), do: custom_headers
+  @spec extract_headers(String.t(), list(), map(), String.t()) :: list()
+  defp extract_headers(soap_action, [], wsdl, body), do: base_headers(soap_action, wsdl, body)
+  defp extract_headers(_, custom_headers, _, _), do: custom_headers
 
-  @spec base_headers(String.t(), map()) :: list()
-  defp base_headers(soap_action, wsdl) do
+  @spec base_headers(String.t(), map(), String.t()) :: list()
+  defp base_headers(soap_action, wsdl, body) do
     uri = URI.parse(wsdl[:endpoint])
     [
+      {"Content-Length", byte_size(body)},
       {"Content-Type", Map.get(@content_types, wsdl[:soap_version])},
       {"User-Agent", "strong-soap/3.4.0"},
       {"Accept", "text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"},
