@@ -69,7 +69,8 @@ defmodule Soap.RequestTest do
     params = {%{token: "barbaz"}, {:body, %{foo: "bar"}, "Hello John"}}
 
     with_mock HTTPoison, post: fn _, body, _, _ -> body end do
-      assert Request.call(wsdl, operation, params) == String.replace(@request_with_header, "<body>", ~s{<body foo="bar">})
+      assert Request.call(wsdl, operation, params) ==
+               String.replace(@request_with_header, "<body>", ~s{<body foo="bar">})
     end
   end
 end

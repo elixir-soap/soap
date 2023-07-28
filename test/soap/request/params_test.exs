@@ -90,10 +90,20 @@ defmodule Soap.Request.ParamsTest do
     xml_body =
       "runTransaction-template.xml"
       |> Fixtures.load_xml()
-      |> String.replace("{{BODY}}", ~s{<test><Person id="something"><firstName>Joe</firstName><lastName>Dirt</lastName></Person></test>})
+      |> String.replace(
+        "{{BODY}}",
+        ~s{<test><Person id="something"><firstName>Joe</firstName><lastName>Dirt</lastName></Person></test>}
+      )
 
     {_, wsdl} = Wsdl.parse_from_file(Fixtures.get_file_path("wsdl/CyberSourceTransaction.wsdl"))
-    function_result = Params.build_body(wsdl, "runTransaction", %{test: {:Person, %{id: "something"}, %{firstName: "Joe", lastName: "Dirt"}}}, nil)
+
+    function_result =
+      Params.build_body(
+        wsdl,
+        "runTransaction",
+        %{test: {:Person, %{id: "something"}, %{firstName: "Joe", lastName: "Dirt"}}},
+        nil
+      )
 
     assert function_result == xml_body
   end

@@ -21,7 +21,8 @@ defmodule Soap.Request.Params do
   Returns XML-like string.
   """
 
-  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map()) :: String.t()
+  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map()) ::
+          String.t()
   def build_body(wsdl, operation, params, headers) do
     with {:ok, body} <- build_soap_body(wsdl, operation, params),
          {:ok, header} <- build_soap_header(wsdl, operation, headers) do
@@ -75,9 +76,7 @@ defmodule Soap.Request.Params do
         if Map.has_key?(val_map, k) do
           validate_param_attributes(val_map, k, v)
         else
-          "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{
-            Enum.join(Map.keys(val_map), ", ")
-          }} is expected."
+          "Invalid SOAP message:Invalid content was found starting with element '#{k}'. One of {#{Enum.join(Map.keys(val_map), ", ")}} is expected."
         end
     end
   end
