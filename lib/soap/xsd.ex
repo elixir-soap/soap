@@ -27,6 +27,7 @@ defmodule Soap.Xsd do
   @spec parse_from_url(String.t(), keyword()) :: {:ok, map()} | {:error, atom()}
   def parse_from_url(path, opts \\ []) do
     request_opts = Keyword.merge([follow_redirect: true, max_redirect: 5], opts)
+
     case Request.get_http_client().get(path, [], request_opts) do
       {:ok, %HTTPoison.Response{status_code: 404}} -> {:error, :not_found}
       {:ok, %HTTPoison.Response{body: body}} -> parse_xsd(body)
