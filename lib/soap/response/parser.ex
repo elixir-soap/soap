@@ -105,5 +105,17 @@ defmodule Soap.Response.Parser do
   defp apply_namespace_to_tag("", tag), do: tag
   defp apply_namespace_to_tag(env_namespace, tag), do: env_namespace <> ":" <> tag
 
-  defp soap_version, do: Application.fetch_env!(:soap, :globals)[:version]
+  defp soap_version do
+    case Application.fetch_env(:soap, :globals) do
+      :error ->
+        "1.1"
+
+      {:ok, content} ->
+        if :version in Keyword.keys(content) do
+          content[:version]
+        else
+          "1.1"
+        end
+    end
+  end
 end
