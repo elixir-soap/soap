@@ -103,6 +103,14 @@ iex> {:ok, response} = Soap.call(wsdl, action, params)
  }}
 ```
 
+Safe strings:
+
+You might have strings that you know are safe where you'd like to skip the escaping step in generating the XML (for example if you have a lot of Base64 encoded data).  For this situation you can mark data as "safe":
+
+```elixir
+params = %{data: {:__safe, data}}
+```
+
 Parse response:
 
 ```elixir
