@@ -39,6 +39,12 @@ Configure version of SOAP protocol. Supported versions `1.1`(default) and `1.2`:
 config :soap, :globals, version: "1.1"
 ```
 
+To force https on the soap calls, just calls
+
+```elixir
+config :soap, :globals, force_https: true
+```
+
 ## Usage
 
 The documentation is available on [HexDocs](https://hexdocs.pm/soap/api-reference.html).

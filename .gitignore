@@ -28,3 +28,4 @@ soap-*.tar
 # Misc.
 /priv
 /.DS_Store
+/.idea
