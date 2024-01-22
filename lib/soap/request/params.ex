@@ -123,6 +123,7 @@ defmodule Soap.Request.Params do
       validated_params ->
         body =
           validated_params
+          |> Enum.sort()
           |> add_action_tag_wrapper(wsdl, operation)
           |> add_body_tag_wrapper
 
