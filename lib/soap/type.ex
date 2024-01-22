@@ -5,7 +5,7 @@ defmodule Soap.Type do
 
   import SweetXml, except: [parse: 1]
 
-  @spec get_complex_types(String.t(), String.t()) :: map()
+  @spec get_complex_types(SweetXml.xmlElement() | String.t(), String.t()) :: map()
   def get_complex_types(wsdl, x_path) do
     wsdl
     |> xpath(~x"#{x_path}"l)
