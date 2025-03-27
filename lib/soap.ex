@@ -64,7 +64,7 @@ defmodule Soap do
 
   - `path`: Path for wsdl file.
   - `type`: Atom that represents the type of path for WSDL file. Can be `:file`
-    or `url`. Default: `:file`.
+    or `:url`. Default: `:file`.
   - `endpoint`: Endpoint to be used for the request.  Defaults to the endpoint
     specified in the WSDL file.  Useful for (e.g.) sending a request to a mock
     server during testing.
