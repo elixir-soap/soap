@@ -106,11 +106,11 @@ defmodule Soap do
       {:ok, %Soap.Response{}}
 
   """
-  @spec call(wsdl :: map(), operation :: String.t(), params :: map(), headers :: any(), opts :: any()) :: any()
-  def call(wsdl, operation, params, headers \\ [], opts \\ []) do
+  @spec call(wsdl :: map(), operation :: String.t(), params :: map(), headers :: any(), opts :: any(), flags :: any()) :: any()
+  def call(wsdl, operation, params, headers \\ [], opts \\ [], flags \\ []) do
     wsdl
     |> validate_operation(operation)
-    |> Request.call(operation, params, headers, opts)
+    |> Request.call(operation, params, headers, opts, flags)
     |> handle_response
   end
 
