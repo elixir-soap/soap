@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" 
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             xmlns:tns="http://example.com/QuoteService" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:xsdLocal1="http://www.example.com/xml/QuoteRequest"
+             xmlns:xsdLocal2="http://www.example.com/xml/QuoteResponse"
+             name="QuoteService" 
+             targetNamespace="http://example.com/QuoteService">
+  <types>
+    <!-- First schema with service-level elements -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                targetNamespace="http://example.com/QuoteService">
+      <xsd:import namespace="http://www.example.com/xml/QuoteResponse"/>
+      <xsd:import namespace="http://www.example.com/xml/QuoteRequest"/>
+      
+      <!-- Input element with _Input suffix and inline complexType (no type attribute) -->
+      <xsd:element name="GetQuote_Input">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="xsdLocal1:QuoteRequest"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+      <!-- Output element with _Output suffix -->
+      <xsd:element name="GetQuote_Output">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="xsdLocal2:QuoteResponse"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    
+    <!-- Second schema for request types -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                targetNamespace="http://www.example.com/xml/QuoteRequest">
+      <xsd:element name="QuoteRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="QuoteDetails" type="xsdLocal1:QuoteDetailsType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+      <xsd:complexType name="QuoteDetailsType">
+        <xsd:sequence>
+          <xsd:element name="ProductId" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Quantity" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="CustomerType" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Region" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    
+    <!-- Third schema for response types -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                targetNamespace="http://www.example.com/xml/QuoteResponse">
+      <xsd:element name="QuoteResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="QuoteResult" type="xsdLocal2:QuoteResultType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+      <xsd:complexType name="QuoteResultType">
+        <xsd:sequence>
+          <xsd:element name="QuoteId" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Price" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Currency" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="ValidUntil" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+  
+  <message name="GetQuote_Input">
+    <part element="tns:GetQuote_Input" name="GetQuote_Input"/>
+  </message>
+  <message name="GetQuote_Output">
+    <part element="tns:GetQuote_Output" name="GetQuote_Output"/>
+  </message>
+  
+  <portType name="QuoteServicePortType">
+    <operation name="GetQuote">
+      <input message="tns:GetQuote_Input"/>
+      <output message="tns:GetQuote_Output"/>
+    </operation>
+  </portType>
+  
+  <binding name="QuoteServiceBinding" type="tns:QuoteServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetQuote">
+      <soap:operation soapAction="document/http://example.com/QuoteService:GetQuote" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  
+  <service name="QuoteService">
+    <port binding="tns:QuoteServiceBinding" name="QuoteServicePort">
+      <soap:address location="http://example.com/services/QuoteService"/>
+    </port>
+  </service>
+</definitions>
+

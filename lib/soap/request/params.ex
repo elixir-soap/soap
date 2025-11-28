@@ -259,12 +259,19 @@ defmodule Soap.Request.Params do
   end
 
   defp handle_action_extractor_result(nil, wsdl, operation) do
-    wsdl[:complex_types]
-    |> Enum.find(fn x -> Macro.camelize(x[:name]) == operation end)
-    |> Map.get(:type)
+    # Try to find by camelized name
+    result = Enum.find(wsdl[:complex_types], fn x -> Macro.camelize(x[:name]) == operation end)
+
+    # If not found, try to find by name with _Input suffix (common in document/literal WSDLs like Siebel)
+    result = result || Enum.find(wsdl[:complex_types], fn x -> x[:name] == "#{operation}_Input" end)
+
+    case result do
+      nil -> ""
+      _ -> Map.get(result, :type, "")
+    end
   end
 
-  defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type)
+  defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type, "")
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, operation) do
@@ -300,7 +307,13 @@ defmodule Soap.Request.Params do
   @spec build_action_attribute(map(), String.t()) :: map()
   defp build_action_attribute(wsdl, operation) do
     action_attribute_namespace = get_action_namespace(wsdl, operation)
-    action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
+
+    action_attribute_value =
+      case wsdl[:namespaces][action_attribute_namespace] do
+        nil -> nil
+        namespace_map -> namespace_map[:value]
+      end
+
     prepare_action_attribute(action_attribute_namespace, action_attribute_value)
   end
 

@@ -119,4 +119,51 @@ defmodule Soap.Request.ParamsTest do
 
     assert function_result == xml_body
   end
+
+  describe "document/literal WSDL with _Input suffix pattern" do
+    @doc_literal_wsdl_path Fixtures.get_file_path("wsdl/DocumentLiteralService.wsdl")
+
+    test "parses WSDL with operation name different from input element name" do
+      {status, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+
+      assert status == :ok
+      assert wsdl[:operations] |> Enum.any?(fn op -> op[:name] == "GetQuote" end)
+
+      # The complex_types should contain the _Input element, not the operation name
+      assert wsdl[:complex_types] |> Enum.any?(fn ct -> ct[:name] == "GetQuote_Input" end)
+    end
+
+    test "#build_body works with _Input suffix pattern (no crash on nil complex type lookup)" do
+      xml_body = Fixtures.load_xml("document_literal_service/GetQuoteRequest.xml")
+
+      parameters = %{
+        "QuoteRequest" => %{
+          "QuoteDetails" => %{
+            "ProductId" => "PROD-001",
+            "Quantity" => "10",
+            "CustomerType" => "Premium",
+            "Region" => "LATAM"
+          }
+        }
+      }
+
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+      function_result = Params.build_body(wsdl, "GetQuote", parameters, nil)
+
+      assert function_result == xml_body
+    end
+
+    test "#build_body handles operation with no matching complex type gracefully" do
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+
+      # Using a non-existent operation should not crash, but gracefully handle nil
+      # The body will be built with the operation name as the wrapper
+      function_result = Params.build_body(wsdl, "NonExistentOperation", %{"test" => "value"}, nil)
+
+      # Should return a string (XML), not crash
+      assert is_binary(function_result)
+      assert String.contains?(function_result, "NonExistentOperation")
+      assert String.contains?(function_result, "<test>value</test>")
+    end
+  end
 end
