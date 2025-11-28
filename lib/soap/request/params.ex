@@ -289,18 +289,24 @@ defmodule Soap.Request.Params do
     cond do
       # Try to find by camelized name
       match = Enum.find(complex_types, &(Macro.camelize(&1[:name]) == operation)) ->
-        Map.get(match, :type, "")
+        get_action_name_or_type(match)
 
       # Try to find by name with _Input suffix (common in document/literal WSDLs like Siebel)
       match = Enum.find(complex_types, &(&1[:name] == "#{operation}_Input")) ->
-        Map.get(match, :type, "")
+        get_action_name_or_type(match)
 
       true ->
         ""
     end
   end
 
-  defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type, "")
+  defp handle_action_extractor_result(result, _wsdl, _operation), do: get_action_name_or_type(result)
+
+  # Returns the type if available, otherwise falls back to the element name
+  # This handles document/literal WSDLs where the input element has no type (inline definition)
+  defp get_action_name_or_type(%{type: type}) when type != "" and not is_nil(type), do: type
+  defp get_action_name_or_type(%{name: name}), do: name
+  defp get_action_name_or_type(_), do: ""
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, operation) do

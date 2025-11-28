@@ -133,7 +133,7 @@ defmodule Soap.Request.ParamsTest do
       assert wsdl[:complex_types] |> Enum.any?(fn ct -> ct[:name] == "GetQuote_Input" end)
     end
 
-    test "#build_body works with _Input suffix pattern (no crash on nil complex type lookup)" do
+    test "#build_body uses _Input element name as wrapper when type is empty" do
       xml_body = Fixtures.load_xml("document_literal_service/GetQuoteRequest.xml")
 
       parameters = %{
@@ -151,6 +151,9 @@ defmodule Soap.Request.ParamsTest do
       function_result = Params.build_body(wsdl, "GetQuote", parameters, nil)
 
       assert function_result == xml_body
+      # Verify wrapper is GetQuote_Input (element name), not GetQuote (operation name)
+      assert String.contains?(function_result, "<GetQuote_Input>")
+      refute String.contains?(function_result, "<GetQuote>")
     end
 
     test "#build_body handles operation with no matching complex type gracefully" do
