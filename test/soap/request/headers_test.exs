@@ -7,8 +7,9 @@ defmodule Soap.Request.HeadersTest do
   @operation "SendMessage"
 
   test "#build without custom parameters" do
+    # SOAPAction header value must be quoted per SOAP 1.1 specification
     base_headers = [
-      {"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"},
+      {"SOAPAction", "\"com.esendex.ems.soapinterface/SendMessage\""},
       {"Content-Type", "text/xml;charset=utf-8"}
     ]
 
