@@ -259,15 +259,19 @@ defmodule Soap.Request.Params do
   end
 
   defp handle_action_extractor_result(nil, wsdl, operation) do
-    # Try to find by camelized name
-    result = Enum.find(wsdl[:complex_types], fn x -> Macro.camelize(x[:name]) == operation end)
+    complex_types = wsdl[:complex_types]
 
-    # If not found, try to find by name with _Input suffix (common in document/literal WSDLs like Siebel)
-    result = result || Enum.find(wsdl[:complex_types], fn x -> x[:name] == "#{operation}_Input" end)
+    cond do
+      # Try to find by camelized name
+      match = Enum.find(complex_types, &(Macro.camelize(&1[:name]) == operation)) ->
+        Map.get(match, :type, "")
 
-    case result do
-      nil -> ""
-      _ -> Map.get(result, :type, "")
+      # Try to find by name with _Input suffix (common in document/literal WSDLs like Siebel)
+      match = Enum.find(complex_types, &(&1[:name] == "#{operation}_Input")) ->
+        Map.get(match, :type, "")
+
+      true ->
+        ""
     end
   end
 
