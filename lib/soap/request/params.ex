@@ -175,12 +175,29 @@ defmodule Soap.Request.Params do
   defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string()
   defp construct_xml_request_body(params) when is_binary(params) or is_number(params), do: params
 
-  @spec construct_xml_request_header(params :: map() | list()) :: list()
+  @spec construct_xml_request_header(params :: map() | list() | nil) :: list() | nil
+  defp construct_xml_request_header(nil), do: nil
+
   defp construct_xml_request_header(params) when is_map(params) or is_list(params) do
     params |> Enum.map(&construct_xml_request_header/1)
   end
 
-  @spec construct_xml_request_header(params :: tuple()) :: tuple()
+  @spec construct_xml_request_header(params :: tuple()) :: tuple() | list()
+  # Handle 3-tuple format {tag, attrs, children} used by WSSE and other custom headers
+  defp construct_xml_request_header({tag, attrs, nested}) when is_list(attrs) and is_list(nested) do
+    [{to_string(tag), attrs, construct_xml_request_header(nested)}]
+  end
+
+  # Handle map entry format {tag, {attrs, children}} for custom headers like WSSE
+  defp construct_xml_request_header({tag, {attrs, nested}}) when is_binary(tag) and is_list(attrs) and is_list(nested) do
+    [{tag, attrs, construct_xml_request_header(nested)}]
+  end
+
+  # Handle 2-tuple attribute format {key, value} - pass through as-is
+  defp construct_xml_request_header({key, value}) when is_binary(key) and is_binary(value) do
+    {key, value}
+  end
+
   defp construct_xml_request_header(params) when is_tuple(params) do
     params
     |> Tuple.to_list()
@@ -208,13 +225,21 @@ defmodule Soap.Request.Params do
     [element(action_tag, action_tag_attributes, body)]
   end
 
-  @spec add_header_part_tag_wrapper(list(), map(), String.t()) :: list()
+  @spec add_header_part_tag_wrapper(list() | nil, map(), String.t()) :: list() | nil
+  defp add_header_part_tag_wrapper(nil, _wsdl, _operation), do: nil
+
   defp add_header_part_tag_wrapper(body, wsdl, operation) do
     action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes])
 
     case get_header_with_namespace(wsdl, operation) do
       nil ->
-        nil
+        # No WSDL-defined header wrapper, return the body as-is for custom headers (e.g., WSSE)
+        # Return nil only if body is empty
+        case body do
+          [] -> nil
+          [[]] -> nil
+          _ -> body
+        end
 
       action_tag ->
         [element(action_tag, action_tag_attributes, body)]
