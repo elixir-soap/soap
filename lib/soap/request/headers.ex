@@ -6,7 +6,7 @@ defmodule Soap.Request.Headers do
 
       iex> {:ok, wsdl} = Fixtures.get_file_path("wsdl/SendService.wsdl") |> Soap.init_model(:file)
       ...> Soap.Request.Headers.build(wsdl, "SendMessage", [])
-      [{"SOAPAction", "com.esendex.ems.soapinterface/SendMessage"}, {"Content-Type", "text/xml;charset=utf-8"}]
+      [{"SOAPAction", ~s("com.esendex.ems.soapinterface/SendMessage")}, {"Content-Type", "text/xml;charset=utf-8"}]
 
   """
 
@@ -28,6 +28,7 @@ defmodule Soap.Request.Headers do
 
   @spec base_headers(String.t()) :: list()
   defp base_headers(soap_action) do
-    [{"SOAPAction", soap_action}, {"Content-Type", "text/xml;charset=utf-8"}]
+    # SOAPAction header value must be quoted per SOAP 1.1 specification
+    [{"SOAPAction", "\"#{soap_action}\""}, {"Content-Type", "text/xml;charset=utf-8"}]
   end
 end

@@ -39,7 +39,7 @@ defmodule Soap.Request.Params do
   @spec validate_params(params :: any(), wsdl :: map(), operation :: String.t()) :: any()
   def validate_params(params, _wsdl, _operation) when is_binary(params), do: params
 
-  def validate_params({_tag, _attrs, _nested} = param, wsdl, operation) do
+  def validate_params(param = {_tag, _attrs, _nested}, wsdl, operation) do
     case validate_param(param, wsdl, operation) do
       nil -> param
       error -> {:error, error}
@@ -175,12 +175,29 @@ defmodule Soap.Request.Params do
   defp construct_xml_request_body(params) when is_atom(params), do: params |> to_string()
   defp construct_xml_request_body(params) when is_binary(params) or is_number(params), do: params
 
-  @spec construct_xml_request_header(params :: map() | list()) :: list()
+  @spec construct_xml_request_header(params :: map() | list() | nil) :: list() | nil
+  defp construct_xml_request_header(nil), do: nil
+
   defp construct_xml_request_header(params) when is_map(params) or is_list(params) do
     params |> Enum.map(&construct_xml_request_header/1)
   end
 
-  @spec construct_xml_request_header(params :: tuple()) :: tuple()
+  @spec construct_xml_request_header(params :: tuple()) :: tuple() | list()
+  # Handle 3-tuple format {tag, attrs, children} used by WSSE and other custom headers
+  defp construct_xml_request_header({tag, attrs, nested}) when is_list(attrs) and is_list(nested) do
+    [{to_string(tag), attrs, construct_xml_request_header(nested)}]
+  end
+
+  # Handle map entry format {tag, {attrs, children}} for custom headers like WSSE
+  defp construct_xml_request_header({tag, {attrs, nested}}) when is_binary(tag) and is_list(attrs) and is_list(nested) do
+    [{tag, attrs, construct_xml_request_header(nested)}]
+  end
+
+  # Handle 2-tuple attribute format {key, value} - pass through as-is
+  defp construct_xml_request_header({key, value}) when is_binary(key) and is_binary(value) do
+    {key, value}
+  end
+
   defp construct_xml_request_header(params) when is_tuple(params) do
     params
     |> Tuple.to_list()
@@ -208,13 +225,21 @@ defmodule Soap.Request.Params do
     [element(action_tag, action_tag_attributes, body)]
   end
 
-  @spec add_header_part_tag_wrapper(list(), map(), String.t()) :: list()
+  @spec add_header_part_tag_wrapper(list() | nil, map(), String.t()) :: list() | nil
+  defp add_header_part_tag_wrapper(nil, _wsdl, _operation), do: nil
+
   defp add_header_part_tag_wrapper(body, wsdl, operation) do
     action_tag_attributes = handle_element_form_default(wsdl[:schema_attributes])
 
     case get_header_with_namespace(wsdl, operation) do
       nil ->
-        nil
+        # No WSDL-defined header wrapper, return the body as-is for custom headers (e.g., WSSE)
+        # Return nil only if body is empty
+        case body do
+          [] -> nil
+          [[]] -> nil
+          _ -> body
+        end
 
       action_tag ->
         [element(action_tag, action_tag_attributes, body)]
@@ -259,12 +284,29 @@ defmodule Soap.Request.Params do
   end
 
   defp handle_action_extractor_result(nil, wsdl, operation) do
-    wsdl[:complex_types]
-    |> Enum.find(fn x -> Macro.camelize(x[:name]) == operation end)
-    |> Map.get(:type)
+    complex_types = wsdl[:complex_types]
+
+    cond do
+      # Try to find by camelized name
+      match = Enum.find(complex_types, &(Macro.camelize(&1[:name]) == operation)) ->
+        get_action_name_or_type(match)
+
+      # Try to find by name with _Input suffix (common in document/literal WSDLs like Siebel)
+      match = Enum.find(complex_types, &(&1[:name] == "#{operation}_Input")) ->
+        get_action_name_or_type(match)
+
+      true ->
+        ""
+    end
   end
 
-  defp handle_action_extractor_result(result, _wsdl, _operation), do: Map.get(result, :type)
+  defp handle_action_extractor_result(result, _wsdl, _operation), do: get_action_name_or_type(result)
+
+  # Returns the type if available, otherwise falls back to the element name
+  # This handles document/literal WSDLs where the input element has no type (inline definition)
+  defp get_action_name_or_type(%{type: type}) when type != "" and not is_nil(type), do: type
+  defp get_action_name_or_type(%{name: name}), do: name
+  defp get_action_name_or_type(_), do: ""
 
   @spec get_action_namespace(wsdl :: map(), operation :: String.t()) :: String.t()
   defp get_action_namespace(wsdl, operation) do
@@ -300,7 +342,13 @@ defmodule Soap.Request.Params do
   @spec build_action_attribute(map(), String.t()) :: map()
   defp build_action_attribute(wsdl, operation) do
     action_attribute_namespace = get_action_namespace(wsdl, operation)
-    action_attribute_value = wsdl[:namespaces][action_attribute_namespace][:value]
+
+    action_attribute_value =
+      case wsdl[:namespaces][action_attribute_namespace] do
+        nil -> nil
+        namespace_map -> namespace_map[:value]
+      end
+
     prepare_action_attribute(action_attribute_namespace, action_attribute_value)
   end
 

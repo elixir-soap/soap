@@ -119,4 +119,95 @@ defmodule Soap.Request.ParamsTest do
 
     assert function_result == xml_body
   end
+
+  describe "document/literal WSDL with _Input suffix pattern" do
+    @doc_literal_wsdl_path Fixtures.get_file_path("wsdl/DocumentLiteralService.wsdl")
+
+    test "parses WSDL with operation name different from input element name" do
+      {status, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+
+      assert status == :ok
+      assert wsdl[:operations] |> Enum.any?(fn op -> op[:name] == "GetQuote" end)
+
+      # The complex_types should contain the _Input element, not the operation name
+      assert wsdl[:complex_types] |> Enum.any?(fn ct -> ct[:name] == "GetQuote_Input" end)
+    end
+
+    test "#build_body uses _Input element name as wrapper when type is empty" do
+      xml_body = Fixtures.load_xml("document_literal_service/GetQuoteRequest.xml")
+
+      parameters = %{
+        "QuoteRequest" => %{
+          "QuoteDetails" => %{
+            "ProductId" => "PROD-001",
+            "Quantity" => "10",
+            "CustomerType" => "Premium",
+            "Region" => "LATAM"
+          }
+        }
+      }
+
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+      function_result = Params.build_body(wsdl, "GetQuote", parameters, nil)
+
+      assert function_result == xml_body
+      # Verify wrapper is GetQuote_Input (element name), not GetQuote (operation name)
+      assert String.contains?(function_result, "<GetQuote_Input>")
+      refute String.contains?(function_result, "<GetQuote>")
+    end
+
+    test "#build_body handles operation with no matching complex type gracefully" do
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+
+      # Using a non-existent operation should not crash, but gracefully handle nil
+      # The body will be built with the operation name as the wrapper
+      function_result = Params.build_body(wsdl, "NonExistentOperation", %{"test" => "value"}, nil)
+
+      # Should return a string (XML), not crash
+      assert is_binary(function_result)
+      assert String.contains?(function_result, "NonExistentOperation")
+      assert String.contains?(function_result, "<test>value</test>")
+    end
+  end
+
+  describe "WSSE Security headers" do
+    @doc_literal_wsdl_path Fixtures.get_file_path("wsdl/DocumentLiteralService.wsdl")
+
+    test "#build_body includes WSSE UsernameToken in SOAP header" do
+      wsse_headers = %{
+        "wsse:Security" => {
+          [{"xmlns:wsse", "http://schemas.xmlsoap.org/ws/2002/07/secext"}],
+          [
+            {"wsse:UsernameToken",
+             [{"xmlns:wsu", "http://schemas.xmlsoap.org/ws/2002/07/utility"}],
+             [
+               {"wsse:Username", [], ["TESTUSER"]},
+               {"wsse:Password", [{"Type", "wsse:PasswordText"}], ["TESTPASS"]}
+             ]}
+          ]
+        }
+      }
+
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+      function_result = Params.build_body(wsdl, "GetQuote", %{}, wsse_headers)
+
+      assert is_binary(function_result)
+      # Check the WSSE Security header structure is present
+      assert String.contains?(function_result, "<wsse:Security")
+      assert String.contains?(function_result, ~s(xmlns:wsse="http://schemas.xmlsoap.org/ws/2002/07/secext"))
+      assert String.contains?(function_result, "<wsse:UsernameToken")
+      assert String.contains?(function_result, ~s(xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility"))
+      assert String.contains?(function_result, "<wsse:Username>TESTUSER</wsse:Username>")
+      assert String.contains?(function_result, ~s(<wsse:Password Type="wsse:PasswordText">TESTPASS</wsse:Password>))
+    end
+
+    test "#build_body handles empty SOAP headers" do
+      {_, wsdl} = Wsdl.parse_from_file(@doc_literal_wsdl_path)
+      function_result = Params.build_body(wsdl, "GetQuote", %{}, %{})
+
+      assert is_binary(function_result)
+      # Header should be empty when no headers are provided
+      assert String.contains?(function_result, "<env:Header/>")
+    end
+  end
 end
