@@ -21,7 +21,7 @@ defmodule Soap.Request.Params do
   Returns XML-like string.
   """
 
-  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map()) ::
+  @spec build_body(wsdl :: map(), operation :: String.t() | atom(), params :: map() | tuple(), headers :: map() | tuple()) ::
           String.t()
   def build_body(wsdl, operation, params, headers) do
     with {:ok, body} <- build_soap_body(wsdl, operation, params),
@@ -130,6 +130,15 @@ defmodule Soap.Request.Params do
     end
   end
 
+  #if first parameter is a map, bypass header wrapper and use header as is to handle multiple headers
+  defp build_soap_header(_wsdl, _operation, [{_tag, %{} = _attrs, _nested} | _] = headers) do
+    body =
+      headers
+      |> add_header_tag_wrapper
+
+    {:ok, body}
+  end
+
   defp build_soap_header(wsdl, operation, headers) do
     case headers |> construct_xml_request_header do
       {:error, messages} ->
@@ -181,6 +190,10 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_header(params :: tuple()) :: tuple()
+  defp construct_xml_request_header({tag, attrs, nested}) do
+    [{to_string(tag), attrs, construct_xml_request_header(nested)}]
+  end
+
   defp construct_xml_request_header(params) when is_tuple(params) do
     params
     |> Tuple.to_list()
@@ -190,8 +203,8 @@ defmodule Soap.Request.Params do
   end
 
   @spec construct_xml_request_header(params :: String.t() | atom() | number()) :: String.t()
-  defp construct_xml_request_header(params) when is_atom(params) or is_number(params), do: params |> to_string
-  defp construct_xml_request_header(params) when is_binary(params), do: params
+  defp construct_xml_request_header(params) when is_atom(params), do: params |> to_string()
+  defp construct_xml_request_header(params) when is_binary(params) or is_number(params), do: params
 
   @spec insert_tag_parameters(params :: list()) :: list()
   defp insert_tag_parameters(params) when is_list(params), do: params |> List.insert_at(1, nil)
