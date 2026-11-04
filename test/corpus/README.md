@@ -73,9 +73,9 @@ Measured across the same files and servers. 1.x is at the `v1.1.1` tag.
 | WSDL loads with default options, of 1,416 | 1,164 | 1,273 |
 | All operations found, default options, of 1,112 | 372 | 987 |
 | All operations found, tolerant options, of 1,112 | 953 | 1,112 |
-| Valid request, right wrapper, with empty params, of 2,886 | 1,144 | 2,879 |
-| Calls to public services giving the right result | 7 of 19 | 15 of 15 |
-| Conformance checks at the time of writing | 437 of 850 | All, with no known failures |
+| Valid request, right wrapper, with empty params, of 2,886 | 1,144 | 2,884 |
+| Calls to public services giving the right result | 7 of 19 | 15 of 15 (a shorter list) |
+| Conformance checks at the time of writing | 437 of 850 | All 1,164, with no known failures |
 
 The 143 files that don't load with default options have an import that can't be read. That's an error by default, and `ignore_failed_imports: true` accepts them. "Tolerant" means that option for 2.0, and `allow_empty_soap_actions` with the right `soap_version` for 1.1.1.
 

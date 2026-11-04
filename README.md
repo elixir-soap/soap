@@ -10,7 +10,7 @@ A SOAP client for Elixir. It reads a WSDL, checks your params against its schema
 {:ok, client} = Soap.load("http://www.dneonline.com/calculator.asmx?WSDL")
 
 Soap.operations(client)
-#=> ["Add", "Divide", "Multiply", "Subtract"]
+#=> ["Add", "Subtract", "Multiply", "Divide"]
 
 Soap.call(client, "Add", %{intA: 2, intB: 3})
 #=> {:ok, %{"AddResponse" => %{"AddResult" => 5}}}
