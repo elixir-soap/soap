@@ -13,6 +13,9 @@ defmodule Soap.HTTP do
     * `:timeout` - how long to wait for a reply, in milliseconds.
     * `:connect_timeout` - how long to wait for a connection, in milliseconds.
     * `:follow_redirects` - whether to follow redirects.
+    * `:max_reply_size` - stop reading a reply past this many bytes, and return
+      `{:error, :reply_too_large}`. `Soap.Decoder` also checks the size, so an adapter that
+      ignores this only reads more than it has to.
   """
 
   @type response :: %{status: pos_integer(), headers: [{String.t(), String.t()}], body: binary()}
@@ -50,12 +53,32 @@ defmodule Soap.HTTP.Req do
       redirect: Keyword.get(opts, :follow_redirects, false)
     ]
 
-    case Req.request(base ++ timeouts(opts) ++ Keyword.get(opts, :req, [])) do
+    case Req.request(base ++ size_limit(opts) ++ timeouts(opts) ++ Keyword.get(opts, :req, [])) do
+      {:ok, %Req.Response{body: :reply_too_large}} ->
+        {:error, :reply_too_large}
+
       {:ok, %Req.Response{status: status, headers: response_headers, body: response_body}} ->
         {:ok, %{status: status, headers: flatten_headers(response_headers), body: response_body}}
 
       {:error, reason} ->
         {:error, reason}
+    end
+  end
+
+  defp size_limit(opts) do
+    case Keyword.get(opts, :max_reply_size, :infinity) do
+      :infinity -> []
+      limit -> [into: &collect(&1, &2, limit)]
+    end
+  end
+
+  defp collect({:data, data}, {request, response}, limit) do
+    body = response.body <> data
+
+    if byte_size(body) > limit do
+      {:halt, {request, %{response | body: :reply_too_large}}}
+    else
+      {:cont, {request, %{response | body: body}}}
     end
   end
 

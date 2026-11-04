@@ -44,6 +44,9 @@ defmodule Soap.Decoder do
   @enc11 "http://schemas.xmlsoap.org/soap/encoding/"
   @enc12 "http://www.w3.org/2003/05/soap-encoding"
 
+  @gzip_window_bits 31
+  @zlib_window_bits 15
+
   @integers ~w(int integer long short byte unsignedInt unsignedLong unsignedShort unsignedByte
                positiveInteger negativeInteger nonPositiveInteger nonNegativeInteger)
 
@@ -53,15 +56,30 @@ defmodule Soap.Decoder do
     @type t :: %__MODULE__{result: term(), soap_headers: map(), attachments: [Soap.Attachment.t()]}
   end
 
+  @default_max_reply_size 100_000_000
+
+  @doc "The reply size limit in `opts`, or the default of 100 MB."
+  @spec max_reply_size(keyword()) :: pos_integer() | :infinity
+  def max_reply_size(opts), do: Keyword.get(opts, :max_reply_size, @default_max_reply_size)
+
   @doc """
   Decodes an HTTP response.
 
   `service` and `operation` can be nil. Replies then decode without a schema.
+
+  ## Options
+
+    * `:max_reply_size` - the largest reply to accept, in bytes, both as received and once
+      decompressed. Defaults to 100 MB. `:infinity` turns it off. A larger reply returns
+      `{:error, %Soap.Error{reason: :reply_too_large}}`.
   """
-  @spec decode(Service.t() | nil, Operation.t() | nil, pos_integer(), list(), binary()) ::
+  @spec decode(Service.t() | nil, Operation.t() | nil, pos_integer(), list(), binary(), keyword()) ::
           {:ok, Decoded.t()} | {:error, Fault.t() | Error.t()}
-  def decode(service, operation, status, headers, body) do
-    with {:ok, plain} <- decompress(headers, body),
+  def decode(service, operation, status, headers, body, opts \\ []) do
+    limit = max_reply_size(opts)
+
+    with :ok <- check_size(byte_size(body), limit),
+         {:ok, plain} <- decompress(headers, body, limit),
          {:ok, xml, attachments} <- split_parts(headers, plain) do
       decode_xml(xml, attachments, service, operation, status)
     end
@@ -69,19 +87,46 @@ defmodule Soap.Decoder do
 
   # Transfer
 
-  defp decompress(headers, body) do
+  defp check_size(size, limit) when size > limit, do: {:error, %Error{reason: :reply_too_large}}
+  defp check_size(_size, _limit), do: :ok
+
+  defp decompress(headers, body, limit) do
     case header(headers, "content-encoding") do
-      "gzip" -> attempt(fn -> :zlib.gunzip(body) end)
-      "x-gzip" -> attempt(fn -> :zlib.gunzip(body) end)
-      "deflate" -> attempt(fn -> :zlib.uncompress(body) end)
+      "gzip" -> inflate(body, @gzip_window_bits, :reset, limit)
+      "x-gzip" -> inflate(body, @gzip_window_bits, :reset, limit)
+      "deflate" -> inflate(body, @zlib_window_bits, :cut, limit)
       _ -> {:ok, body}
     end
   end
 
-  defp attempt(fun) do
-    {:ok, fun.()}
-  rescue
-    _ -> {:error, %Error{reason: :invalid_compressed_body}}
+  # Inflates in small steps, because a few KB can expand to gigabytes.
+  defp inflate(body, window_bits, end_of_stream, limit) do
+    stream = :zlib.open()
+
+    try do
+      :zlib.inflateInit(stream, window_bits, end_of_stream)
+
+      with {:ok, plain} <- inflate_steps(stream, body, [], 0, limit) do
+        :zlib.inflateEnd(stream)
+        {:ok, plain}
+      end
+    rescue
+      _ -> {:error, %Error{reason: :invalid_compressed_body}}
+    after
+      :zlib.close(stream)
+    end
+  end
+
+  defp inflate_steps(stream, input, acc, size, limit) do
+    {state, output} = :zlib.safeInflate(stream, input)
+    size = size + IO.iodata_length(output)
+
+    with :ok <- check_size(size, limit) do
+      case state do
+        :continue -> inflate_steps(stream, [], [acc | output], size, limit)
+        :finished -> {:ok, IO.iodata_to_binary([acc | output])}
+      end
+    end
   end
 
   defp split_parts(headers, body) do

@@ -331,6 +331,33 @@ defmodule Soap.DecoderTest do
       assert {:error, %Error{reason: :invalid_compressed_body}} = plain("nope", 200, [{"content-encoding", "gzip"}])
     end
 
+    test "a cut off gzip body is an error" do
+      gzipped = :zlib.gzip(@reply)
+      cut = binary_part(gzipped, 0, byte_size(gzipped) - 10)
+      assert {:error, %Error{reason: :invalid_compressed_body}} = plain(cut, 200, [{"content-encoding", "gzip"}])
+    end
+
+    test "gzip members in a row decode as one body" do
+      {head, tail} = String.split_at(@reply, 40)
+      assert plain(:zlib.gzip(head) <> :zlib.gzip(tail), 200, [{"content-encoding", "gzip"}]) == {:ok, %{"R" => "1"}}
+    end
+
+    test "a reply over the limit is an error" do
+      assert {:error, %Error{reason: :reply_too_large}} = Decoder.decode(nil, nil, 200, [], @reply, max_reply_size: 10)
+      assert {:ok, %{result: %{"R" => "1"}}} = Decoder.decode(nil, nil, 200, [], @reply, max_reply_size: :infinity)
+    end
+
+    test "a compressed reply that expands past the limit stops early" do
+      zeros = :binary.copy(<<0>>, 50_000_000)
+
+      for {body, encoding} <- [{:zlib.gzip(zeros), "gzip"}, {:zlib.compress(zeros), "deflate"}] do
+        assert byte_size(body) < 100_000
+
+        assert {:error, %Error{reason: :reply_too_large}} =
+                 Decoder.decode(nil, nil, 200, [{"content-encoding", encoding}], body, max_reply_size: 1_000_000)
+      end
+    end
+
     test "MTOM parts resolve into the result" do
       soap = soap11(~s(<R><f><x:Include xmlns:x="http://www.w3.org/2004/08/xop/include" href="cid:a%40b"/></f></R>))
       {type, body} = Multipart.build(soap, [%Soap.Attachment{id: "a@b", data: <<0, 1, 2>>}], "text/xml")

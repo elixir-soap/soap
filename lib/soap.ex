@@ -31,6 +31,8 @@ defmodule Soap do
     * `:timeout` - how long to wait for a reply, in milliseconds.
     * `:connect_timeout` - how long to wait for a connection, in milliseconds.
     * `:follow_redirects` - follow HTTP redirects on calls. Defaults to false.
+    * `:max_reply_size` - the largest reply to accept, in bytes, both as received and once
+      decompressed. Defaults to 100 MB. `:infinity` turns it off.
     * `:http` - a `Soap.HTTP` implementation. Defaults to `Soap.HTTP.Req`.
     * `:http_opts` - extra options for that implementation.
     * `:telemetry_metadata` - a map added to telemetry events.
@@ -125,10 +127,13 @@ defmodule Soap do
   def decode_response(client, operation_name, status, headers, body) do
     {service, operation} = decoding_context(client, operation_name)
 
-    with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body) do
+    with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, decoding_opts(client)) do
       {:ok, Response.new(status, headers, body, decoded)}
     end
   end
+
+  defp decoding_opts(nil), do: []
+  defp decoding_opts(%Client{opts: opts}), do: Keyword.take(opts, [:max_reply_size])
 
   defp decoding_context(nil, _name), do: {nil, nil}
   defp decoding_context(%Client{service: service}, nil), do: {service, nil}
@@ -207,13 +212,22 @@ defmodule Soap do
   end
 
   defp transmit(%Client{service: service}, operation, %Request{} = request, opts) do
-    http_opts = Keyword.merge(Keyword.get(opts, :http_opts, []), Keyword.take(opts, @http_option_keys))
+    limit = Decoder.max_reply_size(opts)
+
+    http_opts =
+      opts
+      |> Keyword.get(:http_opts, [])
+      |> Keyword.merge(Keyword.take(opts, @http_option_keys))
+      |> Keyword.put(:max_reply_size, limit)
 
     case HTTP.adapter(opts).request(:post, request.url, request.headers, request.body, http_opts) do
       {:ok, %{status: status, headers: headers, body: body}} ->
-        with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body) do
+        with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, max_reply_size: limit) do
           {:ok, Response.new(status, headers, body, decoded)}
         end
+
+      {:error, :reply_too_large} ->
+        {:error, %Error{reason: :reply_too_large}}
 
       {:error, reason} ->
         {:error, %Error{reason: {:transport, reason}}}

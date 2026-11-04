@@ -43,6 +43,7 @@ defmodule Soap.Error do
     * `{:transport, reason}` - no reply at all, such as a timeout or a refused connection.
     * `{:invalid_xml, message}`, `:no_envelope`, `:doctype_not_allowed` - a broken reply.
     * `:no_endpoint` - the WSDL gives no address for this operation, and none was passed.
+    * `:reply_too_large` - the reply is over `:max_reply_size`.
   """
   defexception [:reason]
 
