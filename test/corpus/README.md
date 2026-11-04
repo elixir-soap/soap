@@ -15,6 +15,9 @@ Harvested and checked on 4 November 2026.
 | `golden/node-soap/` | 98 test directories of paired requests and responses, from node-soap | 2.5 MB |
 | `recordings/` | 27 real calls to public services, with `index.json` | 284 KB |
 | `live_services.json` | 39 public WSDLs with what each needs, plus 20 URLs that no longer work | |
+| `live_calls.json` | Read-only calls for the live layer | |
+| `known_failures/` | Checks each driver is known to fail | |
+| `scores/` | Whole-corpus score floors for each driver | |
 | `licenses/` | License and NOTICE files for every vendored source | |
 
 The tools that produced all of this are in `tools/corpus/`.
@@ -160,20 +163,66 @@ No public server without an account was found for **MTOM, WS-Security or WS-Addr
 
 Spyne (LGPL) and gSOAP (GPL or commercial) are alternatives. Running them in a container is fine, but their code must not be vendored here.
 
-## Proposed test layers
+## Conformance suite
 
-| Layer | Runs | Uses | Checks |
+The suite in `test/conformance/` runs against a driver, so the same checks measure v1 today and 2.0 later.
+
+```bash
+mix test
+```
+
+| Layer | Runs | File | Checks |
 |---|---|---|---|
-| Parser | Every commit | `wsdl/`, `synthetic/`, `negative/` | Right operations, ports, styles, types and errors for each manifest entry |
-| Golden | Every commit | `golden/node-soap/`, php-src `ext/soap/tests/interop` (213 tests) and `bugs` (144 tests) | Request bytes match after XML normalization, and responses decode as expected |
-| Replay | Every commit | `recordings/` | Faults, multiRef, DataSet, HTML errors and empty bodies decode correctly |
-| Wire | Every commit | Local Bandit server | See the list below |
-| Property | Every commit | Generated values against corpus schemas | Encoding then decoding gives back the same value, and output is schema-valid |
-| Whole corpus | Nightly | All 1,440 harvested WSDLs | No crash, and the numbers above only improve |
-| Interop | Nightly | Docker stack | Real calls to each engine, across every style, version and security option |
-| Live | Nightly, doesn't block merges | Public services | Real calls still work |
+| Parser | Every commit | `parser_test.exs` | Operations, endpoints, envelope, wrapper, action and content type for each manifest entry, against facts from `tools/corpus/add_truth.py` |
+| Golden | Every commit | `golden_test.exs` | Requests match node-soap's after normalization, and responses hold the expected values |
+| Replay | Every commit | `replay_test.exs` | Recorded Faults, multiRef, DataSet, HTML errors and empty bodies decode correctly, with clean keys |
+| Wire | Every commit | `wire_test.exs` | The real HTTP client against a raw socket server: chunked, gzip, BOM, encodings, MTOM, Faults, broken and slow replies, hostile XML, atom growth |
+| Faults | Every commit | `faults_test.exs` | One check for each runtime fault from the 1.1.1 audit |
+| Property | Every commit | `property_test.exs` | Any text survives both directions, and decoding any bytes returns a result |
+| Whole corpus | Nightly | `whole_corpus_test.exs` | All harvested WSDLs, against score floors in `scores/` |
+| Live | Nightly, doesn't block merges | `live_test.exs` | Read-only calls listed in `live_calls.json` |
 
-**Wire scenarios to build:** HTTP 202 with an empty body for one-way calls, Fault at HTTP 200, 400 and 500, SOAP 1.2 Fault with subcodes, HTML gateway errors, truncated bodies, gzip, chunked responses, redirects on POST, BOM in responses, ISO-8859-1 responses, MTOM multipart responses, slow responses and timeouts, and responses with many unique tag names to prove no atoms are created.
+`harness_test.exs` tests the tools themselves.
+
+```bash
+tools/corpus/harvest.sh /tmp/corpus
+```
+
+```bash
+CORPUS_DIR=/tmp/corpus mix test --only nightly
+```
+
+```bash
+mix test --only live
+```
+
+### The ratchet
+
+`known_failures/<driver>.json` lists each check a driver is known to fail, with the reason it failed.
+
+- A check that fails and isn't listed fails the build. It's a regression or a new gap.
+- A check that passes but is still listed also fails the build, so progress is locked in as soon as it happens.
+
+After a deliberate change, rewrite the list and review its diff:
+
+```bash
+CONFORMANCE_UPDATE=1 mix test
+```
+
+### Measuring 2.0
+
+1. Write `test/support/conformance/drivers/v2.ex`, implementing `Soap.Conformance.Driver`.
+2. Run `SOAP_CONFORMANCE_DRIVER=v2 mix test`. Each driver has its own known-failures file, which starts empty.
+3. Work down the list until nothing is left.
+
+The driver's params and results are provisional and may change as the 2.0 API is designed. Some checks are stricter than v1's design on purpose, such as reordering fields to match `xsd:sequence` and quoting `SOAPAction`. Where 2.0 decides otherwise, change the check rather than listing it.
+
+### Not built yet
+
+- **Interop layer:** the Docker stack described above, needed for real MTOM and WS-Security.
+- **php-src golden tests:** the 357 `.phpt` interop and bug tests. Their inputs are PHP code, so they need a converter or a PHP container.
+- **Schema-valid output:** properties cover text, not whether generated requests validate against their schema.
+- **Feature checks:** WS-Security, telemetry, raw XML, RPC-style encoding and `mix soap.gen` have no checks yet, because their APIs don't exist.
 
 ## Licensing
 
@@ -183,16 +232,10 @@ Harvested but deliberately not vendored: `hooklift/gowsdl` (MPL-2.0), `onvif/spe
 
 ## Refreshing
 
-```bash
-python3 tools/corpus/classify.py CORPUS_DIR classified.json
-```
+`harvest.sh` downloads the full harvest and classifies it. After changing fixtures in `manifest.json`, recompute their facts:
 
 ```bash
-python3 tools/corpus/expected.py CORPUS_DIR classified.json expected.json
+python3 tools/corpus/add_truth.py test/corpus
 ```
 
-```bash
-mix run --no-start tools/corpus/baseline.exs CORPUS_DIR expected.json baseline.jsonl
-```
-
-`CORPUS_DIR` is a scratch directory holding the clones and downloads, in `oss/<owner>__<repo>/` and `live/<id>/body`. It stays out of the repository.
+The harvest directory stays out of the repository.
