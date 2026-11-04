@@ -284,10 +284,8 @@ defmodule SoapTest do
       :telemetry.attach_many(
         id,
         [[:soap, :request, :start], [:soap, :request, :stop]],
-        fn event, measurements, metadata, _ ->
-          if metadata[:tag] == test_pid, do: send(test_pid, {event, measurements, metadata})
-        end,
-        nil
+        &__MODULE__.forward_event/4,
+        test_pid
       )
 
       on_exit(fn -> :telemetry.detach(id) end)
@@ -333,6 +331,10 @@ defmodule SoapTest do
       assert body =~ "[masked]"
       refute body =~ "topsecret"
     end
+  end
+
+  def forward_event(event, measurements, metadata, test_pid) do
+    if metadata[:tag] == test_pid, do: send(test_pid, {event, measurements, metadata})
   end
 
   describe "HTTP adapters" do

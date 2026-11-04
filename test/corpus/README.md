@@ -1,6 +1,6 @@
 # SOAP 2.0 test corpus
 
-Real WSDLs, recorded server responses and hand-written edge cases, chosen to cover as many WSDL variants as possible. Soap 2.0 should be built against this corpus.
+Real WSDLs, recorded server responses and hand-written edge cases, chosen to cover as many WSDL variants as possible. Soap 2.0 is built against this corpus.
 
 Harvested and checked on 4 November 2026.
 
@@ -13,6 +13,7 @@ Harvested and checked on 4 November 2026.
 | `synthetic/` | Hand-written cases that the harvest did not cover, including security cases | 52 KB |
 | `negative/` | Upstream files that are malformed or not valid XML namespaces | 20 KB |
 | `golden/node-soap/` | 98 test directories of paired requests and responses, from node-soap | 2.5 MB |
+| `golden/php-interop/` | 315 envelopes extracted from php-src's SOAPBuilders tests | 1.2 MB |
 | `recordings/` | 27 real calls to public services, with `index.json` | 284 KB |
 | `live_services.json` | 39 public WSDLs with what each needs, plus 20 URLs that no longer work | |
 | `live_calls.json` | Read-only calls for the live layer | |
@@ -61,63 +62,26 @@ Counts below cover the whole harvest. Apache CXF supplies 748 of the 1,440 files
 - **XSD 1.1 `override`:** no examples found. Probably safe to leave out.
 - **XSD edge cases:** the `tefra/xsdata-w3c-tests` repository (MIT) mirrors the W3C schema tests, but it is about 50 MB, so it is not vendored.
 
-## Current library results (v1.1.1)
+## Results
 
-These are the bars for Soap 2.0 to beat. Reproduce them with `tools/corpus/baseline.exs`.
+### 1.1.1 against 2.0
 
-### Corpus
+Measured across the same files and servers. 1.x is at the `v1.1.1` tag.
 
-Across 1,408 WSDL 1.1 files:
-
-| Check | Result |
-|---|---|
-| `init_model` crashes with default options | 251 (18%) |
-| Files with SOAP operations | 1,106 |
-| All operations found, default options | 366 (33%) |
-| No operations found and no error raised, default options | 595 (54%) |
-| All operations found, with `allow_empty_soap_actions` and the right `soap_version` | 947 (86%) |
-| Request bodies built (with empty params) | 2,706 |
-| Bodies that crash | 389 (14%) |
-| Bodies that are not valid XML | 1,086 (40%) |
-| Bodies with the wrong wrapper element | 262 (10%) |
-
-Results by variant, with default options. "Good" means valid XML and the right wrapper.
-
-| Variant | Files | Crash | No operations | All operations | Good bodies |
-|---|---|---|---|---|---|
-| document/literal | 891 | 95 | 452 | 315 | 889 of 2,241 |
-| rpc/literal | 80 | 0 | 55 | 22 | 37 of 163 |
-| rpc/encoded | 88 | 5 | 58 | 25 | 15 of 86 |
-| SOAP 1.2 binding | 171 | 86 | 22 | 62 | 409 of 541 |
-| Empty `soapAction` | 431 | 37 | 387 | 1 | 283 of 853 |
-| Default plus alias WSDL namespace | 319 | 17 | 235 | 40 | 58 of 684 |
-| `wsdl:import` | 215 | 41 | 160 | 12 | 170 of 246 |
-
-The wrapper check only applies where the expected element is known. Body checks use the options that find the most operations.
-
-### Live calls
-
-19 calls went to public services through `Soap.call`, using the real HTTP client with `allow_empty_soap_actions`. **7 gave the right result and 12 failed.** A hand-built request succeeded for 11 of those 12. The twelfth, EORI, got a Fault from the hand-built request too, so it has no reference result.
-
-| Service | Result | Cause seen |
+| Check | 1.1.1 | 2.0 |
 |---|---|---|
-| Calculator, SOAP 1.1 | Correct | |
-| Calculator, divide by zero | Correct Fault | |
-| Calculator, SOAP 1.2 | HTTP 500 Fault | Server didn't recognize the request |
-| TempConvert | HTTP 403, then parser `exit` | WSDL gives an `http://` endpoint, and the HTML error page can't be parsed |
-| NumberConversion | HTTP 500 Fault | `invalid attribute name 'xmlns:'` |
-| CountryInfo, 2 calls | HTTP 500, then parser crash | No usable response |
-| InterSystems demo, 2 calls | `OperationError` | Operations not found |
-| ArcGIS | HTTP 400, then parser `exit` | |
-| Swiss UID | HTTP 500 Fault | `Data_validation_failed` |
-| EBI | HTTP 500 Fault | Wrong wrapper element namespace |
-| Herong Hello | Crash | `BadMapError` |
-| EORI | Crash | `FunctionClauseError` |
-| VIES, Brazil central bank (rpc/encoded), SmartBear, CBR, CBR DataSet | Correct | Results keep prefixes and `xmlns` keys |
+| WSDL loads with default options, of 1,416 | 1,164 | 1,273 |
+| All operations found, default options, of 1,112 | 372 | 987 |
+| All operations found, tolerant options, of 1,112 | 953 | 1,112 |
+| Valid request, right wrapper, with empty params, of 2,886 | 1,144 | 2,879 |
+| Calls to public services giving the right result | 7 of 19 | 15 of 15 |
+| Conformance checks at the time of writing | 437 of 850 | All, with no known failures |
+
+The 143 files that don't load with default options have an import that can't be read. That's an error by default, and `ignore_failed_imports: true` accepts them. "Tolerant" means that option for 2.0, and `allow_empty_soap_actions` with the right `soap_version` for 1.1.1.
 
 ### Import fetching
 
-`Soap.init_model` follows any schema location in a WSDL. With `ssrf-schema-location.wsdl`, it sent GET requests for `http://169.254.169.254/latest/meta-data/` and `file:///etc/passwd` to its HTTP client (a recording stub in this test). Soap 2.0 must not follow imports across hosts by default.
+1.1.1's `Soap.init_model` followed any schema location in a WSDL. With `ssrf-schema-location.wsdl`, it sent GET requests for `http://169.254.169.254/latest/meta-data/` and `file:///etc/passwd` to its HTTP client (a recording stub in this test). 2.0 skips both and reports them.
 
 ## Servers
 
@@ -151,21 +115,19 @@ Salesforce (enterprise, partner, metadata), eBay (3.9 MB), Workday (3.4 MB), Bin
 
 ### Local servers for what public ones can't provide
 
-No public server without an account was found for **MTOM, WS-Security or WS-Addressing**, and public services can't be used to test failure handling. A Docker Compose stack would fill this gap. Docker is available on this machine, but **none of this stack has been built or run yet**.
+No public server without an account was found for MTOM, WS-Security or WS-Addressing, and public services can't be used to test failure handling. `test/interop/` runs real ones in Docker:
 
-| Engine | Current version | Why |
-|---|---|---|
-| Apache CXF | 4.2.1 | WS-Security with UsernameToken and signatures, MTOM, WS-Addressing, rpc/literal, document bare |
-| CoreWCF | 1.9.1 | The .NET stack most enterprise clients meet: WS-Security, MTOM, DataSet |
-| node-soap | 1.14.0 | Fast to start, shares a license and test cases with `golden/node-soap` |
-| PHP `SoapServer` | Bundled with PHP | Stable rpc/encoded server with arrays and `href` references |
-| Apache Axis 1.4 | Legacy | The rpc/encoded `multiRef` format older enterprise services still produce |
+| Engine | What it covers |
+|---|---|
+| Apache CXF 4.2.1 | Document and rpc/literal, SOAP 1.2, MTOM in both directions, WS-Security with plain and digest passwords |
+| PHP `SoapServer` | rpc/encoded, typed scalars, `soapenc:Array`, shared references |
+| node-soap 1.14.0 | Document/literal round trips, WS-Security with plain and digest passwords |
 
-Spyne (LGPL) and gSOAP (GPL or commercial) are alternatives. Running them in a container is fine, but their code must not be vendored here.
+WS-Addressing isn't built in, and CoreWCF and Axis 1.4 aren't in the stack.
 
 ## Conformance suite
 
-The suite in `test/conformance/` runs against a driver, so the same checks measure v1 today and 2.0 later.
+The suite in `test/conformance/` runs through a driver, which keeps the checks independent of the API.
 
 ```bash
 mix test
@@ -174,12 +136,14 @@ mix test
 | Layer | Runs | File | Checks |
 |---|---|---|---|
 | Parser | Every commit | `parser_test.exs` | Operations, endpoints, envelope, wrapper, action and content type for each manifest entry, against facts from `tools/corpus/add_truth.py` |
-| Golden | Every commit | `golden_test.exs` | Requests match node-soap's after normalization, and responses hold the expected values |
+| Golden | Every commit | `golden_test.exs` | Requests match node-soap's after normalization, and responses hold the expected values. Where 2.0 deliberately differs, the test names the sample and says why |
+| PHP interop | Every commit | `php_interop_test.exs` | 314 replies from PHP's SOAPBuilders suite decode to clean data |
 | Replay | Every commit | `replay_test.exs` | Recorded Faults, multiRef, DataSet, HTML errors and empty bodies decode correctly, with clean keys |
 | Wire | Every commit | `wire_test.exs` | The real HTTP client against a raw socket server: chunked, gzip, BOM, encodings, MTOM, Faults, broken and slow replies, hostile XML, atom growth |
 | Faults | Every commit | `faults_test.exs` | One check for each runtime fault from the 1.1.1 audit |
 | Property | Every commit | `property_test.exs` | Any text survives both directions, and decoding any bytes returns a result |
 | Whole corpus | Nightly | `whole_corpus_test.exs` | All harvested WSDLs, against score floors in `scores/` |
+| Interop | Nightly | `interop_test.exs` | Real calls to Apache CXF, PHP and node-soap in Docker |
 | Live | Nightly, doesn't block merges | `live_test.exs` | Read-only calls listed in `live_calls.json` |
 
 `harness_test.exs` tests the tools themselves.
@@ -196,6 +160,14 @@ CORPUS_DIR=/tmp/corpus mix test --only nightly
 mix test --only live
 ```
 
+```bash
+docker compose -f test/interop/docker-compose.yml up -d --build --wait
+```
+
+```bash
+mix test --only interop
+```
+
 ### The ratchet
 
 `known_failures/<driver>.json` lists each check a driver is known to fail, with the reason it failed.
@@ -209,24 +181,12 @@ After a deliberate change, rewrite the list and review its diff:
 CONFORMANCE_UPDATE=1 mix test
 ```
 
-### Measuring 2.0
+### Not covered
 
-`test/support/conformance/drivers/v2.ex` drives the 2.0 modules. Each driver has its own known-failures file and score floors. As 2.0 grows, implement the driver's next function and work down the list:
-
-```bash
-SOAP_CONFORMANCE_DRIVER=v2 mix test
-```
-
-`test/soap/service_corpus_test.exs` also checks the WSDL model directly against the facts in `manifest.json`: bindings, versions, actions, styles, wrappers and ports.
-
-The driver's params and results are provisional and may change as the 2.0 API is designed. Some checks are stricter than v1's design on purpose, such as reordering fields to match `xsd:sequence` and quoting `SOAPAction`. Where 2.0 decides otherwise, change the check rather than listing it.
-
-### Not built yet
-
-- **Interop layer:** the Docker stack described above, needed for real MTOM and WS-Security.
-- **php-src golden tests:** the 357 `.phpt` interop and bug tests. Their inputs are PHP code, so they need a converter or a PHP container.
+- **php-src request checks:** the `.phpt` inputs are PHP code, so only their replies are used.
 - **Schema-valid output:** properties cover text, not whether generated requests validate against their schema.
-- **Feature checks:** WS-Security, telemetry, raw XML, RPC-style encoding and `mix soap.gen` have no checks yet, because their APIs don't exist.
+- **WS-Security signing and encryption, and WS-Addressing:** not implemented.
+- **WSDL 2.0:** returns a clear error.
 
 ## Licensing
 

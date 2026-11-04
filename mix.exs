@@ -15,7 +15,8 @@ defmodule Soap.MixProject do
       deps: deps(),
       docs: docs(),
       package: package(),
-      test_coverage: [tool: ExCoveralls]
+      test_coverage: [tool: ExCoveralls],
+      dialyzer: [plt_add_apps: [:mix, :crypto], plt_core_path: "priv/plts", plt_local_path: "priv/plts"]
     ]
   end
 
@@ -35,8 +36,8 @@ defmodule Soap.MixProject do
 
   defp package do
     [
-      description: "SOAP client for Elixir programming language",
-      files: ["lib", "mix.exs", "README.md", "LICENSE*", "CHANGELOG*"],
+      description: "SOAP client for Elixir: schema-aware requests and results, MTOM, WS-Security",
+      files: ["lib", "mix.exs", "README.md", "MIGRATING.md", "LICENSE*", "CHANGELOG*"],
       maintainers: ["Petr Stepchenko", "Roman Kakorin"],
       licenses: ["MIT"],
       links: %{
@@ -73,7 +74,8 @@ defmodule Soap.MixProject do
       extras: [
         "CHANGELOG.md": [],
         "LICENSE.md": [title: "License"],
-        "README.md": [title: "Overview"]
+        "README.md": [title: "Overview"],
+        "MIGRATING.md": [title: "Migrating from 1.x"]
       ],
       main: "readme",
       source_url: @source_url,

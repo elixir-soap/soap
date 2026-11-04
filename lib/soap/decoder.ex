@@ -373,10 +373,10 @@ defmodule Soap.Decoder do
     attrs = attributes(element, type, ctx)
     value = decode_text(element.text, type, ctx)
 
-    case {map_size(attrs), value} do
-      {0, value} -> value
-      {_, nil} -> attrs
-      {_, value} -> Map.put(attrs, "#text", value)
+    cond do
+      map_size(attrs) == 0 -> value
+      value in [nil, %{}] -> attrs
+      true -> Map.put(attrs, "#text", value)
     end
   end
 

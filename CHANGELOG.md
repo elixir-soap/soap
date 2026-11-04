@@ -1,5 +1,39 @@
 # Changelog
 
+## 2.0.0 (unreleased)
+
+A rewrite. See the [migration guide](MIGRATING.md).
+
+### Added
+
+- `Soap.load/2`, `Soap.call/4`, `Soap.request/4` and `Soap.build_request/4`, configured per client and per call.
+- A WSDL model that follows binding, port type, message, part and schema instead of guessing from names.
+- Schema-aware requests: order, namespaces, validation, and values formatted by type.
+- Schema-aware results: lists stay lists, values are typed, and prefixes are gone.
+- `Soap.Fault` and `Soap.Error`, for every failure.
+- SOAP 1.2 per client, including Faults with subcodes.
+- `wsdl:import`, `xsd:include`, `xsd:redefine` and import cycles.
+- rpc/encoded requests and replies, with `multiRef` links and `soapenc:Array`.
+- WS-Security `UsernameToken`, with a plain password or a digest.
+- MTOM in both directions, and SOAP with Attachments.
+- `Soap.Raw`, for prebuilt XML.
+- HTTP adapters, with Req by default and HTTPoison as an option.
+- Telemetry events and a logger, with credentials masked.
+- `Soap.Test`, for testing code that calls SOAP services.
+- `mix soap.gen`, which generates a typed client from a WSDL.
+
+### Changed
+
+- Results use string keys and no longer create atoms.
+- Imports are limited by default: a WSDL can't reach other hosts or read arbitrary files.
+- Replies with a DOCTYPE are refused.
+- Elixir 1.15 or newer is required.
+
+### Removed
+
+- `Soap.init_model`, `Soap.Wsdl`, `Soap.Xsd`, `Soap.Type`, `Soap.Request.Params` and `config :soap, :globals`.
+- The `sweet_xml` and `xml_builder` dependencies.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

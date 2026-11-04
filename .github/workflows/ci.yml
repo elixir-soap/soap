@@ -1,4 +1,4 @@
-name: Conformance
+name: CI
 
 on:
   push:
@@ -11,12 +11,13 @@ env:
   MIX_ENV: test
 
 jobs:
-  offline:
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         version:
+          - { elixir: "1.15", otp: "26" }
           - { elixir: "1.18", otp: "27" }
           - { elixir: "1.20", otp: "29" }
     steps:
@@ -26,7 +27,37 @@ jobs:
           elixir-version: ${{ matrix.version.elixir }}
           otp-version: ${{ matrix.version.otp }}
       - run: mix deps.get
+      - run: mix compile --warnings-as-errors
       - run: mix test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.20"
+          otp-version: "29"
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: mix credo --strict
+      - uses: actions/cache@v4
+        with:
+          path: priv/plts
+          key: plts-${{ hashFiles('mix.lock') }}
+      - run: mix dialyzer
+
+  interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.20"
+          otp-version: "29"
+      - run: docker compose -f test/interop/docker-compose.yml up -d --build --wait
+      - run: mix deps.get
+      - run: mix test --only interop
 
   whole-corpus:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
