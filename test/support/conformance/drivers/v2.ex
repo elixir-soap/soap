@@ -26,7 +26,9 @@ defmodule Soap.Conformance.Drivers.V2 do
     end
   end
 
-  defp encoder_opts(opts), do: [headers: opts[:soap_headers] || []]
+  defp encoder_opts(opts) do
+    [headers: opts[:soap_headers] || []] ++ Keyword.take(opts, [:validate, :mtom])
+  end
 
   # A list of nodes holding one scalar under no name means the element's own value.
   defp to_params(params), do: params

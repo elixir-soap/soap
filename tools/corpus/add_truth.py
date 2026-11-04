@@ -80,6 +80,7 @@ def truth(path):
                     'style': style,
                     'use': (body.get('use') if body is not None else None) or 'literal',
                     'body_namespace': body.get('namespace') if body is not None else None,
+                    'has_input': io_el is not None,
                 })
         for s in root.findall(q('service')):
             for p in s.findall(q('port')):
@@ -90,7 +91,9 @@ def truth(path):
         parts, prefixes = messages.get(inputs.get(name), ([], {}))
         first = entry['bindings'][0]
         wrapper = None
-        if first['style'] == 'rpc':
+        if first['style'] == 'rpc' and inputs.get(name) is None and not first['has_input']:
+            wrapper = None
+        elif first['style'] == 'rpc':
             wrapper = {'name': name, 'namespace': first['body_namespace']}
         elif len(parts) == 1 and parts[0].get('element'):
             qn = parts[0].get('element')

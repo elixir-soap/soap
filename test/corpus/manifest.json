@@ -86,7 +86,8 @@
         "action": "http://tempuri.org/IService1/GetPerson",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -192,7 +193,8 @@
         "action": "",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:www.example.org:abstract"
+        "body_namespace": "urn:www.example.org:abstract",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -207,7 +209,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": "urn:www.example.org:abstract"
+        "body_namespace": "urn:www.example.org:abstract",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -222,7 +225,8 @@
         "action": "",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:www.example.org:abstract"
+        "body_namespace": "urn:www.example.org:abstract",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -335,7 +339,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -347,7 +352,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -362,7 +368,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -377,7 +384,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -392,7 +400,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -407,7 +416,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -422,7 +432,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -437,7 +448,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -452,7 +464,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -467,7 +480,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -482,7 +496,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -497,7 +512,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -512,7 +528,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -527,7 +544,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -542,7 +560,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -557,7 +576,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -572,7 +592,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -587,7 +608,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -602,7 +624,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -617,7 +640,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -632,7 +656,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -647,7 +672,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -662,7 +688,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://example.org/ts-tests"
+        "body_namespace": "http://example.org/ts-tests",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -773,7 +800,8 @@
         "action": "http://tempuri.org/IStreamedService/UploadStream",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -788,7 +816,8 @@
         "action": "http://tempuri.org/IStreamedService/GetDisconnectResult",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -885,7 +914,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -900,7 +930,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -915,7 +946,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -930,7 +962,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1021,7 +1054,8 @@
         "action": "http://some.schema.com/marketplace/search/v1/services/operation",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1105,7 +1139,8 @@
         "action": "http:/Test/Test",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1250,7 +1285,8 @@
         "action": "",
         "style": "literal",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1265,7 +1301,8 @@
         "action": "",
         "style": "literal",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -1277,7 +1314,8 @@
         "action": "",
         "style": "literal",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -1289,7 +1327,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -1361,7 +1400,8 @@
         "action": "urn:checkAuth",
         "style": "document",
         "use": "encoded",
-        "body_namespace": "urn:netDB"
+        "body_namespace": "urn:netDB",
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -1445,7 +1485,8 @@
         "action": "http://tempuri.org/HelloWorld",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1542,7 +1583,8 @@
         "action": "http://www.BuiltinTypes.com/Operation",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -1554,7 +1596,8 @@
         "action": "http://www.BuiltinTypes.com/StringOperation",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1759,7 +1802,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1774,7 +1818,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1789,7 +1834,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1804,7 +1850,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1819,7 +1866,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1834,7 +1882,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1849,7 +1898,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1864,7 +1914,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1879,7 +1930,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1894,7 +1946,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1909,7 +1962,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1924,7 +1978,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -1939,7 +1994,8 @@
         "action": "testFault",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit"
+        "body_namespace": "http://org/apache/axis2/jaxws/proxy/rpclit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2026,7 +2082,8 @@
         "action": "http://test.example.com/OperationB",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        }
       ],
       "wrapper": null
@@ -2038,7 +2095,8 @@
         "action": "http://test.example.com/OperationA",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2120,7 +2178,8 @@
         "action": "",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://soapinterop/"
+        "body_namespace": "http://soapinterop/",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2199,7 +2258,8 @@
         "action": "#test",
         "style": "rcp",
         "use": "encoded",
-        "body_namespace": "http://test-uri/"
+        "body_namespace": "http://test-uri/",
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -2211,7 +2271,8 @@
         "action": "#test2",
         "style": "rcp",
         "use": "encoded",
-        "body_namespace": "http://test-uri/"
+        "body_namespace": "http://test-uri/",
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -2310,7 +2371,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2325,7 +2387,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2340,7 +2403,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2355,7 +2419,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2370,7 +2435,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2385,7 +2451,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2400,7 +2467,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2541,14 +2609,16 @@
         "action": "http://Company.com/Application/Company_ESB_Application_Biztalk_AgentDetails_4405_AgentDetails_Prt/GetAgentDetails",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://Company.com/Application/Company_ESB_Application_Biztalk_AgentDetails_4405_AgentDetails_Prt/GetAgentDetails",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2657,7 +2727,8 @@
         "action": "urn:TMSWebServices:xtvdWebService#activate",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:TMSWebServices"
+        "body_namespace": "urn:TMSWebServices",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2672,7 +2743,8 @@
         "action": "urn:TMSWebServices:xtvdWebService#download",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:TMSWebServices"
+        "body_namespace": "urn:TMSWebServices",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2759,7 +2831,8 @@
         "action": "test://",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "test://"
+        "body_namespace": "test://",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2843,7 +2916,8 @@
         "action": "http://tempuri.org/EchoService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -2982,7 +3056,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3121,7 +3196,8 @@
         "action": "beerpByLocation",
         "style": "document",
         "use": "encoded",
-        "body_namespace": "urn:import-sample"
+        "body_namespace": "urn:import-sample",
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -3204,7 +3280,8 @@
         "action": "urn:fpAction",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:wsdl"
+        "body_namespace": "urn:wsdl",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3297,14 +3374,16 @@
         "action": "http://schemas.vecozo.nl/berichtuitwisseling/v3/IndienenBericht",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://schemas.vecozo.nl/berichtuitwisseling/v3/IndienenBericht",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3404,7 +3483,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3419,7 +3499,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3434,7 +3515,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3449,7 +3531,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3464,7 +3547,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3479,7 +3563,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3494,7 +3579,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3509,7 +3595,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3524,7 +3611,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3539,7 +3627,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3554,7 +3643,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3569,7 +3659,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3584,7 +3675,8 @@
         "action": null,
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:RpcExample"
+        "body_namespace": "urn:RpcExample",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3715,7 +3807,8 @@
         "action": "echo",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3794,7 +3887,8 @@
         "action": "http://www.example.com/stock/Quote/GetLastTradePriceRequest",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -3868,13 +3962,11 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        }
       ],
-      "wrapper": {
-       "name": "doIt",
-       "namespace": null
-      }
+      "wrapper": null
      }
     },
     "ports": [
@@ -3952,7 +4044,8 @@
         "action": "#Message",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:MessageService"
+        "body_namespace": "urn:MessageService",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4035,7 +4128,8 @@
         "action": "runTransaction",
         "style": "document",
         "use": "literal",
-        "body_namespace": "urn:schemas-cybersource-com:transaction-data-1.26"
+        "body_namespace": "urn:schemas-cybersource-com:transaction-data-1.26",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4120,7 +4214,8 @@
         "action": "http://www.comped.it/CloudSignService/AddSignature",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4217,7 +4312,8 @@
         "action": "http://tempUri.org/DayAsNumber",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4359,14 +4455,16 @@
         "action": "http://www.example.org/in-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/in-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4381,14 +4479,16 @@
         "action": "http://www.example.org/robust-in-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/robust-in-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4403,14 +4503,16 @@
         "action": "http://www.example.org/in-out",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/in-out",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4425,14 +4527,16 @@
         "action": "http://www.example.org/out-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/out-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        }
       ],
       "wrapper": null
@@ -4444,14 +4548,16 @@
         "action": "http://www.example.org/robust-out-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/robust-out-only",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": false
        }
       ],
       "wrapper": null
@@ -4463,14 +4569,16 @@
         "action": "http://www.example.org/out-in",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://www.example.org/out-in",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4556,7 +4664,8 @@
         "action": "http://example.com/hf/testHeader",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://example.com/hf"
+        "body_namespace": "http://example.com/hf",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4645,7 +4754,8 @@
         "action": "http://test.com/soap/v3/CustomerAction",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "http://test.com/soap/v3/"
+        "body_namespace": "http://test.com/soap/v3/",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4724,7 +4834,8 @@
         "action": "http://davey.synapticmedia.net/php-mag/shafikdavey_automaticwebservices/src/Listing%201.php#hello",
         "style": "document",
         "use": "encoded",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -4736,7 +4847,8 @@
         "action": "http://davey.synapticmedia.net/php-mag/shafikdavey_automaticwebservices/src/Listing%201.php#goodBye",
         "style": "document",
         "use": "encoded",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -4814,7 +4926,8 @@
         "action": "urn:ExampleInterface-ExamplePortType#ExampleOperation",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:ExampleInterface-ExamplePortType"
+        "body_namespace": "urn:ExampleInterface-ExamplePortType",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4901,7 +5014,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -4916,7 +5030,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5002,7 +5117,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://3e.pl/ADInterface"
+        "body_namespace": "http://3e.pl/ADInterface",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5174,7 +5290,8 @@
         "action": "",
         "style": "rpc",
         "use": "encoded",
-        "body_namespace": "urn:www.example.org:utf8"
+        "body_namespace": "urn:www.example.org:utf8",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5255,7 +5372,8 @@
         "action": "pingOperation",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5339,7 +5457,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5427,7 +5546,8 @@
         "action": "http://soapinterop.org/attachments/",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5442,7 +5562,8 @@
         "action": "http://soapinterop.org/attachments/",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5457,7 +5578,8 @@
         "action": "http://soapinterop.org/attachments/",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5472,7 +5594,8 @@
         "action": "http://soapinterop.org/attachments/",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5576,14 +5699,16 @@
         "action": "http://soapinterop.org/echoVoid",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoVoid",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5598,14 +5723,16 @@
         "action": "http://soapinterop.org/echoInteger",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoInteger",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5620,14 +5747,16 @@
         "action": "http://soapinterop.org/echoFloat",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoFloat",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5642,14 +5771,16 @@
         "action": "http://soapinterop.org/echoString",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoString",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5664,14 +5795,16 @@
         "action": "http://soapinterop.org/echoBase64",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoBase64",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5686,14 +5819,16 @@
         "action": "http://soapinterop.org/echoDate",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoDate",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5708,14 +5843,16 @@
         "action": "http://soapinterop.org/echoComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5730,14 +5867,16 @@
         "action": "http://soapinterop.org/echoIntegerMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoIntegerMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5752,14 +5891,16 @@
         "action": "http://soapinterop.org/echoFloatMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoFloatMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5774,14 +5915,16 @@
         "action": "http://soapinterop.org/echoStringMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoStringMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5796,14 +5939,16 @@
         "action": "http://soapinterop.org/echoComplexTypeMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoComplexTypeMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5818,14 +5963,16 @@
         "action": "http://soapinterop.org/echoDecimal",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoDecimal",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5840,14 +5987,16 @@
         "action": "http://soapinterop.org/echoBoolean",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoBoolean",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5862,14 +6011,16 @@
         "action": "http://soapinterop.org/echoHexBinary",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoHexBinary",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5884,14 +6035,16 @@
         "action": "http://soapinterop.org/echoComplexTypeAsSimpleTypes",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoComplexTypeAsSimpleTypes",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5906,14 +6059,16 @@
         "action": "http://soapinterop.org/echoSimpleTypesAsComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoSimpleTypesAsComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5928,14 +6083,16 @@
         "action": "http://soapinterop.org/echoNestedComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoNestedComplexType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5950,14 +6107,16 @@
         "action": "http://soapinterop.org/echoNestedMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoNestedMultiOccurs",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5972,14 +6131,16 @@
         "action": "http://soapinterop.org/echoChoice",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoChoice",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -5994,14 +6155,16 @@
         "action": "http://soapinterop.org/echoEnum",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoEnum",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6016,14 +6179,16 @@
         "action": "http://soapinterop.org/echoAnyType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoAnyType",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6038,14 +6203,16 @@
         "action": "http://soapinterop.org/echoAnyElement",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org/echoAnyElement",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6060,14 +6227,16 @@
         "action": "http://soapinterop.org",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://soapinterop.org",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6154,7 +6323,8 @@
         "action": null,
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6237,7 +6407,8 @@
         "action": "http://soapinterop.org/",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6321,7 +6492,8 @@
         "action": "http://tempuri.org/PRWebServ/getOtherInformation/getContinentList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6407,7 +6579,8 @@
         "action": "http://soapinterop.org/",
         "style": "document",
         "use": "literal",
-        "body_namespace": "http://soapinterop.org/WSDLInteropTestDocLit"
+        "body_namespace": "http://soapinterop.org/WSDLInteropTestDocLit",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6491,7 +6664,8 @@
         "action": "sendsms",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6623,7 +6797,8 @@
         "action": "http://test-soap.com/api/registration/registerUser",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6715,7 +6890,8 @@
         "action": "http://example.org/soapformat/Example",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://example.org/soapformat/Example"
+        "body_namespace": "http://example.org/soapformat/Example",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6730,7 +6906,8 @@
         "action": "http://example.org/soapformat/example2",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": "http://example.org/soapformat/example2"
+        "body_namespace": "http://example.org/soapformat/example2",
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6820,7 +6997,8 @@
         "action": "",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6906,7 +7084,8 @@
         "action": "http://Microsoft.ServiceModel.Samples/IService1/GetData",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6921,7 +7100,8 @@
         "action": "http://Microsoft.ServiceModel.Samples/IService1/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -6936,7 +7116,8 @@
         "action": "http://Microsoft.ServiceModel.Samples/IService1/GetDataUsingDataContract2",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7016,7 +7197,8 @@
         "action": "http://apache.org/axis2/mtom/GetContent",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7157,7 +7339,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7241,7 +7424,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7327,7 +7511,8 @@
         "action": "tns#Dummy",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7342,7 +7527,8 @@
         "action": "tns#DummySave",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -7425,7 +7611,8 @@
         "action": "SAY_HI_1",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7440,7 +7627,8 @@
         "action": "SAY_HI_2",
         "style": "rpc",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7531,7 +7719,8 @@
         "action": "http://example.com/xi/WebService/soap1.1",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7546,7 +7735,8 @@
         "action": "http://example.com/xi/WebService/soap1.1",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7758,7 +7948,8 @@
         "action": "urn:#LoginRequest",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7773,7 +7964,8 @@
         "action": "urn:#RespondToChallengeRequest",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7788,7 +7980,8 @@
         "action": "urn:#LogoutRequest",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7803,7 +7996,8 @@
         "action": "urn:#GetSystemInfoRequest",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7901,7 +8095,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7916,7 +8111,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7931,7 +8127,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7946,7 +8143,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7961,7 +8159,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7976,7 +8175,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -7991,7 +8191,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8006,7 +8207,8 @@
         "action": "",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8170,7 +8372,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8185,7 +8388,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8200,7 +8404,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8215,7 +8420,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8230,7 +8436,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8245,7 +8452,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8260,7 +8468,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8275,7 +8484,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8290,7 +8500,8 @@
         "action": null,
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8305,7 +8516,8 @@
         "action": "http://apache.org/hello_world_soap_http/testDocLitBare",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8462,70 +8674,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoWithTimeout",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8540,70 +8762,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": null
@@ -8615,70 +8847,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/Echo",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8693,70 +8935,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoComplex",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8771,70 +9023,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/TestFault",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8849,70 +9111,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ThrowInvalidOperationException",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -8927,70 +9199,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/GetDataUsingDataContract",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9005,70 +9287,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/ValidateMessagePropertyHeaders",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9083,70 +9375,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGetAuthToken",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9161,70 +9463,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/UserGamePlayGetList",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9239,70 +9551,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReply",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9317,70 +9639,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/MessageContractRequestReplyNotWrapped",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9395,70 +9727,80 @@
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "http://tempuri.org/IWcfProjectNService/EchoHttpMessageProperty",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9608,7 +9950,8 @@
         "action": "http://docs.oasis-open.org/ws-dd/ns/discovery/2009/01/HelloOp",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9623,7 +9966,8 @@
         "action": "http://docs.oasis-open.org/ws-dd/ns/discovery/2009/01/ByeOp",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9638,7 +9982,8 @@
         "action": "http://docs.oasis-open.org/ws-dd/ns/discovery/2009/01/ProbeOp",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9653,7 +9998,8 @@
         "action": "http://docs.oasis-open.org/ws-dd/ns/discovery/2009/01/ResolveOp",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9727,7 +10073,8 @@
         "action": "urn:s/x",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9794,7 +10141,8 @@
         "action": "urn:s/x",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9892,7 +10240,8 @@
         "action": "urn:s/x",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -9961,14 +10310,16 @@
         "action": "urn:s/v11",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.2",
         "action": "urn:s/v12",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -10046,7 +10397,8 @@
         "action": "urn:s/x",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -10113,14 +10465,16 @@
         "action": "urn:s/text",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        },
        {
         "version": "1.1",
         "action": "urn:s/number",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {
@@ -10267,7 +10621,8 @@
         "action": "urn:s/x",
         "style": "document",
         "use": "literal",
-        "body_namespace": null
+        "body_namespace": null,
+        "has_input": true
        }
       ],
       "wrapper": {

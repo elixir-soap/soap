@@ -118,8 +118,12 @@ defmodule Soap.Encoder do
     decl = Walk.find_element(ctx.schema, qname)
     type = decl && Walk.type_of(ctx.schema, decl)
     {attrs, value} = split_wrapper_value(params)
-    encode_value(qname, attrs, value, type, %{nillable: false}, [local], ctx)
+    encode_value(declared_qname(decl, qname), attrs, value, type, %{nillable: false}, [local], ctx)
   end
+
+  # The schema knows an element's real namespace, even if a WSDL's reference to it is sloppy.
+  defp declared_qname(nil, qname), do: qname
+  defp declared_qname(decl, _qname), do: {decl.ns, decl.name}
 
   defp split_wrapper_value({_name, attrs, value}) when is_map(attrs), do: {attrs, value}
   defp split_wrapper_value(params), do: {%{}, params}
@@ -134,7 +138,7 @@ defmodule Soap.Encoder do
       end)
 
     check_unknown(rest, path, ctx, Enum.map(parts, & &1.name))
-    nodes
+    nodes ++ Enum.flat_map(rest, &schemaless_entry(&1, {nil, nil}, path, ctx))
   end
 
   defp part_element?(%{element: {_ns, local}}, entry), do: local_name(entry) == local
@@ -143,7 +147,7 @@ defmodule Soap.Encoder do
   defp encode_part(%{element: {_, local} = qname}, {_key, attrs, value}, path, ctx) do
     decl = Walk.find_element(ctx.schema, qname)
     type = decl && Walk.type_of(ctx.schema, decl)
-    [encode_value(qname, attrs, value, type, %{nillable: false}, [local | path], ctx)]
+    [encode_value(declared_qname(decl, qname), attrs, value, type, %{nillable: false}, [local | path], ctx)]
   end
 
   defp encode_part(part, {_key, attrs, value}, path, ctx) do
@@ -402,11 +406,15 @@ defmodule Soap.Encoder do
 
   defp encode_leftovers(entries, fields, open?, parent, path, ctx) do
     if open? or not ctx.validate do
-      Enum.flat_map(entries, &schemaless_entry(&1, parent, path, ctx))
+      Enum.flat_map(entries, &schemaless_entry(&1, sibling_scope(fields, parent), path, ctx))
     else
       check_unknown(entries, path, ctx, Enum.map(fields, & &1.name))
     end
   end
+
+  # An element the schema doesn't name is qualified the way its siblings are.
+  defp sibling_scope([%{ns: ns} | _], {_ns, name}), do: {ns, name}
+  defp sibling_scope([], parent), do: parent
 
   defp check_unknown([], _path, _ctx, _allowed), do: []
   defp check_unknown(_entries, _path, %{validate: false}, _allowed), do: []
@@ -416,13 +424,16 @@ defmodule Soap.Encoder do
     throw({:invalid_param, [name | path], "not allowed here. Expected one of: #{Enum.join(allowed, ", ")}"})
   end
 
-  # No schema to follow: children inherit the parent's namespace.
-  defp encode_schemaless(value, qname, path, ctx) do
+  # With no schema to follow, children are qualified if the parent's schema says so, and
+  # if it's unknown, they inherit the parent's namespace.
+  defp encode_schemaless(value, {ns, _} = qname, path, ctx) do
+    scope = if Schema.element_form(ctx.schema, ns) == "unqualified", do: {nil, nil}, else: qname
+
     cond do
       is_nil(value) -> []
       match?(%Raw{}, value) -> value
       scalar?(value) -> scalar_text(value)
-      true -> value |> entries() |> Enum.flat_map(&schemaless_entry(&1, qname, path, ctx))
+      true -> value |> entries() |> Enum.flat_map(&schemaless_entry(&1, scope, path, ctx))
     end
   end
 
@@ -674,7 +685,7 @@ defmodule Soap.Encoder do
     end
   end
 
-  defp write(text, _prefixes, _declarations) when is_binary(text), do: escape_text(text)
+  defp write(text, _prefixes, _declarations) when is_binary(text), do: text_or_cdata(text)
 
   defp write_content(%Raw{xml: xml}, _prefixes), do: xml
 
@@ -682,7 +693,7 @@ defmodule Soap.Encoder do
     ["<", Map.fetch!(prefixes, @xop), ":Include href=\"cid:", escape_attribute(id), "\"/>"]
   end
 
-  defp write_content(text, _prefixes) when is_binary(text), do: escape_text(text)
+  defp write_content(text, _prefixes) when is_binary(text), do: text_or_cdata(text)
   defp write_content(children, prefixes) when is_list(children), do: Enum.map(children, &write(&1, prefixes, []))
 
   defp write_attribute({{ns, name}, value}, prefixes) do
@@ -698,6 +709,17 @@ defmodule Soap.Encoder do
 
   defp tag_name({nil, name}, _prefixes), do: name
   defp tag_name({ns, name}, prefixes), do: [Map.fetch!(prefixes, ns), ":", name]
+
+  # A value that is exactly one CDATA section goes out as that section.
+  defp text_or_cdata(<<"<![CDATA[", rest::binary>> = text) do
+    if String.ends_with?(rest, "]]>") and :binary.matches(rest, "]]>") |> length() == 1 do
+      text
+    else
+      escape_text(text)
+    end
+  end
+
+  defp text_or_cdata(text), do: escape_text(text)
 
   @doc "Escapes text content."
   def escape_text(text) do
@@ -717,7 +739,4 @@ defmodule Soap.Encoder do
     |> String.replace("\t", "&#9;")
     |> String.replace("\r", "&#13;")
   end
-
-  @doc false
-  def builtin_namespace, do: Schema.xsd_namespace()
 end

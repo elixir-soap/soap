@@ -25,7 +25,7 @@ defmodule Soap.Schema do
   @soap12_enc "http://www.w3.org/2003/05/soap-encoding"
   @builtin [@xsd, @soap_enc, @soap12_enc]
 
-  defstruct elements: %{}, types: %{}, groups: %{}, attribute_groups: %{}, attributes: %{}
+  defstruct elements: %{}, types: %{}, groups: %{}, attribute_groups: %{}, attributes: %{}, element_forms: %{}
 
   @type qname :: {String.t() | nil, String.t()}
   @type t :: %__MODULE__{
@@ -33,7 +33,8 @@ defmodule Soap.Schema do
           types: %{qname() => ComplexType.t() | SimpleType.t()},
           groups: %{qname() => Group.t()},
           attribute_groups: %{qname() => list()},
-          attributes: %{qname() => AttributeDecl.t()}
+          attributes: %{qname() => AttributeDecl.t()},
+          element_forms: %{(String.t() | nil) => String.t()}
         }
 
   @doc "The XML Schema namespace."
@@ -51,6 +52,9 @@ defmodule Soap.Schema do
   @doc "Finds a global element."
   def element(%__MODULE__{elements: elements}, qname), do: Map.get(elements, qname)
 
+  @doc "The `elementFormDefault` of a namespace's schema, or nil if none was read."
+  def element_form(%__MODULE__{element_forms: forms}, namespace), do: Map.get(forms, namespace)
+
   @doc "Combines two schemas. Declarations in `later` win, as `xsd:redefine` requires."
   def merge(%__MODULE__{} = earlier, %__MODULE__{} = later) do
     %__MODULE__{
@@ -58,7 +62,8 @@ defmodule Soap.Schema do
       types: Map.merge(earlier.types, later.types),
       groups: Map.merge(earlier.groups, later.groups),
       attribute_groups: Map.merge(earlier.attribute_groups, later.attribute_groups),
-      attributes: Map.merge(earlier.attributes, later.attributes)
+      attributes: Map.merge(earlier.attributes, later.attributes),
+      element_forms: Map.merge(earlier.element_forms, later.element_forms)
     }
   end
 
@@ -81,7 +86,8 @@ defmodule Soap.Schema do
       attribute_form: Element.attr(schema, "attributeFormDefault", "unqualified")
     }
 
-    Enum.reduce(schema.children, %__MODULE__{}, &read_top_level(&1, &2, ctx))
+    start = %__MODULE__{element_forms: %{ctx.target => ctx.element_form}}
+    Enum.reduce(schema.children, start, &read_top_level(&1, &2, ctx))
   end
 
   @doc """

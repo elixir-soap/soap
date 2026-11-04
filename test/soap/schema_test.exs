@@ -212,7 +212,7 @@ defmodule Soap.SchemaTest do
           ~s(<xs:annotation><xs:documentation>x</xs:documentation></xs:annotation><other/><xs:notation name="n" public="p"/>)
         )
 
-      assert s == %Schema{}
+      assert s == %Schema{element_forms: %{"urn:t" => "qualified"}}
     end
 
     test "survives declarations with missing or bad attributes" do

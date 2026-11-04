@@ -61,7 +61,15 @@ defmodule Soap.Schema.Walk do
   def resolve(_schema, nil), do: nil
 
   def resolve(schema, {_ns, local} = qname) do
-    if Schema.builtin?(qname), do: {:builtin, local}, else: find_type(schema, qname)
+    if Schema.builtin?(qname), do: {:builtin, local}, else: find_type(schema, qname) || type_of_element(schema, qname)
+  end
+
+  # Some schemas name a global element where a type belongs.
+  defp type_of_element(schema, qname) do
+    case Map.get(schema.elements, qname) do
+      %ElementDecl{inline: inline} when not is_nil(inline) -> inline
+      _ -> nil
+    end
   end
 
   @doc """
