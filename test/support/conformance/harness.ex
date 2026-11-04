@@ -31,10 +31,11 @@ defmodule Soap.Conformance.Harness do
     outcome = isolate(fun, Keyword.get(opts, :timeout, 20_000))
     known = :persistent_term.get({__MODULE__, :known})
     listed? = Map.has_key?(known, id)
-    :ets.insert(@table, {id, outcome})
+    self_test? = String.starts_with?(id, "_self/")
+    unless self_test?, do: :ets.insert(@table, {id, outcome})
 
     cond do
-      updating?() -> :ok
+      updating?() and not self_test? -> :ok
       outcome == :pass and listed? -> ExUnit.Assertions.flunk(xpass_message(id))
       outcome == :pass -> :ok
       listed? -> :ok

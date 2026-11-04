@@ -58,13 +58,18 @@ defmodule Soap.Conformance.Xml do
         {"xmlns:" <> prefix, uri}, acc -> Map.put(acc, prefix, uri)
       end)
 
-    with {:ok, ns, name} <- expand(tag, scope, true),
+    with :ok <- check_declarations(declared),
+         {:ok, ns, name} <- expand(tag, scope, true),
          {:ok, attrs} <- resolve_attrs(plain, scope),
          {:ok, children} <- resolve_children(content, scope) do
       text = content |> Enum.filter(&is_binary/1) |> Enum.join()
       text = if children == [] and String.trim(text) != "", do: text, else: ""
       {:ok, %{ns: blank_to_nil(ns), name: name, attrs: attrs, children: children, text: text}}
     end
+  end
+
+  defp check_declarations(declared) do
+    if List.keymember?(declared, "xmlns:", 0), do: {:error, :empty_namespace_prefix}, else: :ok
   end
 
   defp resolve_attrs(attrs, scope) do
