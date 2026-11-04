@@ -16,23 +16,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - elixir: "1.18"
-            otp: "27"
-          - elixir: "1.20"
-            otp: "29"
+        driver: [v1, v2]
+        version:
+          - { elixir: "1.18", otp: "27" }
+          - { elixir: "1.20", otp: "29" }
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
-          elixir-version: ${{ matrix.elixir }}
-          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.version.elixir }}
+          otp-version: ${{ matrix.version.otp }}
       - run: mix deps.get
       - run: mix test
+        env:
+          SOAP_CONFORMANCE_DRIVER: ${{ matrix.driver }}
 
   whole-corpus:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        driver: [v1, v2]
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
@@ -44,6 +49,7 @@ jobs:
       - run: mix test --only nightly
         env:
           CORPUS_DIR: ${{ runner.temp }}/corpus
+          SOAP_CONFORMANCE_DRIVER: ${{ matrix.driver }}
 
   live:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
