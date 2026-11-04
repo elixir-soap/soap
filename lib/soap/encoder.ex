@@ -713,7 +713,7 @@ defmodule Soap.Encoder do
 
   # A value that is exactly one CDATA section goes out as that section.
   defp text_or_cdata(<<"<![CDATA[", rest::binary>> = text) do
-    if String.ends_with?(rest, "]]>") and :binary.matches(rest, "]]>") |> length() == 1 do
+    if String.ends_with?(rest, "]]>") and length(:binary.matches(rest, "]]>")) == 1 do
       text
     else
       escape_text(text)

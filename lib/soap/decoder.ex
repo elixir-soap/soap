@@ -357,15 +357,12 @@ defmodule Soap.Decoder do
 
   # Even with no WSDL, a value can say that it's a number or a boolean.
   defp xsi_builtin(element) do
-    case Element.attr_ns(element, @xsi, "type") do
-      nil ->
-        nil
-
-      value ->
-        case Element.qname(element, value) do
-          {ns, _} = qname when ns != nil -> if Schema.builtin?(qname), do: {:builtin, elem(qname, 1)}
-          _ -> nil
-        end
+    with value when not is_nil(value) <- Element.attr_ns(element, @xsi, "type"),
+         {_ns, local} = qname <- Element.qname(element, value),
+         true <- Schema.builtin?(qname) do
+      {:builtin, local}
+    else
+      _ -> nil
     end
   end
 

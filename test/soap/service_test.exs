@@ -186,6 +186,18 @@ defmodule Soap.ServiceTest do
       assert {:error, {:unknown_operation, "Nope", ["Pay"]}} = Service.operation(service, "Nope")
     end
 
+    test "a binding naming a port type that doesn't exist still finds its messages" do
+      doc =
+        String.replace(
+          wsdl(),
+          ~s(<wsdl:binding name="B" type="tns:PT">),
+          ~s(<wsdl:binding name="B" type="tns:Missing">)
+        )
+
+      {:ok, service} = Service.from_string(doc)
+      assert {:ok, %{input: %{body: {:element, {"urn:t", "Pay"}}}}} = Service.operation(service, "Pay")
+    end
+
     test "a binding that isn't SOAP is ignored" do
       http =
         ~s(<wsdl:binding name="H" type="tns:PT"><http:binding xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" verb="GET"/><wsdl:operation name="Other"/></wsdl:binding>)

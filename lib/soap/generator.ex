@@ -79,13 +79,9 @@ defmodule Soap.Generator do
   end
 
   defp unique_name(name, used) do
-    if MapSet.member?(used, name) do
-      2
-      |> Stream.iterate(&(&1 + 1))
-      |> Enum.find_value(fn n -> if not MapSet.member?(used, "#{name}_#{n}"), do: "#{name}_#{n}" end)
-    else
-      name
-    end
+    [name]
+    |> Stream.concat(Stream.map(Stream.iterate(2, &(&1 + 1)), &"#{name}_#{&1}"))
+    |> Enum.find(&(not MapSet.member?(used, &1)))
   end
 
   # Operations

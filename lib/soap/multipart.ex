@@ -67,10 +67,10 @@ defmodule Soap.Multipart do
   end
 
   defp parse_part(raw) do
-    raw = String.replace_prefix(raw, "\r\n", "") |> String.replace_prefix("\n", "")
+    raw = raw |> String.replace_prefix("\r\n", "") |> String.replace_prefix("\n", "")
     {head, content} = split_head(raw)
     headers = parse_headers(head)
-    content = String.replace_suffix(content, "\r\n", "") |> String.replace_suffix("\n", "")
+    content = content |> String.replace_suffix("\r\n", "") |> String.replace_suffix("\n", "")
 
     %Attachment{
       id: headers |> List.keyfind("content-id", 0, {nil, nil}) |> elem(1) |> strip_brackets(),

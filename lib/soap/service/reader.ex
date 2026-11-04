@@ -73,7 +73,15 @@ defmodule Soap.Service.Reader do
 
   defp binding_operations(binding, index) do
     port_type = lookup(index.port_types, Element.qname(binding.element, Element.attr(binding.element, "type")))
-    abstract = if port_type, do: wsdl_children(port_type, "operation"), else: []
+
+    # A binding can name a port type that doesn't exist. Its operations can still be
+    # matched by name, which beats sending an empty Body.
+    abstract =
+      if port_type do
+        wsdl_children(port_type, "operation")
+      else
+        index.port_types |> Map.values() |> Enum.flat_map(&wsdl_children(&1, "operation"))
+      end
 
     binding.element
     |> wsdl_children("operation")
