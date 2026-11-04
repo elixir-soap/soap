@@ -134,7 +134,7 @@ defmodule Soap.DecoderTest do
 
       out = typed(fields, "<f>INF</f><f>-INF</f><f>NaN</f><d>12.50</d><b>AQL/</b><h>01ff</h>")
       assert out["f"] == [:infinity, :negative_infinity, :nan]
-      assert Decimal.equal?(out["d"], Decimal.new("12.50"))
+      assert out["d"] == "12.50"
       assert out["b"] == <<1, 2, 255>>
       assert out["h"] == <<1, 255>>
     end

@@ -13,8 +13,8 @@ defmodule Soap.Decoder do
 
     * An element that can repeat is always a list, even with one item.
     * Values take their schema type: integers, floats, booleans, `Date`, `DateTime`,
-      `NaiveDateTime`, `Time`, and `Decimal` when that library is installed. Base64 and
-      hex decode to bytes. A value that doesn't parse stays a string.
+      `NaiveDateTime` and `Time`. Base64 and hex decode to bytes. `xsd:decimal` stays a
+      string, so no precision is lost. A value that doesn't parse stays a string.
     * `xsi:nil` is `nil`.
 
   Attributes appear as `"@name"`, and an element's text next to attributes as `"#text"`.
@@ -542,7 +542,8 @@ defmodule Soap.Decoder do
 
   defp convert(name, text) when name in ["double", "float"], do: convert_float(String.trim(text), text)
 
-  defp convert("decimal", text), do: convert_decimal(String.trim(text), text)
+  # A decimal stays text, because a float would lose precision.
+  defp convert("decimal", text), do: String.trim(text)
 
   defp convert("boolean", text) do
     case String.trim(text) do
@@ -577,17 +578,6 @@ defmodule Soap.Decoder do
     case Float.parse(trimmed) do
       {number, ""} -> number
       _ -> text
-    end
-  end
-
-  defp convert_decimal(trimmed, text) do
-    if Code.ensure_loaded?(Decimal) do
-      case Decimal.parse(trimmed) do
-        {decimal, ""} -> decimal
-        _ -> text
-      end
-    else
-      text
     end
   end
 

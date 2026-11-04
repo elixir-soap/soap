@@ -59,9 +59,10 @@ defmodule Soap.MixProject do
       {:saxy, "~> 1.6"},
       {:req, "~> 0.5"},
       {:telemetry, "~> 1.0"},
-      {:decimal, "~> 2.0 or ~> 3.0", optional: true},
       {:jason, "~> 1.4"},
       {:stream_data, "~> 1.1", only: :test},
+      # Only to test that %Decimal{} params work. The library itself doesn't use it.
+      {:decimal, "~> 3.0", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},

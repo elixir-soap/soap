@@ -29,6 +29,8 @@ defmodule Soap.Encoder do
   allowed, because servers often accept less than their WSDL says.
   """
 
+  @compile {:no_warn_undefined, Decimal}
+
   alias Soap.{Attachment, Error, Raw, Schema}
   alias Soap.Schema.{ComplexType, SimpleType, Walk}
   alias Soap.Service
@@ -568,6 +570,9 @@ defmodule Soap.Encoder do
   defp scalar_text(value) when is_binary(value), do: value
   defp scalar_text(true), do: "true"
   defp scalar_text(false), do: "false"
+  # xsd:decimal has no exponent form, which Decimal's default text can use. This only runs
+  # when an application passes a %Decimal{}, so the library is there. It isn't a dependency.
+  defp scalar_text(%{__struct__: Decimal} = value), do: value.__struct__.to_string(value, :normal)
   defp scalar_text(%{__struct__: _} = value), do: to_string(value)
   defp scalar_text(value) when is_map(value) or is_tuple(value) or is_list(value), do: inspect(value)
   defp scalar_text(value), do: to_string(value)

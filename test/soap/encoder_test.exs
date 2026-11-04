@@ -132,6 +132,8 @@ defmodule Soap.EncoderTest do
         {"xsd:int", 5, "5"},
         {"xsd:long", "5", "5"},
         {"xsd:decimal", 1.5, "1.5"},
+        {"xsd:decimal", Decimal.new("10.50"), "10.50"},
+        {"xsd:decimal", Decimal.new("1E+3"), "1000"},
         {"xsd:double", 1.5, "1.5"},
         {"xsd:double", "INF", "INF"},
         {"xsd:boolean", true, "true"},

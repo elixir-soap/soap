@@ -112,14 +112,14 @@ order
 #=>   "Paid" => true,
 #=>   "Created" => ~U[2026-11-04 10:00:00Z],
 #=>   "Lines" => [%{"Sku" => "A-1", "Quantity" => 2}],
-#=>   "Total" => %{"@currency" => "EUR", "#text" => Decimal.new("10.50")}
+#=>   "Total" => %{"@currency" => "EUR", "#text" => "10.50"}
 #=> }
 ```
 
 - Keys are strings, so a reply can't create atoms. Prefixes are dropped, so a server changing its prefix changes nothing.
 - An element that can repeat is always a list, even with one item.
 - Values take their schema type. A value that doesn't parse stays a string.
-- `Decimal` needs the `:decimal` package. Without it, decimals stay strings.
+- `xsd:decimal` stays a string, so no precision is lost. Call `Decimal.new/1` if you want a `Decimal`.
 - `xsi:nil` is `nil`.
 - `rpc/encoded` links (`multiRef`, `href`) are followed, and `soapenc:Array` becomes a list.
 
