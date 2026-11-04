@@ -25,6 +25,7 @@ defmodule Soap.MixProject do
       preferred_envs: [
         coveralls: :test,
         "coveralls.detail": :test,
+        "coveralls.github": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
       ]
