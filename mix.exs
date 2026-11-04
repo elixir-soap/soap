@@ -14,20 +14,7 @@ defmodule Soap.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: docs(),
-      package: package(),
-      test_coverage: [tool: ExCoveralls]
-    ]
-  end
-
-  def cli do
-    [
-      preferred_envs: [
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.github": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test
-      ]
+      package: package()
     ]
   end
 
@@ -63,8 +50,7 @@ defmodule Soap.MixProject do
       # Only to test that %Decimal{} params work. The library itself doesn't use it.
       {:decimal, "~> 3.0", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
-      {:excoveralls, "~> 0.18", only: :test}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false}
     ]
   end
 
