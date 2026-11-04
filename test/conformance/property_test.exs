@@ -47,7 +47,9 @@ defmodule Soap.Conformance.PropertyTest do
         check all(value <- xml_text(), max_runs: @runs) do
           assert sent_text(model, value) == value
         end
-      end, timeout: 60_000)
+      end,
+      timeout: 60_000
+    )
   end
 
   test "text with newlines and tabs reaches the server unchanged" do
@@ -59,7 +61,9 @@ defmodule Soap.Conformance.PropertyTest do
         check all(value <- xml_text([?\n, ?\t]), max_runs: @runs) do
           assert sent_text(model, value) == value
         end
-      end, timeout: 60_000)
+      end,
+      timeout: 60_000
+    )
   end
 
   test "any text in a reply decodes unchanged" do
@@ -75,7 +79,9 @@ defmodule Soap.Conformance.PropertyTest do
           assert decoded |> values_at("result") |> leaves() == [String.trim(value)] or
                    decoded |> values_at("result") |> leaves() == [value]
         end
-      end, timeout: 60_000)
+      end,
+      timeout: 60_000
+    )
   end
 
   test "decoding any bytes returns a result" do
@@ -86,7 +92,9 @@ defmodule Soap.Conformance.PropertyTest do
           result = driver().decode(nil, nil, status, [], bytes)
           assert match?({:ok, _}, result) or match?({:fault, _}, result) or match?({:error, _}, result)
         end
-      end, timeout: 60_000)
+      end,
+      timeout: 60_000
+    )
   end
 
   test "decoding a cut-off reply returns a result" do
@@ -99,6 +107,8 @@ defmodule Soap.Conformance.PropertyTest do
           result = driver().decode(nil, nil, 200, [], binary_part(reply, 0, cut))
           assert {:error, _} = result
         end
-      end, timeout: 60_000)
+      end,
+      timeout: 60_000
+    )
   end
 end

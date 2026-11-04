@@ -187,7 +187,9 @@ defmodule Soap.SchemaTest do
       s =
         schema(
           ~s(<xs:element name="E" type="T"/><xs:complexType name="T"><xs:sequence><xs:element name="a" type="T"/></xs:sequence></xs:complexType>),
-          "", target_namespace: "urn:i")
+          "",
+          target_namespace: "urn:i"
+        )
 
       assert %{ns: "urn:i", type: {"urn:i", "T"}} = Schema.element(s, {"urn:i", "E"})
       assert Schema.unresolved_references(s) == []
