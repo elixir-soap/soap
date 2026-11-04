@@ -211,9 +211,13 @@ CONFORMANCE_UPDATE=1 mix test
 
 ### Measuring 2.0
 
-1. Write `test/support/conformance/drivers/v2.ex`, implementing `Soap.Conformance.Driver`.
-2. Run `SOAP_CONFORMANCE_DRIVER=v2 mix test`. Each driver has its own known-failures file, which starts empty.
-3. Work down the list until nothing is left.
+`test/support/conformance/drivers/v2.ex` drives the 2.0 modules. Each driver has its own known-failures file and score floors. As 2.0 grows, implement the driver's next function and work down the list:
+
+```bash
+SOAP_CONFORMANCE_DRIVER=v2 mix test
+```
+
+`test/soap/service_corpus_test.exs` also checks the WSDL model directly against the facts in `manifest.json`: bindings, versions, actions, styles, wrappers and ports.
 
 The driver's params and results are provisional and may change as the 2.0 API is designed. Some checks are stricter than v1's design on purpose, such as reordering fields to match `xsd:sequence` and quoting `SOAPAction`. Where 2.0 decides otherwise, change the check rather than listing it.
 
