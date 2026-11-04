@@ -7,7 +7,7 @@ defmodule Soap.Conformance.Drivers.V2 do
   """
   @behaviour Soap.Conformance.Driver
 
-  alias Soap.Service
+  alias Soap.{Encoder, Service}
 
   @adapter_key {__MODULE__, :adapter}
 
@@ -25,6 +25,11 @@ defmodule Soap.Conformance.Drivers.V2 do
       {:error, :network_disabled}
     end
   end
+
+  defp encoder_opts(opts), do: [headers: opts[:soap_headers] || []]
+
+  # A list of nodes holding one scalar under no name means the element's own value.
+  defp to_params(params), do: params
 
   defp with_adapter(opts) do
     [http: :persistent_term.get(@adapter_key, Soap.HTTP.HTTPoison)] ++ opts
@@ -51,7 +56,14 @@ defmodule Soap.Conformance.Drivers.V2 do
   end
 
   @impl true
-  def build_request(_service, _operation, _params, _opts), do: raise("not implemented")
+  def build_request(service, name, params, opts) do
+    operation_opts = if opts[:soap_version], do: [version: opts[:soap_version]], else: []
+
+    with {:ok, operation} <- Service.operation(service, name, operation_opts),
+         {:ok, encoded} <- Encoder.encode(service, operation, to_params(params), encoder_opts(opts)) do
+      {:ok, %{body: encoded.xml, headers: Soap.Request.headers(operation, opts[:http_headers] || [])}}
+    end
+  end
 
   @impl true
   def call(_service, _operation, _params, _opts), do: raise("not implemented")
