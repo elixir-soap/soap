@@ -39,7 +39,7 @@ defmodule Soap.Request.Params do
   @spec validate_params(params :: any(), wsdl :: map(), operation :: String.t()) :: any()
   def validate_params(params, _wsdl, _operation) when is_binary(params), do: params
 
-  def validate_params({_tag, _attrs, _nested} = param, wsdl, operation) do
+  def validate_params(param = {_tag, _attrs, _nested}, wsdl, operation) do
     case validate_param(param, wsdl, operation) do
       nil -> param
       error -> {:error, error}
