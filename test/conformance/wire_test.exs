@@ -83,7 +83,11 @@ defmodule Soap.Conformance.WireTest do
 
     test "MTOM multipart reply" do
       boundary = "MIMEBoundary"
-      soap = soap11(~s(<PayOut xmlns="urn:t"><result><x:Include xmlns:x="http://www.w3.org/2004/08/xop/include" href="cid:part1"/></result></PayOut>))
+
+      soap =
+        soap11(
+          ~s(<PayOut xmlns="urn:t"><result><x:Include xmlns:x="http://www.w3.org/2004/08/xop/include" href="cid:part1"/></result></PayOut>)
+        )
 
       body =
         "--#{boundary}\r\nContent-Type: application/xop+xml; type=\"text/xml\"\r\nContent-ID: <root>\r\n\r\n#{soap}\r\n" <>
@@ -101,15 +105,21 @@ defmodule Soap.Conformance.WireTest do
 
   describe "SOAP faults" do
     test "at HTTP 500" do
-      check("fault_500", fn -> assert {:fault, %{code: "s:Server", message: "boom"}} = call_with(WireServer.http(500, [@xml], fault11())) end)
+      check("fault_500", fn ->
+        assert {:fault, %{code: "s:Server", message: "boom"}} = call_with(WireServer.http(500, [@xml], fault11()))
+      end)
     end
 
     test "at HTTP 200" do
-      check("fault_200", fn -> assert {:fault, %{message: "boom"}} = call_with(WireServer.http(200, [@xml], fault11())) end)
+      check("fault_200", fn ->
+        assert {:fault, %{message: "boom"}} = call_with(WireServer.http(200, [@xml], fault11()))
+      end)
     end
 
     test "at HTTP 400" do
-      check("fault_400", fn -> assert {:fault, %{message: "boom"}} = call_with(WireServer.http(400, [@xml], fault11())) end)
+      check("fault_400", fn ->
+        assert {:fault, %{message: "boom"}} = call_with(WireServer.http(400, [@xml], fault11()))
+      end)
     end
 
     test "SOAP 1.2 fault with a subcode" do
@@ -122,7 +132,9 @@ defmodule Soap.Conformance.WireTest do
       steps = WireServer.http(500, [{"Content-Type", "application/soap+xml"}], fault)
 
       check("fault_12_subcode", fn ->
-        assert {:fault, %{code: code, message: "nope"}} = call_with(steps, [], soap_uri: "http://schemas.xmlsoap.org/wsdl/soap12/")
+        assert {:fault, %{code: code, message: "nope"}} =
+                 call_with(steps, [], soap_uri: "http://schemas.xmlsoap.org/wsdl/soap12/")
+
         assert String.contains?(code, "Sender")
       end)
     end
@@ -144,7 +156,9 @@ defmodule Soap.Conformance.WireTest do
     end
 
     test "plain text at HTTP 200" do
-      check("text_200", fn -> assert {:error, _} = call_with(WireServer.http(200, [{"Content-Type", "text/plain"}], "OK")) end)
+      check("text_200", fn ->
+        assert {:error, _} = call_with(WireServer.http(200, [{"Content-Type", "text/plain"}], "OK"))
+      end)
     end
 
     test "XML with no SOAP envelope" do

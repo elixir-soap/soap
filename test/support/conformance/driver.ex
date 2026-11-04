@@ -55,7 +55,13 @@ defmodule Soap.Conformance.Driver do
   @callback call(model(), operation :: String.t(), params(), opts :: keyword()) :: result()
 
   @doc "Decodes a response. `model` is nil when no WSDL is available."
-  @callback decode(model() | nil, operation :: String.t() | nil, status :: pos_integer(), headers :: list(), body :: binary()) ::
+  @callback decode(
+              model() | nil,
+              operation :: String.t() | nil,
+              status :: pos_integer(),
+              headers :: list(),
+              body :: binary()
+            ) ::
               result()
 
   @doc """

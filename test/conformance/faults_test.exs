@@ -178,7 +178,12 @@ defmodule Soap.Conformance.FaultsTest do
   end
 
   describe "crashes" do
-    for {name, type, value} <- [{"int", "xsd:int", 1}, {"boolean", "xsd:boolean", true}, {"long", "xsd:long", 1}, {"double", "xsd:double", 1.5}] do
+    for {name, type, value} <- [
+          {"int", "xsd:int", 1},
+          {"boolean", "xsd:boolean", true},
+          {"long", "xsd:long", 1},
+          {"double", "xsd:double", 1.5}
+        ] do
       @type_name type
       @value value
       test "#{name} fields are supported" do
@@ -192,7 +197,10 @@ defmodule Soap.Conformance.FaultsTest do
     test "nested complex types are supported" do
       check("nested_type", fn ->
         fields = ~s(<xsd:element name="parent" type="tns:Parent"/>)
-        extra = ~s(<xsd:complexType name="Parent"><xsd:sequence><xsd:element name="child" type="xsd:string"/></xsd:sequence></xsd:complexType>)
+
+        extra =
+          ~s(<xsd:complexType name="Parent"><xsd:sequence><xsd:element name="child" type="xsd:string"/></xsd:sequence></xsd:complexType>)
+
         request = build([fields: fields, extra_types: extra], [{"parent", %{}, [{"child", %{}, "x"}]}])
         assert [%{name: "parent", children: [%{name: "child", text: "x"}]}] = sent_children(request)
       end)
@@ -230,10 +238,12 @@ defmodule Soap.Conformance.FaultsTest do
     test "SOAP 1.1 and 1.2 services work in one application" do
       check("both_versions", fn ->
         reply12 = soap12(~s(<PayOut xmlns="urn:t"><result>done</result></PayOut>))
-        assert {:ok, decoded} = offline(fn ->
-                 {:ok, model} = driver().load_string(wsdl(soap_uri: "http://schemas.xmlsoap.org/wsdl/soap12/"), [])
-                 driver().decode(model, "Pay", 200, [], reply12)
-               end)
+
+        assert {:ok, decoded} =
+                 offline(fn ->
+                   {:ok, model} = driver().load_string(wsdl(soap_uri: "http://schemas.xmlsoap.org/wsdl/soap12/"), [])
+                   driver().decode(model, "Pay", 200, [], reply12)
+                 end)
 
         assert decoded |> values_at("result") |> leaves() == ["done"]
       end)
@@ -288,7 +298,10 @@ defmodule Soap.Conformance.FaultsTest do
           )
 
         assert {:ok, model} = offline(fn -> driver().load_string(doc, []) end)
-        assert {:ok, request} = offline(fn -> driver().build_request(model, "Pay", @params, soap_headers: [{"Token", "x"}]) end)
+
+        assert {:ok, request} =
+                 offline(fn -> driver().build_request(model, "Pay", @params, soap_headers: [{"Token", "x"}]) end)
+
         assert Xml.valid?(request.body)
       end)
     end
@@ -343,7 +356,11 @@ defmodule Soap.Conformance.FaultsTest do
               WireServer.http(200, [{"Content-Type", "text/xml"}], wsdl(imports: imports))
 
             _ ->
-              WireServer.http(200, [{"Content-Type", "text/xml"}], ~s(<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:x"/>))
+              WireServer.http(
+                200,
+                [{"Content-Type", "text/xml"}],
+                ~s(<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:x"/>)
+              )
           end
 
           WireServer.with_handler(handler, fn server ->
@@ -356,7 +373,9 @@ defmodule Soap.Conformance.FaultsTest do
 
     test "a failed import is reported" do
       check("failed_import_reported", fn ->
-        dir = write_wsdl([{"main.wsdl", wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="missing.xsd"/>))}])
+        dir =
+          write_wsdl([{"main.wsdl", wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="missing.xsd"/>))}])
+
         assert {:error, _} = offline(fn -> driver().load(Path.join(dir, "main.wsdl"), []) end)
       end)
     end
@@ -398,7 +417,11 @@ defmodule Soap.Conformance.FaultsTest do
 
     test "xsi:nil is nil" do
       check("xsi_nil", fn ->
-        body = soap11(~s(<PayOut xmlns="urn:t" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><result xsi:nil="true"/></PayOut>))
+        body =
+          soap11(
+            ~s(<PayOut xmlns="urn:t" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><result xsi:nil="true"/></PayOut>)
+          )
+
         assert {:ok, result} = decoded(body)
         assert values_at(result, "result") == [nil]
       end)
@@ -408,7 +431,9 @@ defmodule Soap.Conformance.FaultsTest do
   describe "security" do
     test "imports can't read files outside the allowed directory" do
       check("import_confined", fn ->
-        secret = ~s(<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:x"><xsd:complexType name="LeakedType"><xsd:sequence/></xsd:complexType></xsd:schema>)
+        secret =
+          ~s(<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:x"><xsd:complexType name="LeakedType"><xsd:sequence/></xsd:complexType></xsd:schema>)
+
         doc = wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="../secret.xsd"/>))
         dir = write_wsdl([{"secret.xsd", secret}, {"svc/main.wsdl", doc}])
 
@@ -423,7 +448,9 @@ defmodule Soap.Conformance.FaultsTest do
 
     test "remote imports are not fetched by default" do
       check("no_remote_import", fn ->
-        doc = wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="http://169.254.169.254/latest/meta-data/"/>))
+        doc =
+          wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="http://169.254.169.254/latest/meta-data/"/>))
+
         dir = write_wsdl([{"main.wsdl", doc}])
         {_result, attempts} = driver().without_network(fn -> driver().load(Path.join(dir, "main.wsdl"), []) end)
         assert attempts == []

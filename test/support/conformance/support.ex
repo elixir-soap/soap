@@ -24,7 +24,11 @@ defmodule Soap.Conformance.Support do
   def wsdl(opts \\ []) do
     pfx = opts[:schema_prefix] || "xsd"
     soap_uri = opts[:soap_uri] || "http://schemas.xmlsoap.org/wsdl/soap/"
-    fields = opts[:fields] || ~s(<#{pfx}:element name="zeta" type="#{pfx}:string"/><#{pfx}:element name="alpha" type="#{pfx}:string"/>)
+
+    fields =
+      opts[:fields] ||
+        ~s(<#{pfx}:element name="zeta" type="#{pfx}:string"/><#{pfx}:element name="alpha" type="#{pfx}:string"/>)
+
     element_name = opts[:element_name] || "Pay"
     type_name = opts[:type_name] || element_name
     action = Keyword.get(opts, :action, "urn:t/Pay")
@@ -54,8 +58,11 @@ defmodule Soap.Conformance.Support do
     """
   end
 
-  def soap11(inner), do: ~s(<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body>#{inner}</s:Body></s:Envelope>)
-  def soap12(inner), do: ~s(<e:Envelope xmlns:e="http://www.w3.org/2003/05/soap-envelope"><e:Body>#{inner}</e:Body></e:Envelope>)
+  def soap11(inner),
+    do: ~s(<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body>#{inner}</s:Body></s:Envelope>)
+
+  def soap12(inner),
+    do: ~s(<e:Envelope xmlns:e="http://www.w3.org/2003/05/soap-envelope"><e:Body>#{inner}</e:Body></e:Envelope>)
 
   def fault11(code \\ "s:Server", message \\ "boom") do
     soap11("<s:Fault><faultcode>#{code}</faultcode><faultstring>#{message}</faultstring></s:Fault>")

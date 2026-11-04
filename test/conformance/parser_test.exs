@@ -77,7 +77,8 @@ defmodule Soap.Conformance.ParserTest do
           test "#{label} builds well-formed requests" do
             Harness.check("#{unquote(prefix)}/request_xml", fn ->
               each_request(@entry, fn name, _op, _version, request ->
-                assert Xml.valid?(request.body), "#{name}: not valid XML: #{inspect(request.body) |> String.slice(0, 160)}"
+                assert Xml.valid?(request.body),
+                       "#{name}: not valid XML: #{inspect(request.body) |> String.slice(0, 160)}"
               end)
             end)
           end
@@ -100,7 +101,9 @@ defmodule Soap.Conformance.ParserTest do
 
                   wrapper ->
                     assert {:ok, [first | _]} = Support.request_body(request)
-                    assert first.name == wrapper["name"], "#{name}: wrapper is #{first.name}, expected #{wrapper["name"]}"
+
+                    assert first.name == wrapper["name"],
+                           "#{name}: wrapper is #{first.name}, expected #{wrapper["name"]}"
 
                     if wrapper["namespace"] do
                       assert first.ns == wrapper["namespace"],

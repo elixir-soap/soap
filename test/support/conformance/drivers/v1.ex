@@ -83,8 +83,11 @@ defmodule Soap.Conformance.Drivers.V1 do
     # 1.x has no notion of a Fault. It returns the Fault's children as a plain map
     # when the status is 400 or above, and that is the only form it can report.
     case parsed do
-      %{faultcode: code, faultstring: message} when status >= 400 -> {:fault, %{code: text(code), message: text(message)}}
-      other -> {:ok, other}
+      %{faultcode: code, faultstring: message} when status >= 400 ->
+        {:fault, %{code: text(code), message: text(message)}}
+
+      other ->
+        {:ok, other}
     end
   end
 

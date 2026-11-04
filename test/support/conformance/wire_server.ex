@@ -93,7 +93,9 @@ defmodule Soap.Conformance.WireServer do
 
   defp read_request(socket, buffer \\ "") do
     case :binary.split(buffer, "\r\n\r\n") do
-      [head, rest] -> read_body(socket, parse_head(head), rest)
+      [head, rest] ->
+        read_body(socket, parse_head(head), rest)
+
       [_] ->
         case :gen_tcp.recv(socket, 0, 5_000) do
           {:ok, data} -> read_request(socket, buffer <> data)
