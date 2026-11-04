@@ -19,7 +19,8 @@ defmodule Soap.Decoder do
 
   Attributes appear as `"@name"`, and an element's text next to attributes as `"#text"`.
   This is the same form `Soap.Encoder` accepts. When `xsi:type` says a value is a subtype
-  of its declared type, `"@type"` holds that subtype's local name.
+  of its declared type, `"@xsi:type"` holds that subtype's local name, which is also how
+  `Soap.Encoder` takes it.
 
   With no schema, an element repeated in the reply is a list and a single one isn't, and
   all values are strings.
@@ -330,7 +331,7 @@ defmodule Soap.Decoder do
   # A subtype is worth reporting. Encoded services label every value, which isn't.
   defp add_type_name(%{} = result, element, %ComplexType{} = declared, effective)
        when not is_struct(result) and effective != declared do
-    Map.put(result, "@type", element |> Element.attr_ns(@xsi, "type") |> String.split(":") |> List.last())
+    Map.put(result, "@xsi:type", element |> Element.attr_ns(@xsi, "type") |> String.split(":") |> List.last())
   end
 
   defp add_type_name(result, _element, _declared, _effective), do: result

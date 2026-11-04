@@ -165,7 +165,15 @@ defmodule Soap.DecoderTest do
         ~s(<xsd:complexType name="B"><xsd:sequence>#{field("id", "xsd:int")}</xsd:sequence></xsd:complexType><xsd:complexType name="C"><xsd:complexContent><xsd:extension base="tns:B"><xsd:sequence>#{field("x", "xsd:int")}</xsd:sequence></xsd:extension></xsd:complexContent></xsd:complexType>)
 
       out = typed(field("b", "tns:B"), ~s(<b xmlns:t="urn:t" xsi:type="t:C"><id>1</id><x>2</x></b>), extra)
-      assert out == %{"b" => %{"id" => 1, "x" => 2, "@type" => "C"}}
+      assert out == %{"b" => %{"id" => 1, "x" => 2, "@xsi:type" => "C"}}
+    end
+
+    test "a real attribute named type isn't mistaken for it" do
+      extra =
+        ~s(<xsd:complexType name="B"><xsd:sequence/><xsd:attribute name="type" type="xsd:string"/></xsd:complexType><xsd:complexType name="C"><xsd:complexContent><xsd:extension base="tns:B"/></xsd:complexContent></xsd:complexType>)
+
+      out = typed(field("b", "tns:B"), ~s(<b xmlns:t="urn:t" type="real" xsi:type="t:C"/>), extra)
+      assert out == %{"b" => %{"@type" => "real", "@xsi:type" => "C"}}
     end
 
     test "a list type splits, and simple content keeps its attributes" do
