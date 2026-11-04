@@ -88,12 +88,11 @@ defmodule Soap.Conformance.Driver do
 
   @doc "The selected driver module."
   def current do
-    case System.get_env("SOAP_CONFORMANCE_DRIVER", "v1") do
-      "v1" -> Soap.Conformance.Drivers.V1
+    case System.get_env("SOAP_CONFORMANCE_DRIVER", "v2") do
       other -> Module.concat([Soap.Conformance.Drivers, String.upcase(other)])
     end
   end
 
   @doc "Short name of the selected driver, used for its known-failures file."
-  def name, do: System.get_env("SOAP_CONFORMANCE_DRIVER", "v1")
+  def name, do: System.get_env("SOAP_CONFORMANCE_DRIVER", "v2")
 end

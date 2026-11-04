@@ -2,14 +2,14 @@ defmodule Soap.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/elixir-soap/soap"
-  @version "1.1.1"
+  @version "2.0.0-dev"
 
   def project do
     [
       app: :soap,
       name: "Soap",
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -55,19 +55,16 @@ defmodule Soap.MixProject do
   defp deps do
     [
       {:saxy, "~> 1.6"},
-      {:sweet_xml, "~> 0.6"},
-      {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
-
-      # Http && XML
-      {:httpoison, "~> 1.0 or ~> 2.0"},
-      {:xml_builder, "~> 2.1"},
-      {:credo, "~> 1.0", only: [:dev, :test]},
+      {:req, "~> 0.5"},
+      {:telemetry, "~> 1.0"},
+      {:decimal, "~> 2.0 or ~> 3.0", optional: true},
+      {:httpoison, "~> 1.0 or ~> 2.0 or ~> 3.0", optional: true},
+      {:jason, "~> 1.4"},
+      {:stream_data, "~> 1.1", only: :test},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:mock, "~> 0.3.0", only: :test},
-      # mock pins meck ~> 0.9.2, which no longer compiles on OTP 29.
-      {:meck, "~> 1.0", only: :test, override: true},
-      {:stream_data, "~> 1.1", only: :test}
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 

@@ -74,22 +74,13 @@ defmodule Soap.Conformance.Drivers.V2 do
 
   @impl true
   def with_network(fun) do
-    {:ok, _} = Application.ensure_all_started(:hackney)
+    {:ok, _} = Application.ensure_all_started(:req)
     fun.()
   end
 
   # 2.0 reads no application configuration at all, so there is nothing to remove.
   @impl true
-  def without_app_config(fun) do
-    saved = Application.get_env(:soap, :globals)
-    Application.delete_env(:soap, :globals)
-
-    try do
-      fun.()
-    after
-      Application.put_env(:soap, :globals, saved)
-    end
-  end
+  def without_app_config(fun), do: fun.()
 
   @impl true
   def tolerant_opts(_versions), do: [ignore_failed_imports: true]
