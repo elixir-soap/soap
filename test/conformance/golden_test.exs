@@ -29,6 +29,10 @@ defmodule Soap.Conformance.GoldenTest do
       "The type is declared in a qualified schema, so Item belongs to that schema's namespace, not the wrapper's.",
     "getAvailability__should_not_fail_without_children" =>
       "node-soap ignores the namespace in soap:body, which the WSDL 1.1 binding requires for rpc.",
+    "Dummy__should_parse_nil" =>
+      "A nil for an element the schema doesn't call nillable is left out. node-soap sends xsi:nil.",
+    "Dummy__should_escape_xml" =>
+      "A nil for an element the schema doesn't call nillable is left out. node-soap sends xsi:nil.",
     "Message__overriding_namespace_prefix" =>
       "The sample uses a node-soap key prefix to change an element's namespace.",
     "createData__should_generate_complex_type_request" =>

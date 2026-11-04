@@ -249,7 +249,9 @@ defmodule Soap.Service.Loader do
   end
 
   defp read({:url, url}, opts) do
-    case HTTP.adapter(opts).request(:get, url, [], "", Keyword.get(opts, :http_opts, follow_redirect: true)) do
+    http_opts = Keyword.merge([follow_redirects: true], Keyword.get(opts, :http_opts, []))
+
+    case HTTP.adapter(opts).request(:get, url, [], "", http_opts) do
       {:ok, %{status: status, body: body}} when status in 200..299 -> {:ok, body}
       {:ok, %{status: status}} -> {:error, {:http_status, status, url}}
       {:error, reason} -> {:error, {:http, reason, url}}

@@ -1,13 +1,10 @@
 defmodule Soap.Conformance.Drivers.V2 do
   @moduledoc """
-  Drives the 2.0 modules through the conformance contract.
-
-  So far only the WSDL model exists. Building requests, calling and decoding raise, so
-  that checks expecting `{:error, _}` can't pass just because nothing is built yet.
+  Drives the public API through the conformance contract.
   """
   @behaviour Soap.Conformance.Driver
 
-  alias Soap.{Encoder, Service}
+  alias Soap.Service
 
   @adapter_key {__MODULE__, :adapter}
 
@@ -26,15 +23,8 @@ defmodule Soap.Conformance.Drivers.V2 do
     end
   end
 
-  defp encoder_opts(opts) do
-    [headers: opts[:soap_headers] || []] ++ Keyword.take(opts, [:validate, :mtom])
-  end
-
-  # A list of nodes holding one scalar under no name means the element's own value.
-  defp to_params(params), do: params
-
   defp with_adapter(opts) do
-    [http: :persistent_term.get(@adapter_key, Soap.HTTP.HTTPoison)] ++ opts
+    [http: :persistent_term.get(@adapter_key, Soap.HTTP.Req)] ++ opts
   end
 
   @impl true
@@ -59,19 +49,43 @@ defmodule Soap.Conformance.Drivers.V2 do
 
   @impl true
   def build_request(service, name, params, opts) do
-    operation_opts = if opts[:soap_version], do: [version: opts[:soap_version]], else: []
-
-    with {:ok, operation} <- Service.operation(service, name, operation_opts),
-         {:ok, encoded} <- Encoder.encode(service, operation, to_params(params), encoder_opts(opts)) do
-      {:ok, %{body: encoded.xml, headers: Soap.Request.headers(operation, opts[:http_headers] || [])}}
+    case Soap.build_request(client(service), name, params, call_opts(opts)) do
+      {:ok, request} -> {:ok, %{body: request.body, headers: request.headers}}
+      {:error, _} = error -> error
     end
   end
 
   @impl true
-  def call(_service, _operation, _params, _opts), do: raise("not implemented")
+  def call(service, name, params, opts) do
+    service |> client() |> Soap.call(name, params, call_opts(opts)) |> translate()
+  end
 
   @impl true
-  def decode(_service, _operation, _status, _headers, _body), do: raise("not implemented")
+  def decode(service, name, status, headers, body) do
+    client = if service, do: client(service)
+
+    case Soap.decode_response(client, name, status, headers, body) do
+      {:ok, response} -> {:ok, response.result}
+      error -> translate(error)
+    end
+  end
+
+  defp client(service), do: Soap.new(service, http: :persistent_term.get(@adapter_key, Soap.HTTP.Req))
+
+  defp call_opts(opts) do
+    Enum.flat_map(opts, fn
+      {:soap_version, version} -> [version: version]
+      {:soap_headers, nil} -> []
+      {:soap_headers, headers} -> [headers: headers]
+      {:recv_timeout, value} -> [timeout: value]
+      {:timeout, value} -> [connect_timeout: value]
+      other -> [other]
+    end)
+  end
+
+  defp translate({:ok, result}), do: {:ok, result}
+  defp translate({:error, %Soap.Fault{code: code, message: message}}), do: {:fault, %{code: code, message: message}}
+  defp translate({:error, %Soap.Error{reason: reason}}), do: {:error, reason}
 
   @impl true
   def without_network(fun) do
