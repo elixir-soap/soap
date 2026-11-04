@@ -15,8 +15,7 @@ defmodule Soap.MixProject do
       deps: deps(),
       docs: docs(),
       package: package(),
-      test_coverage: [tool: ExCoveralls],
-      dialyzer: [plt_add_apps: [:mix, :crypto], plt_core_path: "priv/plts", plt_local_path: "priv/plts"]
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -64,7 +63,6 @@ defmodule Soap.MixProject do
       # Only to test that %Decimal{} params work. The library itself doesn't use it.
       {:decimal, "~> 3.0", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
       {:excoveralls, "~> 0.18", only: :test}
     ]

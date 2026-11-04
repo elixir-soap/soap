@@ -26,5 +26,4 @@ soap-*.tar
 /tmp/
 
 # Misc.
-/priv
 /.DS_Store
