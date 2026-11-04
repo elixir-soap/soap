@@ -78,17 +78,17 @@ defmodule Soap.Schema.Walk do
   """
   @spec fields(Schema.t(), ComplexType.t()) :: {[Field.t()], open? :: boolean()}
   def fields(schema, %ComplexType{} = type) do
-    {items, open?} = collect_type(schema, type, MapSet.new())
+    {items, open?} = collect_type(schema, type, %{})
     {number(items), open?}
   end
 
   defp collect_type(schema, %ComplexType{} = type, seen) do
     key = {type.ns, type.name}
 
-    if type.name != nil and MapSet.member?(seen, key) do
+    if type.name != nil and Map.has_key?(seen, key) do
       {[], false}
     else
-      seen = if type.name, do: MapSet.put(seen, key), else: seen
+      seen = if type.name, do: Map.put(seen, key, true), else: seen
       {inherited, inherited_open?} = collect_base(schema, type, seen)
       {own, own_open?} = collect_particle(schema, type.content, seen, false)
       {inherited ++ own, inherited_open? or own_open?}
@@ -130,11 +130,11 @@ defmodule Soap.Schema.Walk do
   defp collect_particle(schema, %GroupRef{ref: ref} = group_ref, seen, repeating?) do
     key = {:group, ref}
 
-    if MapSet.member?(seen, key) do
+    if Map.has_key?(seen, key) do
       {[], false}
     else
       target = Map.get(schema.groups, ref)
-      collect_particle(schema, target, MapSet.put(seen, key), repeating? or many?(group_ref.max))
+      collect_particle(schema, target, Map.put(seen, key, true), repeating? or many?(group_ref.max))
     end
   end
 
@@ -215,15 +215,15 @@ defmodule Soap.Schema.Walk do
 
   @doc "A complex type's attributes, base types first, with groups and references expanded."
   @spec attributes(Schema.t(), ComplexType.t()) :: [AttributeDecl.t()]
-  def attributes(schema, %ComplexType{} = type), do: collect_attributes(schema, type, MapSet.new())
+  def attributes(schema, %ComplexType{} = type), do: collect_attributes(schema, type, %{})
 
   defp collect_attributes(schema, %ComplexType{} = type, seen) do
     key = {type.ns, type.name}
 
-    if type.name != nil and MapSet.member?(seen, key) do
+    if type.name != nil and Map.has_key?(seen, key) do
       []
     else
-      seen = MapSet.put(seen, key)
+      seen = Map.put(seen, key, true)
 
       inherited =
         case resolve(schema, type.base) do
@@ -238,13 +238,13 @@ defmodule Soap.Schema.Walk do
   defp expand_attributes(schema, attributes, seen) do
     Enum.flat_map(attributes, fn
       %AttributeGroupRef{ref: ref} ->
-        if MapSet.member?(seen, {:attribute_group, ref}) do
+        if Map.has_key?(seen, {:attribute_group, ref}) do
           []
         else
           expand_attributes(
             schema,
             Map.get(schema.attribute_groups, ref, []),
-            MapSet.put(seen, {:attribute_group, ref})
+            Map.put(seen, {:attribute_group, ref}, true)
           )
         end
 
@@ -257,7 +257,7 @@ defmodule Soap.Schema.Walk do
   Reduces a type to what its text looks like: `{:atomic, builtin_name, simple_type}`,
   `{:list, item}`, `:union`, `:complex`, or `:unknown`.
   """
-  def simple_form(schema, type), do: simple_form(schema, type, MapSet.new())
+  def simple_form(schema, type), do: simple_form(schema, type, %{})
 
   defp simple_form(_schema, nil, _seen), do: :unknown
   defp simple_form(_schema, {:builtin, name}, _seen), do: {:atomic, name, nil}
@@ -274,12 +274,12 @@ defmodule Soap.Schema.Walk do
   defp simple_form(schema, %SimpleType{} = type, seen) do
     key = {type.ns, type.name}
 
-    if type.name != nil and MapSet.member?(seen, key) do
+    if type.name != nil and Map.has_key?(seen, key) do
       :unknown
     else
       base = type.inline_item || resolve(schema, type.base)
 
-      case simple_form(schema, base, MapSet.put(seen, key)) do
+      case simple_form(schema, base, Map.put(seen, key, true)) do
         {:atomic, name, inherited} -> {:atomic, name, merge_restrictions(type, inherited)}
         other -> other
       end

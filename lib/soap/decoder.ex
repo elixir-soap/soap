@@ -179,7 +179,7 @@ defmodule Soap.Decoder do
   defp decode_soap_headers(%Element{ns: ns} = envelope, ctx) do
     case Element.child(envelope, ns, "Header") do
       nil -> %{}
-      header -> header.children |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, MapSet.new())}) |> collect()
+      header -> header.children |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, %{})}) |> collect()
     end
   end
 
@@ -251,7 +251,7 @@ defmodule Soap.Decoder do
   defp decode_detail(%Element{children: []} = detail, _ctx), do: blank_to_nil(detail.text)
 
   defp decode_detail(%Element{children: children}, ctx) do
-    children |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, MapSet.new())}) |> collect()
+    children |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, %{})}) |> collect()
   end
 
   defp blank_to_nil(text), do: if(String.trim(text) == "", do: nil, else: text)
@@ -259,7 +259,7 @@ defmodule Soap.Decoder do
   # Elements
 
   defp decode_root(element, operation, ctx) do
-    decode_element(element, root_type(element, operation, ctx), ctx, MapSet.new())
+    decode_element(element, root_type(element, operation, ctx), ctx, %{})
   end
 
   defp root_type(_element, _operation, %{schema: nil}), do: nil
@@ -309,8 +309,8 @@ defmodule Soap.Decoder do
 
   defp reference_target(id, ctx, seen) do
     cond do
-      MapSet.member?(seen, id) -> :cycle
-      Map.has_key?(ctx.references, id) -> {:ok, Map.fetch!(ctx.references, id), MapSet.put(seen, id)}
+      Map.has_key?(seen, id) -> :cycle
+      Map.has_key?(ctx.references, id) -> {:ok, Map.fetch!(ctx.references, id), Map.put(seen, id, true)}
       true -> :none
     end
   end
