@@ -54,6 +54,7 @@ defmodule Soap.MixProject do
 
   defp deps do
     [
+      {:saxy, "~> 1.6"},
       {:sweet_xml, "~> 0.6"},
       {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
 
@@ -66,8 +67,7 @@ defmodule Soap.MixProject do
       {:mock, "~> 0.3.0", only: :test},
       # mock pins meck ~> 0.9.2, which no longer compiles on OTP 29.
       {:meck, "~> 1.0", only: :test, override: true},
-      {:stream_data, "~> 1.1", only: :test},
-      {:saxy, "~> 1.6", only: :test}
+      {:stream_data, "~> 1.1", only: :test}
     ]
   end
 
