@@ -37,6 +37,8 @@ defmodule Soap.Decoder do
   alias Soap.Service.{Message, Operation}
   alias Soap.XML.Element
 
+  @behaviour Saxy.Handler
+
   @env11 "http://schemas.xmlsoap.org/soap/envelope/"
   @env12 "http://www.w3.org/2003/05/soap-envelope"
   @xsi "http://www.w3.org/2001/XMLSchema-instance"
@@ -54,6 +56,13 @@ defmodule Soap.Decoder do
     @moduledoc "Everything in a decoded reply."
     defstruct [:result, soap_headers: %{}, attachments: []]
     @type t :: %__MODULE__{result: term(), soap_headers: map(), attachments: [Soap.Attachment.t()]}
+  end
+
+  defmodule Frame do
+    @moduledoc false
+    # An open element while a reply is decoded during parsing. `mode` says how to read its
+    # children, and stays nil until it has one.
+    defstruct [:kind, :element, :declared, :effective, :mode, repeats: false, acc: %{}, text: []]
   end
 
   @default_max_reply_size 100_000_000
@@ -81,7 +90,7 @@ defmodule Soap.Decoder do
     with :ok <- check_size(byte_size(body), limit),
          {:ok, plain} <- decompress(headers, body, limit),
          {:ok, xml, attachments} <- split_parts(headers, plain) do
-      decode_xml(xml, attachments, service, operation, status)
+      decode_xml(xml, attachments, service, operation, status, opts)
     end
   end
 
@@ -152,12 +161,204 @@ defmodule Soap.Decoder do
 
   # Envelope
 
-  defp decode_xml(xml, attachments, service, operation, status) do
+  defp decode_xml(xml, attachments, service, operation, status, opts) do
     case String.trim(xml) do
       "" -> empty_reply(status, xml)
+      _ -> decode_document(xml, attachments, service, operation, status, opts)
+    end
+  end
+
+  # Nearly every reply decodes during parsing, with no tree in memory. Anything unusual goes
+  # through the tree: faults, broken documents, links that can point anywhere in the Body,
+  # attachments and SOAP arrays. `tree: true` forces that, to compare the two in tests.
+  defp decode_document(xml, attachments, service, operation, status, opts) when status in 200..299 do
+    with false <- Keyword.get(opts, :tree, false),
+         {:ok, decoded} <- decode_while_parsing(xml, attachments, service, operation) do
+      {:ok, decoded}
+    else
       _ -> parse_reply(xml, attachments, service, operation, status)
     end
   end
+
+  defp decode_document(xml, attachments, service, operation, status, _opts) do
+    parse_reply(xml, attachments, service, operation, status)
+  end
+
+  @doc false
+  def decode_while_parsing(xml, attachments, service, operation) do
+    ctx = %{
+      schema: if(service, do: service.schema),
+      references: %{},
+      attachments: attachments,
+      operation: operation,
+      field_cache: %{}
+    }
+
+    case XML.sax(xml, __MODULE__, {ctx, []}) do
+      {:ok, {_ctx, %Decoded{} = decoded}} -> {:ok, decoded}
+      _ -> :needs_tree
+    end
+  catch
+    :needs_tree -> :needs_tree
+  end
+
+  @doc false
+  @impl Saxy.Handler
+  def handle_event(:start_element, {tag, attributes}, {ctx, stack}) do
+    scope =
+      case stack do
+        [%Frame{element: %Element{scope: scope}} | _] -> scope
+        [] -> XML.Handler.root_scope()
+      end
+
+    {stack, ctx} = read_parent(stack, ctx)
+    {:ok, {ctx, open_frame(XML.Handler.open(tag, attributes, scope), stack, ctx)}}
+  end
+
+  def handle_event(:characters, chars, {ctx, [%Frame{} = top | rest]}) do
+    {:ok, {ctx, [%{top | text: [top.text | chars]} | rest]}}
+  end
+
+  def handle_event(:end_element, _tag, {ctx, [%Frame{} = top | rest]}) do
+    {:ok, {ctx, close_frame(top, rest, ctx)}}
+  end
+
+  def handle_event(_event, _data, state), do: {:ok, state}
+
+  defp open_frame(%Element{name: "Envelope", ns: ns} = element, [], _ctx) when ns in [@env11, @env12] do
+    [%Frame{kind: :envelope, element: element}]
+  end
+
+  defp open_frame(_element, [], _ctx), do: throw(:needs_tree)
+
+  defp open_frame(
+         %Element{ns: ns, name: name} = element,
+         [%Frame{kind: :envelope, element: %{ns: ns}, acc: acc} | _] = stack,
+         _ctx
+       )
+       when name in ["Body", "Header"] and not is_map_key(acc, name) do
+    [%Frame{kind: :section, element: element} | stack]
+  end
+
+  defp open_frame(_element, [%Frame{kind: :envelope} | _], _ctx), do: throw(:needs_tree)
+
+  defp open_frame(%Element{} = element, [%Frame{kind: :section, element: %{name: "Body", ns: ns}} | _] = stack, ctx) do
+    if (element.name == "Fault" and element.ns == ns) or multi_ref?(element), do: throw(:needs_tree)
+    [value_frame(element, root_type(element, ctx.operation, ctx), false) | stack]
+  end
+
+  defp open_frame(%Element{} = element, [%Frame{kind: :section} | _] = stack, _ctx) do
+    [value_frame(element, nil, false) | stack]
+  end
+
+  defp open_frame(%Element{} = element, [%Frame{mode: mode} | _] = stack, ctx) do
+    {type, repeats?} = child_type(mode, element, ctx)
+    [value_frame(element, type, repeats?) | stack]
+  end
+
+  defp value_frame(%Element{} = element, type, repeats?) do
+    if needs_tree?(element), do: throw(:needs_tree)
+    %Frame{kind: :value, element: element, declared: type, repeats: repeats?}
+  end
+
+  defp needs_tree?(%Element{ns: @xop, name: "Include"}), do: true
+  defp needs_tree?(%Element{attrs: attrs}) when map_size(attrs) == 0, do: false
+  defp needs_tree?(%Element{attrs: attrs}), do: is_map_key(attrs, {nil, "href"}) or is_map_key(attrs, {@enc12, "ref"})
+
+  # The first child says that an element isn't a leaf, so now is the time to read its type.
+  defp read_parent([%Frame{kind: :value, mode: nil, element: element} = parent | rest], ctx) do
+    effective = effective_type(element, parent.declared, ctx)
+    {mode, ctx} = children_mode(effective, element, ctx)
+    {[%{parent | effective: effective, mode: mode} | rest], ctx}
+  end
+
+  defp read_parent(stack, ctx), do: {stack, ctx}
+
+  defp children_mode({:parts, parts}, _element, ctx), do: {{:parts, parts}, ctx}
+  defp children_mode(%ComplexType{array_type: item}, _element, _ctx) when not is_nil(item), do: throw(:needs_tree)
+
+  defp children_mode(effective, element, ctx) do
+    cond do
+      soap_array?(element) -> throw(:needs_tree)
+      match?(%ComplexType{}, effective) -> cached_fields(effective, ctx)
+      true -> {:plain, ctx}
+    end
+  end
+
+  # A long reply repeats the same few types, and most of it is their fields.
+  defp cached_fields(%ComplexType{} = type, %{field_cache: cache} = ctx) do
+    key = if type.name, do: {type.ns, type.name}, else: type
+
+    case cache do
+      %{^key => mode} ->
+        {mode, ctx}
+
+      _ ->
+        {fields, _open?} = Walk.fields(ctx.schema, type)
+        mode = {:fields, fields, Map.new(Enum.reverse(fields), &{&1.name, &1})}
+        {mode, %{ctx | field_cache: Map.put(cache, key, mode)}}
+    end
+  end
+
+  defp child_type({:parts, parts}, child, ctx), do: {part_type(parts, child, ctx), false}
+  defp child_type(:plain, _child, _ctx), do: {nil, false}
+
+  defp child_type({:fields, fields, index}, %Element{name: name} = child, ctx) do
+    field =
+      case index do
+        %{^name => field} -> field
+        _ -> find_substituted(fields, child, ctx)
+      end
+
+    {field_type(field, child, ctx), field != nil and field.repeats}
+  end
+
+  defp close_frame(%Frame{kind: :value} = frame, [%Frame{} = parent | rest], ctx) do
+    [%{parent | acc: add(parent.acc, frame.element.name, frame_value(frame, ctx), frame.repeats)} | rest]
+  end
+
+  defp close_frame(%Frame{kind: :section, element: element, acc: acc}, [%Frame{} = envelope | rest], _ctx) do
+    [%{envelope | acc: Map.put(envelope.acc, element.name, reverse_lists(acc))} | rest]
+  end
+
+  defp close_frame(%Frame{kind: :envelope, acc: acc}, [], ctx) do
+    body = Map.get(acc, "Body", %{})
+
+    %Decoded{
+      result: if(map_size(body) > 0, do: body),
+      soap_headers: Map.get(acc, "Header", %{}),
+      attachments: ctx.attachments
+    }
+  end
+
+  # Nothing on the element can change how its text reads.
+  defp frame_value(%Frame{mode: nil, element: %Element{attrs: attrs}, text: text, declared: declared}, ctx)
+       when map_size(attrs) == 0 do
+    decode_text(IO.iodata_to_binary(text), declared, ctx)
+  end
+
+  defp frame_value(%Frame{mode: nil, element: element, text: text, declared: declared}, ctx) do
+    decode_in_place(%{element | text: IO.iodata_to_binary(text)}, declared, ctx, %{})
+  end
+
+  defp frame_value(%Frame{element: element, text: text} = frame, ctx) do
+    if nil_element?(element) do
+      nil
+    else
+      element = %{element | text: IO.iodata_to_binary(text)}
+
+      frame.mode
+      |> finish_children(frame.acc, element, frame.effective, ctx)
+      |> add_type_name(element, frame.declared, frame.effective)
+    end
+  end
+
+  defp finish_children({:parts, _parts}, acc, _element, _type, _ctx), do: reverse_lists(acc)
+
+  defp finish_children({:fields, fields, _index}, acc, element, type, ctx),
+    do: finish_fields(acc, element, type, fields, ctx)
+
+  defp finish_children(:plain, acc, element, _type, ctx), do: finish_plain(acc, element, ctx)
 
   defp empty_reply(status, _body) when status in 200..299, do: {:ok, %Decoded{result: nil}}
   defp empty_reply(status, body), do: {:error, %Error{reason: {:http_status, status, body}}}
@@ -181,7 +382,7 @@ defmodule Soap.Decoder do
   defp read_envelope(%Element{ns: ns} = envelope, xml, attachments, service, operation, status) do
     body = Element.child(envelope, ns, "Body")
     children = if body, do: body.children, else: []
-    ctx = context(service, envelope, children, attachments)
+    ctx = context(service, children, attachments)
 
     case Enum.find(children, &(&1.name == "Fault" and &1.ns == ns)) do
       nil -> read_result(envelope, xml, children, operation, status, ctx)
@@ -189,12 +390,11 @@ defmodule Soap.Decoder do
     end
   end
 
-  defp context(service, envelope, children, attachments) do
+  defp context(service, children, attachments) do
     %{
       schema: if(service, do: service.schema),
       references: reference_index(children, %{}),
-      attachments: attachments,
-      envelope_ns: envelope.ns
+      attachments: attachments
     }
   end
 
@@ -360,9 +560,11 @@ defmodule Soap.Decoder do
     end
   end
 
+  defp nil_element?(element), do: Element.attr_ns(element, @xsi, "nil") in ["true", "1"]
+
   defp decode_in_place(element, type, ctx, seen) do
     cond do
-      Element.attr_ns(element, @xsi, "nil") in ["true", "1"] -> nil
+      nil_element?(element) -> nil
       include = Element.child(element, @xop, "Include") -> resolve_include(include, ctx)
       true -> decode_typed(element, type, ctx, seen)
     end
@@ -442,11 +644,16 @@ defmodule Soap.Decoder do
       decode_array(element, ctx, seen)
     else
       element.children
-      |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, seen)})
-      |> collect()
-      |> Map.merge(attributes(element, nil, ctx))
-      |> add_mixed_text(element, nil)
+      |> Enum.reduce(%{}, &add(&2, &1.name, decode_element(&1, nil, ctx, seen), false))
+      |> finish_plain(element, ctx)
     end
+  end
+
+  defp finish_plain(acc, element, ctx) do
+    acc
+    |> reverse_lists()
+    |> Map.merge(attributes(element, nil, ctx))
+    |> add_mixed_text(element, nil)
   end
 
   defp decode_array(element, ctx, seen), do: Enum.map(element.children, &decode_element(&1, nil, ctx, seen))
@@ -455,11 +662,22 @@ defmodule Soap.Decoder do
     {fields, _open?} = Walk.fields(ctx.schema, type)
 
     element.children
-    |> Enum.map(fn child ->
+    |> Enum.reduce(%{}, fn child, acc ->
       field = find_field(fields, child, ctx)
-      {child.name, decode_element(child, field_type(field, child, ctx), ctx, seen), field != nil and field.repeats}
+
+      add(
+        acc,
+        child.name,
+        decode_element(child, field_type(field, child, ctx), ctx, seen),
+        field != nil and field.repeats
+      )
     end)
-    |> collect_with_shape(fields)
+    |> finish_fields(element, type, fields, ctx)
+  end
+
+  defp finish_fields(acc, element, type, fields, ctx) do
+    acc
+    |> shape_repeats(fields)
     |> Map.merge(attributes(element, type, ctx))
     |> add_mixed_text(element, type)
   end
@@ -499,14 +717,8 @@ defmodule Soap.Decoder do
     if mixed? and String.trim(element.text) != "", do: Map.put(result, "#text", element.text), else: result
   end
 
-  # Repeats a key into a list, and gives repeating fields a list even with one value.
-  defp collect_with_shape(triples, fields) do
-    from_reply =
-      triples
-      |> Enum.reduce(%{}, fn {name, value, repeats?}, acc ->
-        add(acc, name, value, repeats?)
-      end)
-
+  # Gives repeating fields a list even with one value.
+  defp shape_repeats(from_reply, fields) do
     Enum.reduce(fields, reverse_lists(from_reply), fn field, acc ->
       # A repeating element that isn't present stays absent, so absent and empty differ.
       if field.repeats and is_map_key(acc, field.name) and not is_list(acc[field.name]) do
@@ -538,6 +750,8 @@ defmodule Soap.Decoder do
       pair -> pair
     end)
   end
+
+  defp attributes(%Element{attrs: attrs}, _type, _ctx) when map_size(attrs) == 0, do: %{}
 
   defp attributes(element, type, ctx) do
     declared = declared_attribute_types(type, ctx)
