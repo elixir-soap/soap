@@ -30,7 +30,8 @@ defmodule Soap.Conformance.LiveTest do
             driver().with_network(fn ->
               assert {:ok, model} = driver().load_url(@call["wsdl"], driver().tolerant_opts([@call["version"]]))
               params = Enum.map(@call["params"], fn [name, value] -> {name, %{}, value} end)
-              driver().call(model, @call["operation"], params, recv_timeout: 25_000, timeout: 15_000)
+              endpoint = if @call["endpoint"], do: [endpoint: @call["endpoint"]], else: []
+              driver().call(model, @call["operation"], params, [recv_timeout: 25_000, timeout: 15_000] ++ endpoint)
             end)
 
           case @call["expect"] do

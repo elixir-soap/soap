@@ -168,6 +168,8 @@ defmodule Soap.Generator do
     roots
     |> Enum.reduce(%{}, &walk_type(&1, &2, service))
     |> Map.values()
+    |> Enum.filter(& &1.name)
+    |> Enum.uniq_by(&type_name/1)
     |> Enum.sort_by(&type_name/1)
   end
 
@@ -176,11 +178,14 @@ defmodule Soap.Generator do
   defp message_roots(%{parts: parts}, service), do: Enum.flat_map(parts, &List.wrap(part_type(&1, service)))
 
   defp walk_type(%ComplexType{name: name} = type, acc, service) do
-    if name != nil and Map.has_key?(acc, {type.ns, name}) do
+    # Anonymous types are visited too, because references can make them recursive.
+    key = if name, do: {type.ns, name}, else: {:anonymous, type}
+
+    if Map.has_key?(acc, key) do
       acc
     else
-      acc = if name, do: Map.put(acc, {type.ns, name}, type), else: acc
       {fields, _} = Walk.fields(service.schema, type)
+      acc = Map.put(acc, key, type)
       Enum.reduce(fields, acc, fn field, inner -> walk_type(Walk.type_of(service.schema, field), inner, service) end)
     end
   end

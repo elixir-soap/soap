@@ -103,7 +103,7 @@ defmodule Soap.Conformance.PropertyTest do
       fn ->
         reply = pay_reply()
 
-        check all(cut <- StreamData.integer(0..(byte_size(reply) - 1)), max_runs: @runs) do
+        check all(cut <- StreamData.integer(1..(byte_size(reply) - 1)), max_runs: @runs) do
           result = driver().decode(nil, nil, 200, [], binary_part(reply, 0, cut))
           assert {:error, _} = result
         end

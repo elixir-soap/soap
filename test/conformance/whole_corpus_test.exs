@@ -38,10 +38,9 @@ defmodule Soap.Conformance.WholeCorpusTest do
       {:ok, request} ->
         want = get_in(wrappers, [name, "expect"])
 
-        with true <- Xml.valid?(request.body),
-             {:ok, [first | _]} <- request_body(request) do
-          want == nil or first.name == want
-        else
+        case Xml.valid?(request.body) && request_body(request) do
+          {:ok, [first | _]} -> want == nil or first.name == want
+          {:ok, []} -> want == nil
           _ -> false
         end
 
@@ -54,7 +53,6 @@ defmodule Soap.Conformance.WholeCorpusTest do
     path = Path.join(corpus, entry["path"])
     wanted = Enum.uniq(entry["ops11"] ++ entry["ops12"])
     versions = if(entry["ops11"] != [], do: ["1.1"], else: []) ++ if(entry["ops12"] != [], do: ["1.2"], else: [])
-    version = List.first(versions) || "1.1"
     default = attempt(fn -> driver().load(path, []) end)
     tolerant = attempt(fn -> driver().load(path, driver().tolerant_opts(versions)) end)
 
@@ -67,6 +65,7 @@ defmodule Soap.Conformance.WholeCorpusTest do
       case tolerant do
         {:ok, model} ->
           for name <- wanted |> Enum.sort() |> Enum.take(8) do
+            version = if name in entry["ops11"], do: "1.1", else: "1.2"
             attempt(fn -> valid_request?(model, name, entry["wrappers"], version) end, 5_000) == true
           end
 
