@@ -2,8 +2,8 @@ defmodule Soap.Conformance.Drivers.V2 do
   @moduledoc """
   Drives the 2.0 modules through the conformance contract.
 
-  So far only the WSDL model exists. Building requests, calling and decoding return
-  `{:error, :not_implemented}`, which the suite records as known failures.
+  So far only the WSDL model exists. Building requests, calling and decoding raise, so
+  that checks expecting `{:error, _}` can't pass just because nothing is built yet.
   """
   @behaviour Soap.Conformance.Driver
 
@@ -51,13 +51,13 @@ defmodule Soap.Conformance.Drivers.V2 do
   end
 
   @impl true
-  def build_request(_service, _operation, _params, _opts), do: {:error, :not_implemented}
+  def build_request(_service, _operation, _params, _opts), do: raise("not implemented")
 
   @impl true
-  def call(_service, _operation, _params, _opts), do: {:error, :not_implemented}
+  def call(_service, _operation, _params, _opts), do: raise("not implemented")
 
   @impl true
-  def decode(_service, _operation, _status, _headers, _body), do: {:error, :not_implemented}
+  def decode(_service, _operation, _status, _headers, _body), do: raise("not implemented")
 
   @impl true
   def without_network(fun) do
@@ -92,5 +92,5 @@ defmodule Soap.Conformance.Drivers.V2 do
   end
 
   @impl true
-  def tolerant_opts(_versions), do: []
+  def tolerant_opts(_versions), do: [ignore_failed_imports: true]
 end
