@@ -8,7 +8,7 @@ defmodule Soap.XMLTest do
   describe "namespaces" do
     test "resolves prefixes, default namespaces and scoping" do
       {:ok, root} = XML.parse(~s(<a:r xmlns:a="u" xmlns="d"><x/><a:y xmlns="e"><z/></a:y></a:r>))
-      assert {root.ns, root.name, root.prefix} == {"u", "r", "a"}
+      assert {root.ns, root.name} == {"u", "r"}
       [x, y] = root.children
       assert {x.ns, x.name} == {"d", "x"}
       assert {y.ns, y.name} == {"u", "y"}

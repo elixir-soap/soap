@@ -28,10 +28,23 @@ defmodule Soap.XML do
   """
   @spec parse(binary(), keyword()) :: {:ok, Element.t()} | {:error, term()}
   def parse(xml, opts \\ []) when is_binary(xml) do
+    case sax(xml, __MODULE__.Handler, %{stack: [], root: nil}, opts) do
+      {:ok, %{root: %Element{} = root}} -> {:ok, root}
+      {:ok, _} -> {:error, {:invalid_xml, "no root element"}}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @doc """
+  Parses `xml` under the same rules as `parse/2`, but sends its events to a `Saxy.Handler`,
+  and returns the handler's final state.
+  """
+  @spec sax(binary(), module(), term(), keyword()) :: {:ok, term()} | {:error, term()}
+  def sax(xml, handler, state, opts \\ []) when is_binary(xml) do
     with {:ok, utf8} <- to_utf8(xml, opts),
          {:ok, document} <- drop_declaration(String.trim_leading(utf8)),
          :ok <- check_prolog(document) do
-      run_parser(document)
+      run_parser(document, handler, state)
     end
   end
 
@@ -46,10 +59,9 @@ defmodule Soap.XML do
 
   defp drop_declaration(document), do: {:ok, document}
 
-  defp run_parser(xml) do
-    case Saxy.parse_string(xml, __MODULE__.Handler, %{stack: [], root: nil}, expand_entity: :keep) do
-      {:ok, %{root: %Element{} = root}} -> {:ok, root}
-      {:ok, _} -> {:error, {:invalid_xml, "no root element"}}
+  defp run_parser(xml, handler, state) do
+    case Saxy.parse_string(xml, handler, state, expand_entity: :keep) do
+      {:ok, final} -> {:ok, final}
       {:error, error} -> {:error, {:invalid_xml, Exception.message(error)}}
     end
   rescue
@@ -135,22 +147,10 @@ defmodule Soap.XML do
       parent_scope =
         case state.stack do
           [%Element{scope: scope} | _] -> scope
-          [] -> %{"xml" => @xml_ns}
+          [] -> root_scope()
         end
 
-      {declarations, plain} = Enum.split_with(attributes, fn {name, _} -> namespace_declaration?(name) end)
-      scope = Enum.reduce(declarations, parent_scope, &declare/2)
-      {ns, local} = Element.expand(tag, scope, true)
-
-      element = %Element{
-        ns: ns,
-        name: local,
-        prefix: prefix_of(tag),
-        scope: scope,
-        attrs: Map.new(plain, fn {name, value} -> {Element.expand(name, scope, false), value} end)
-      }
-
-      {:ok, %{state | stack: [element | state.stack]}}
+      {:ok, %{state | stack: [open(tag, attributes, parent_scope) | state.stack]}}
     end
 
     def handle_event(:characters, chars, %{stack: [top | rest]} = state) do
@@ -168,6 +168,23 @@ defmodule Soap.XML do
       end
     end
 
+    @doc "The prefixes in force before the root element."
+    def root_scope, do: %{"xml" => @xml_ns}
+
+    @doc "An element from a start tag, with no children or text yet."
+    def open(tag, [], scope) do
+      {ns, local} = Element.expand(tag, scope, true)
+      %Element{ns: ns, name: local, scope: scope}
+    end
+
+    def open(tag, attributes, parent_scope) do
+      {declarations, plain} = Enum.split_with(attributes, fn {name, _} -> namespace_declaration?(name) end)
+      scope = Enum.reduce(declarations, parent_scope, &declare/2)
+      {ns, local} = Element.expand(tag, scope, true)
+      attrs = Map.new(plain, fn {name, value} -> {Element.expand(name, scope, false), value} end)
+      %Element{ns: ns, name: local, scope: scope, attrs: attrs}
+    end
+
     defp namespace_declaration?("xmlns"), do: true
     defp namespace_declaration?("xmlns:" <> _), do: true
     defp namespace_declaration?(_), do: false
@@ -176,12 +193,5 @@ defmodule Soap.XML do
     defp declare({"xmlns", uri}, scope), do: Map.put(scope, "", uri)
     defp declare({"xmlns:", _uri}, scope), do: scope
     defp declare({"xmlns:" <> prefix, uri}, scope), do: Map.put(scope, prefix, uri)
-
-    defp prefix_of(tag) do
-      case String.split(tag, ":", parts: 2) do
-        [prefix, _] -> prefix
-        [_] -> nil
-      end
-    end
   end
 end

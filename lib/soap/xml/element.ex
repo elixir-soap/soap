@@ -6,14 +6,13 @@ defmodule Soap.XML.Element do
   that are themselves qualified names, such as `type="xsd:string"`.
   """
 
-  defstruct [:ns, :name, :prefix, attrs: %{}, children: [], text: [], scope: %{}]
+  defstruct [:ns, :name, attrs: %{}, children: [], text: [], scope: %{}]
 
   @type qname :: {String.t() | nil, String.t()}
 
   @type t :: %__MODULE__{
           ns: String.t() | nil,
           name: String.t(),
-          prefix: String.t() | nil,
           attrs: %{qname() => String.t()},
           children: [t()],
           text: binary() | iodata(),
@@ -53,7 +52,7 @@ defmodule Soap.XML.Element do
   """
   @spec expand(String.t(), map(), boolean()) :: qname()
   def expand(name, scope, use_default?) do
-    case String.split(name, ":", parts: 2) do
+    case :binary.split(name, ":") do
       [prefix, local] -> {Map.get(scope, prefix), local}
       [local] -> {if(use_default?, do: Map.get(scope, "")), local}
     end
