@@ -7748,7 +7748,7 @@
     "ops": null,
     "agrees_with_truth": null
    },
-   "expect": "parse",
+   "expect": "return {:error, _}",
    "truth": {
     "operations": {
      "LoginRequest": {
@@ -9784,7 +9784,7 @@
     "bodies_malformed": 0,
     "bodies_wrong_wrapper": 0
    },
-   "expect": "refuse to read outside the WSDL directory",
+   "expect": "read nothing outside import_root when it is set",
    "truth": {
     "operations": {
      "Ping": {

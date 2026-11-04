@@ -22,6 +22,8 @@ defmodule Soap.Schema do
   @xsd "http://www.w3.org/2001/XMLSchema"
   @wsdl "http://schemas.xmlsoap.org/wsdl/"
   @soap_enc "http://schemas.xmlsoap.org/soap/encoding/"
+  @soap12_enc "http://www.w3.org/2003/05/soap-encoding"
+  @builtin [@xsd, @soap_enc, @soap12_enc]
 
   defstruct elements: %{}, types: %{}, groups: %{}, attribute_groups: %{}, attributes: %{}
 
@@ -41,7 +43,7 @@ defmodule Soap.Schema do
   def soap_encoding_namespace, do: @soap_enc
 
   @doc "True for a type defined by XML Schema or SOAP encoding rather than a document."
-  def builtin?({ns, _name}), do: ns in [@xsd, @soap_enc]
+  def builtin?({ns, _name}), do: ns in @builtin
 
   @doc "Finds a global type."
   def type(%__MODULE__{types: types}, qname), do: Map.get(types, qname)
@@ -101,7 +103,7 @@ defmodule Soap.Schema do
     |> Enum.uniq()
   end
 
-  defp resolved?(_schema, {_kind, {ns, _} = qname}) when ns in [@xsd, @soap_enc], do: builtin?(qname)
+  defp resolved?(_schema, {_kind, {ns, _}}) when ns in @builtin, do: true
   defp resolved?(_schema, {_kind, {"http://www.w3.org/XML/1998/namespace", _}}), do: true
   defp resolved?(schema, {:type, qname}), do: Map.has_key?(schema.types, qname)
   defp resolved?(schema, {:element, qname}), do: Map.has_key?(schema.elements, qname)
@@ -244,7 +246,7 @@ defmodule Soap.Schema do
   end
 
   # soapenc:Array restrictions name their item type in a wsdl:arrayType attribute.
-  defp array_type({@soap_enc, "Array"}, attrs), do: Enum.find_value(attrs, &array_item/1)
+  defp array_type({ns, "Array"}, attrs) when ns in [@soap_enc, @soap12_enc], do: Enum.find_value(attrs, &array_item/1)
   defp array_type(_base, _attrs), do: nil
 
   defp array_item(%AttributeDecl{array_type: item}), do: item
@@ -430,6 +432,9 @@ defmodule Soap.Schema do
   defp qualified(el, value, ctx) do
     case Element.qname(el, value) do
       {nil, local} when ctx.chameleon -> {ctx.target, local}
+      # A schema in a WSDL whose default namespace is the WSDL's. No schema type lives
+      # there, so an unprefixed reference can only mean this schema's own namespace.
+      {@wsdl, local} -> {ctx.target, local}
       qname -> qname
     end
   end
