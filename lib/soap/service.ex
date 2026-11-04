@@ -19,6 +19,8 @@ defmodule Soap.Service do
     * `:import_root` - a directory that local imports must stay inside.
     * `:allow_imports_from` - hosts that imports may be fetched from, or `:all`. See
       `Soap.Service.Loader` for the full rules.
+    * `:ignore_failed_imports` - accept a partial model when an import can't be read.
+      Otherwise that's an error.
     * `:base` - for `from_string/2`, the path or URL that relative imports resolve against.
     * `:http` - a `Soap.HTTP` implementation.
     * `:http_opts` - options passed to it.

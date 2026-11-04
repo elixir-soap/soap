@@ -343,6 +343,15 @@ defmodule Soap.ServiceTest do
       assert {:error, {:import_failed, path, {:file, :enoent, path}}} = Service.load(Path.join(dir, "main.wsdl"))
     end
 
+    test "failed imports can be accepted, and are still reported" do
+      doc = wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="missing.xsd"/>))
+      dir = tmp_dir([{"main.wsdl", doc}])
+
+      {:ok, service} = Service.load(Path.join(dir, "main.wsdl"), ignore_failed_imports: true)
+      assert Service.operations(service) == ["Pay"]
+      assert service.unresolved_imports == [{"missing.xsd", :import_failed}]
+    end
+
     test "an import that isn't XML is an error" do
       dir =
         tmp_dir([

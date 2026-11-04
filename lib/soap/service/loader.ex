@@ -15,7 +15,8 @@ defmodule Soap.Service.Loader do
 
   Skipped imports don't fail the load. They appear in `unresolved_imports`, with the
   reason. An import the rules allow but that can't be read is an error, because the
-  model would be silently incomplete.
+  model would be silently incomplete. To accept a partial model anyway, pass
+  `ignore_failed_imports: true`, and those imports are listed as `:import_failed`.
   """
 
   alias Soap.{HTTP, Schema, XML}
@@ -143,15 +144,30 @@ defmodule Soap.Service.Loader do
     {:ok, %{state | unresolved: [{reference, reason} | state.unresolved]}}
   end
 
-  defp follow_resolved({:ok, location}, _reference, target, state) do
+  defp follow_resolved({:ok, location}, reference, target, state) do
     key = location_key(location, target)
 
     cond do
-      MapSet.member?(state.visited, key) -> {:ok, state}
-      state.documents >= @max_documents -> {:error, :too_many_documents}
-      true -> visit(location, target, %{state | visited: MapSet.put(state.visited, key)})
+      MapSet.member?(state.visited, key) ->
+        {:ok, state}
+
+      state.documents >= @max_documents ->
+        {:error, :too_many_documents}
+
+      true ->
+        location |> visit(target, %{state | visited: MapSet.put(state.visited, key)}) |> tolerate(reference, state)
     end
   end
+
+  defp tolerate({:error, {:import_failed, _, _}} = error, reference, state) do
+    if state.opts[:ignore_failed_imports] do
+      {:ok, %{state | unresolved: [{reference, :import_failed} | state.unresolved]}}
+    else
+      error
+    end
+  end
+
+  defp tolerate(result, _reference, _state), do: result
 
   defp visit(location, target, state) do
     with {:ok, body} <- read(location, state.opts),

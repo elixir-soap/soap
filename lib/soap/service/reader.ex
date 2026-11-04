@@ -47,11 +47,10 @@ defmodule Soap.Service.Reader do
 
   defp lookup(_index, nil), do: nil
 
-  defp lookup(index, {_ns, local} = qname) do
-    case index do
-      %{^qname => found} -> found
-      _ -> Enum.find_value(index, fn {{_, name}, found} -> if name == local, do: found end)
-    end
+  defp lookup(index, {_ns, local} = qname), do: Map.get(index, qname) || find_by_local_name(index, local)
+
+  defp find_by_local_name(index, local) do
+    Enum.find_value(index, fn {{_ns, name}, found} -> if name == local, do: found end)
   end
 
   # Bindings
