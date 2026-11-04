@@ -1,0 +1,46 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="http://www.bookstore.org/booklist/xsd"
+   xmlns:tns="http://www.bookstore.org/booklist/xsd"
+   xmlns:booksvc="http://www.bookstore.org/book/wsdl"
+   xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions"
+   elementFormDefault="qualified">
+  
+  <element name="getBookList" type="tns:getBookListType">
+  	<annotation>
+  	  <documentation>
+         The request element for the book list service.
+  	  </documentation>
+    </annotation>
+  </element>
+  
+  <element name="bookList" type="tns:bookListType">
+    <annotation>
+      <documentation>
+         The response element for the book list service.
+      </documentation>
+    </annotation>
+  </element>
+  
+  <complexType name="getBookListType">
+    <sequence>
+      <element name="author" type="string" minOccurs="0" maxOccurs="unbounded"/>
+      <element name="title" type="string" minOccurs="0" maxOccurs="1"/>
+      <element name="publisher" type="string" minOccurs="0" maxOccurs="1"/>
+      <element name="subject" type="string" minOccurs="0" maxOccurs="1"/>
+      <element name="language" type="string" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="bookListType">
+    <sequence>
+      <element name="book" type="tns:bookType" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="bookType">
+    <attribute name="title" type="string"/>
+    <attribute name="url" type="anyURI" 
+       wsdlx:interface="booksvc:BookInterface"
+       wsdlx:binding="booksvc:BookHTTPBinding"/>
+  </complexType>
+</schema>
