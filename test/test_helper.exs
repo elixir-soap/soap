@@ -1,4 +1,4 @@
 # :nightly needs the full harvest and :live needs the internet. See test/corpus/README.md.
-ExUnit.start(exclude: [:nightly, :live])
+ExUnit.start(exclude: [:nightly, :live, :interop])
 
 Soap.Conformance.Harness.start()

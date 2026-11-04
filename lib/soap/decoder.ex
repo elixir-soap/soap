@@ -18,8 +18,8 @@ defmodule Soap.Decoder do
     * `xsi:nil` is `nil`.
 
   Attributes appear as `"@name"`, and an element's text next to attributes as `"#text"`.
-  This is the same form `Soap.Encoder` accepts. `"@type"` holds the local name from
-  `xsi:type` on a complex value, which tells apart subtypes of a declared type.
+  This is the same form `Soap.Encoder` accepts. When `xsi:type` says a value is a subtype
+  of its declared type, `"@type"` holds that subtype's local name.
 
   With no schema, an element repeated in the reply is a list and a single one isn't, and
   all values are strings.
@@ -146,7 +146,7 @@ defmodule Soap.Decoder do
   defp context(service, envelope, children, attachments) do
     %{
       schema: if(service, do: service.schema),
-      references: reference_index(children),
+      references: reference_index(children, %{}),
       attachments: attachments,
       envelope_ns: envelope.ns
     }
@@ -189,8 +189,18 @@ defmodule Soap.Decoder do
       Element.attr_ns(element, @enc12, "root") == "false"
   end
 
-  defp reference_index(children) do
-    for child <- children, id = Element.attr(child, "id"), id != nil, into: %{}, do: {id, child}
+  # A link can point anywhere in the Body. PHP, for one, puts the target on the first use
+  # of a shared value and links to it from the others.
+  defp reference_index(children, index) do
+    Enum.reduce(children, index, fn child, acc ->
+      acc =
+        case Element.attr(child, "id") do
+          nil -> acc
+          id -> Map.put_new(acc, id, child)
+        end
+
+      reference_index(child.children, acc)
+    end)
   end
 
   # Faults
@@ -308,9 +318,22 @@ defmodule Soap.Decoder do
     cond do
       Element.attr_ns(element, @xsi, "nil") in ["true", "1"] -> nil
       include = Element.child(element, @xop, "Include") -> resolve_include(include, ctx)
-      true -> decode_value(element, effective_type(element, type, ctx), ctx, seen)
+      true -> decode_typed(element, type, ctx, seen)
     end
   end
+
+  defp decode_typed(element, declared, ctx, seen) do
+    effective = effective_type(element, declared, ctx)
+    element |> decode_value(effective, ctx, seen) |> add_type_name(element, declared, effective)
+  end
+
+  # A subtype is worth reporting. Encoded services label every value, which isn't.
+  defp add_type_name(%{} = result, element, %ComplexType{} = declared, effective)
+       when not is_struct(result) and effective != declared do
+    Map.put(result, "@type", element |> Element.attr_ns(@xsi, "type") |> String.split(":") |> List.last())
+  end
+
+  defp add_type_name(result, _element, _declared, _effective), do: result
 
   defp resolve_include(include, ctx) do
     id = include |> Element.attr("href", "") |> String.replace_prefix("cid:", "") |> URI.decode()
@@ -368,6 +391,24 @@ defmodule Soap.Decoder do
   end
 
   defp decode_value(%Element{} = element, %ComplexType{} = type, ctx, seen) do
+    if soap_array?(element), do: decode_array(element, ctx, seen), else: decode_fields(element, type, ctx, seen)
+  end
+
+  defp decode_value(%Element{} = element, _type, ctx, seen) do
+    if soap_array?(element) do
+      decode_array(element, ctx, seen)
+    else
+      element.children
+      |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, seen)})
+      |> collect()
+      |> Map.merge(attributes(element, nil, ctx))
+      |> add_mixed_text(element, nil)
+    end
+  end
+
+  defp decode_array(element, ctx, seen), do: Enum.map(element.children, &decode_element(&1, nil, ctx, seen))
+
+  defp decode_fields(element, type, ctx, seen) do
     {fields, _open?} = Walk.fields(ctx.schema, type)
 
     element.children
@@ -378,19 +419,6 @@ defmodule Soap.Decoder do
     |> collect_with_shape(fields)
     |> Map.merge(attributes(element, type, ctx))
     |> add_mixed_text(element, type)
-    |> add_type_name(element)
-  end
-
-  defp decode_value(%Element{} = element, _type, ctx, seen) do
-    if soap_array?(element) do
-      Enum.map(element.children, &decode_element(&1, nil, ctx, seen))
-    else
-      element.children
-      |> Enum.map(&{&1.name, decode_element(&1, nil, ctx, seen)})
-      |> collect()
-      |> Map.merge(attributes(element, nil, ctx))
-      |> add_mixed_text(element, nil)
-    end
   end
 
   # With no schema, a soapenc:Array still says that it's one.
@@ -426,13 +454,6 @@ defmodule Soap.Decoder do
   defp add_mixed_text(result, %Element{} = element, type) do
     mixed? = match?(%ComplexType{mixed: true}, type) or type == nil
     if mixed? and String.trim(element.text) != "", do: Map.put(result, "#text", element.text), else: result
-  end
-
-  defp add_type_name(result, element) do
-    case Element.attr_ns(element, @xsi, "type") do
-      nil -> result
-      value -> Map.put(result, "@type", value |> String.split(":") |> List.last())
-    end
   end
 
   # Repeats a key into a list, and gives repeating fields a list even with one value.
