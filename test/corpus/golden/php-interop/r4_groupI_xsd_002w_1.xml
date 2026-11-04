@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://soapinterop.org/"><SOAP-ENV:Body><ns1:echoIntegerResponse><ns1:return>22</ns1:return></ns1:echoIntegerResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

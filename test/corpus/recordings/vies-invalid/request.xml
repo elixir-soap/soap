@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><checkVat xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types"><countryCode>DE</countryCode><vatNumber>000000000</vatNumber></checkVat></e:Body></e:Envelope>

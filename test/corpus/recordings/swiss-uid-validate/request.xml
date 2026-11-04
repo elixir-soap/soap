@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><ValidateVatNumber xmlns="http://www.uid.admin.ch/xmlns/uid-wse"><vatNumber>CHE-116.281.710</vatNumber></ValidateVatNumber></e:Body></e:Envelope>

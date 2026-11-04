@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:s='http://www.w3.org/2001/XMLSchema'>
+  <SOAP-ENV:Body><FindPersonResponse xmlns="http://tempuri.org"><FindPersonResult><Name>Newton,Dave R.</Name><SSN>384-10-6538</SSN><DOB>2000-03-20</DOB><Home><Street>6977 First Street</Street><City>Pueblo</City><State>AK</State><Zip>63163</Zip></Home><Office><Street>9984 Second Blvd</Street><City>Washington</City><State>MN</State><Zip>42829</Zip></Office><FavoriteColors><FavoriteColorsItem>Red</FavoriteColorsItem></FavoriteColors><Age>26</Age></FindPersonResult></FindPersonResponse></SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

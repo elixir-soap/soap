@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<definitions
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="http://soapinterop.org/"
+        xmlns:foo="urn:foo"
+        xmlns:bar="urn:bar"
+        targetNamespace="http://soapinterop.org/">
+</definitions>

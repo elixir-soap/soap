@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><soap:Fault><faultcode>soap:Server</faultcode><faultstring>System.Web.Services.Protocols.SoapException: Server was unable to process request. ---&gt; System.OverflowException: Arithmetic operation resulted in an overflow.
+   at Calculator.Divide(Int32 intA, Int32 intB) in G:\PleskVhosts\dneonline.com\httpdocs\Calculator.asmx:line 19
+   --- End of inner exception stack trace ---</faultstring><detail /></soap:Fault></soap:Body></soap:Envelope>

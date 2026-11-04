@@ -1,0 +1,1877 @@
+{
+ "checked": "2026-11-04",
+ "wsdls": [
+  {
+   "url": "http://www.dneonline.com/calculator.asmx?WSDL",
+   "sha256": "78d6c955cef5e46e424b0c87ad80bf6f2572a7031146d97716b80ea1022c8a11",
+   "bytes": 7880,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "style:default-absent",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex"
+   ],
+   "baseline_v1": {
+    "expected_ops": 4,
+    "default": {
+     "ok": true,
+     "ops": 4,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 4,
+     "endpoint": true
+    },
+    "bodies": 4,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.w3schools.com/xml/tempconvert.asmx?WSDL",
+   "sha256": "953f28fa5bd6c850c17d9eb52f6d550247083c3768565a3d12e7e25fb11a3575",
+   "bytes": 6901,
+   "features": [
+    "action:present",
+    "binding:http-get-post",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "part:type",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "style:default-absent",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:minOccurs-0",
+    "xs:nillable"
+   ],
+   "baseline_v1": {
+    "expected_ops": 2,
+    "default": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "bodies": 2,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.dataaccess.com/webservicesserver/NumberConversion.wso?WSDL",
+   "sha256": "c544123d2d3e6ccca67ce79e9f659fb5d191f40c35e68cc15d9746534721e454",
+   "bytes": 4645,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-xs",
+    "service:multi-port",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xsd:decimal"
+   ],
+   "baseline_v1": {
+    "expected_ops": 2,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "bodies": 2,
+    "bodies_crash": 0,
+    "bodies_malformed": 2,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+   "sha256": "88ff081ee3088396f713b84e38bc9527dda987d0a8023e7c292e84bbed856b02",
+   "bytes": 37172,
+   "features": [
+    "action:empty",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-xs",
+    "service:multi-port",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable"
+   ],
+   "baseline_v1": {
+    "expected_ops": 21,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 21,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.crcind.com/csp/samples/SOAP.Demo.cls?WSDL",
+   "sha256": "656693714c69d02c9f935df458d54d1966fe0fb5a6a5174d6a8f25ba755c02a5",
+   "bytes": 18732,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:element-qualified",
+    "import:xsd-located",
+    "location:absolute-url",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-default-and-alias",
+    "prefix:xsd-s",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:complexContent",
+    "xs:dotnet-diffgram",
+    "xs:element-ref",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:recursive-type",
+    "xs:restriction",
+    "xsd:base64Binary",
+    "xsd:date",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 9,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "loose": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl",
+   "sha256": "a5de093d23585cb3ff4d6c2a4367ba6003de48b428e30bb99548f2d184829279",
+   "bytes": 11628,
+   "features": [
+    "action:empty",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:attribute-qualified",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:enumeration",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:restriction",
+    "xsd:boolean",
+    "xsd:date"
+   ],
+   "baseline_v1": {
+    "expected_ops": 2,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "bodies": 2,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://ec.europa.eu/taxation_customs/tin/checkTinService.wsdl",
+   "sha256": "19788a5378b4e7be82f5bd0e04a9836627b3ca489c92b66bcfe74488d80be9d2",
+   "bytes": 7198,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:attribute-qualified",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:minOccurs-0",
+    "xsd:boolean",
+    "xsd:date"
+   ],
+   "baseline_v1": {
+    "expected_ops": 1,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "bodies": 1,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://ec.europa.eu/taxation_customs/dds2/eos/validation/services/validation?wsdl",
+   "sha256": "9d1f8d3ed866c07c064208886a978cdeb8b36456cca03785cf78f7f367050a92",
+   "bytes": 4641,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-absent",
+    "import:xsd-include",
+    "location:absolute-url",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:local-form-attr",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable"
+   ],
+   "baseline_v1": {
+    "expected_ops": 1,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "bodies": 1,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLserver.php?wsdl",
+   "sha256": "67197bd2c0def2c09a8f3a23b6dee3a9b297840b1e54ce5d56f42614ef3d3aa2",
+   "bytes": 27397,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "body:encodingStyle",
+    "body:namespace-attr",
+    "combo:rpc/encoded",
+    "doc:wsdl-documentation",
+    "enc:iso-8859-1",
+    "form:element-absent",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "part:type",
+    "prefix:wsdl-default-and-alias",
+    "prefix:xsd-xsd",
+    "wsdl:1.1",
+    "xs:all",
+    "xs:enumeration",
+    "xs:restriction",
+    "xsd:boolean"
+   ],
+   "baseline_v1": {
+    "expected_ops": 12,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "loose": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.herongyang.com/Service/Hello_WSDL_11_SOAP.wsdl",
+   "sha256": "ec2a4d0fc61d43893f922d73bf8985bda2e56c7dd2ae1c82f47fc57fa898d1a9",
+   "bytes": 1931,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-absent",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "style:default-absent",
+    "wrapper:element-ne-op",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 1,
+    "default": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "bodies": 1,
+    "bodies_crash": 1,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.herongyang.com/Service/Hello_WSDL_20_SOAP.wsdl",
+   "sha256": "ed554d6c597d39e5aecd70b93b53e5972491a378ed832df49b9563ad90925b42",
+   "bytes": 1603,
+   "features": [
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wsdl20:binding-soap",
+    "wsdl:2.0"
+   ],
+   "baseline_v1": null,
+   "requires": "WSDL only"
+  },
+  {
+   "url": "http://secure.smartbearsoftware.com/samples/testcomplete14/webservices/Service.asmx?WSDL",
+   "sha256": "8a2f05ee1cd2ba5d356a24a7e5acc6ddb254ce5eda98aa1f4686ed230bbe455e",
+   "bytes": 12492,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "style:default-absent",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:mixed",
+    "xsd:dateTime",
+    "xsd:double"
+   ],
+   "baseline_v1": {
+    "expected_ops": 6,
+    "default": {
+     "ok": true,
+     "ops": 6,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 6,
+     "endpoint": true
+    },
+    "bodies": 6,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx",
+   "sha256": "f0d3abe5180e5d1f8631b72711ccf8d6d4f6df8e6710469e41b21cf2933ca808",
+   "bytes": 863,
+   "features": [
+    "address:https",
+    "binding:none-abstract",
+    "import:wsdl",
+    "location:relative",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-none",
+    "service:multi-port",
+    "types:none",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 0,
+    "default": {
+     "ok": false,
+     "crash": "MatchError"
+    },
+    "loose": {
+     "ok": false,
+     "crash": "MatchError"
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "token"
+  },
+  {
+   "url": "https://www.onvif.org/ver10/device/wsdl/devicemgmt.wsdl",
+   "sha256": "c66773e3da37e493f370b1ed31906a8b3eee980ccd23735245ea2dc45b87eecf",
+   "bytes": 199759,
+   "features": [
+    "action:present",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "import:xsd-located",
+    "location:parent-dir",
+    "mep:request-response",
+    "part:element",
+    "prefix:soap-means-soap12",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xs",
+    "service:none",
+    "size:100kb-1mb",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:anyAttribute",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:restriction",
+    "xsd:anyURI",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:duration"
+   ],
+   "baseline_v1": {
+    "expected_ops": 103,
+    "default": {
+     "ok": false,
+     "crash": "ArgumentError"
+    },
+    "loose": {
+     "ok": true,
+     "ops": 103,
+     "endpoint": false
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "WSDL only, runs on devices"
+  },
+  {
+   "url": "https://www.onvif.org/ver10/media/wsdl/media.wsdl",
+   "sha256": "bb4596f47ff0f907b8113fd2c86f649faa098df0e0df9f1c5f4de34f592de1eb",
+   "bytes": 175142,
+   "features": [
+    "action:present",
+    "binding:soap12",
+    "body:parts-attr",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "import:xsd-located",
+    "location:parent-dir",
+    "mep:request-response",
+    "part:element",
+    "prefix:soap-means-soap12",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xs",
+    "service:none",
+    "size:100kb-1mb",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:anyAttribute",
+    "xs:attribute",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xsd:boolean",
+    "xsd:float"
+   ],
+   "baseline_v1": {
+    "expected_ops": 79,
+    "default": {
+     "ok": false,
+     "crash": "ArgumentError"
+    },
+    "loose": {
+     "ok": true,
+     "ops": 79,
+     "endpoint": false
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "WSDL only, runs on devices"
+  },
+  {
+   "url": "https://doc.s3.amazonaws.com/2006-03-01/AmazonS3.wsdl",
+   "sha256": "56c3483c619bbfd282480dea761c5e47630abb44433bf623b6cfe12d763299d3",
+   "bytes": 14906,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:element-qualified",
+    "import:xsd-include",
+    "location:relative",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wrapper:element-eq-op",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 16,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 16,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "SOAP API retired, WSDL only"
+  },
+  {
+   "url": "https://webservices.netsuite.com/wsdl/v2024_1_0/netsuite.wsdl",
+   "sha256": "f919dd63a200c72a5efabef7419e835069a1cfe4e14dfb2250fe088622fda7a4",
+   "bytes": 126287,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:fault-declared",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "import:xsd-located",
+    "location:parent-dir",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:fault-declared",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-xsd",
+    "schema:no-target-namespace",
+    "size:100kb-1mb",
+    "wrapper:element-eq-op",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 42,
+    "default": {
+     "ok": true,
+     "ops": 42,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 42,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://api.authorize.net/soap/v1/Service.asmx?WSDL",
+   "sha256": "99974c6b203ad3fe08fd56268a8a14f28b8bbaa0e70533157c99d0ab0217c4e6",
+   "bytes": 141657,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "size:100kb-1mb",
+    "style:default-absent",
+    "types:multiple-inline-schemas",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:choice",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:restriction",
+    "xsd:boolean",
+    "xsd:date",
+    "xsd:dateTime",
+    "xsd:decimal",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 32,
+    "default": {
+     "ok": true,
+     "ops": 32,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 32,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://www.paypalobjects.com/wsdl/PayPalSvc.wsdl",
+   "sha256": "86847b4dcef7b415c111fc597cb196608f73c8c92151763b03d5d09d66bf1b8a",
+   "bytes": 230332,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:attribute-unqualified",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "header:message-prefix-not-tns",
+    "import:xsd-located",
+    "location:relative",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-default-and-alias",
+    "prefix:xsd-default",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xs",
+    "prefix:xsd-xsd",
+    "service:multi-port",
+    "size:100kb-1mb",
+    "wrapper:element-ne-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:complexContent",
+    "xs:element-ref",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:integer"
+   ],
+   "baseline_v1": {
+    "expected_ops": 57,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 57,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 8,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://developer.ebay.com/webservices/latest/ebaySvc.wsdl",
+   "sha256": "a4fe4b48ea3237ad70e303939eac3339b0b5d1f6cfb19a848d49d0afdf9154c5",
+   "bytes": 3925069,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:attribute-unqualified",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "header:message-prefix-not-tns",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xs",
+    "size:over-1mb",
+    "wrapper:element-ne-op",
+    "wsdl:1.1",
+    "xs:abstract-type",
+    "xs:any",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:element-default-or-fixed",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:recursive-type",
+    "xs:restriction",
+    "xs:simpleContent",
+    "xsd:anyURI",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:decimal",
+    "xsd:double",
+    "xsd:duration",
+    "xsd:float",
+    "xsd:long",
+    "xsd:time"
+   ],
+   "baseline_v1": {
+    "expected_ops": 73,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 73,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 8,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://ics2wsa.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.219.wsdl",
+   "sha256": "2dac88f1cadd96b3bd19def25cfcfcc1ab06049d2b0d8c30f5d1f00a55809856",
+   "bytes": 2164,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-absent",
+    "import:xsd-located",
+    "location:relative",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "schema:no-target-namespace",
+    "wrapper:element-ne-op",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 1,
+    "default": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 1,
+     "endpoint": true
+    },
+    "bodies": 1,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 1
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://community.workday.com/sites/default/files/file-hosting/productionapi/Human_Resources/v41.0/Human_Resources.wsdl",
+   "sha256": "9241ffaaf6254fde181fe863f96bfaf35b777705c01580fb34f7bb6db29dd702",
+   "bytes": 3443706,
+   "features": [
+    "action:missing",
+    "binding:fault-declared",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:attribute-qualified",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:message-prefix-not-tns",
+    "mep:request-response",
+    "msg:zero-parts",
+    "op:fault-declared",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "size:over-1mb",
+    "wrapper:element-ne-op",
+    "wsdl:1.1",
+    "xs:any",
+    "xs:attribute",
+    "xs:choice",
+    "xs:complexContent",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:restriction",
+    "xs:simpleContent",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:date",
+    "xsd:dateTime",
+    "xsd:time"
+   ],
+   "baseline_v1": {
+    "expected_ops": 276,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 276,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 8,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "tenant"
+  },
+  {
+   "url": "https://www.brenda-enzymes.org/soap/brenda_zeep.wsdl",
+   "sha256": "33dcc6d9dd853d81b10a1599f3e665250f66ac389dceb0c678a3e4ff04506408",
+   "bytes": 201100,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "body:encodingStyle",
+    "body:namespace-attr",
+    "combo:rpc/encoded",
+    "enc:soapenc-array",
+    "form:element-absent",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "part:type",
+    "prefix:wsdl-default-and-alias",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "wsdl:1.1",
+    "xs:all",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:restriction"
+   ],
+   "baseline_v1": {
+    "expected_ops": 171,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "loose": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?WSDL",
+   "sha256": "d172e23d4cb0aee4968a0b57abf01681099c296abb78f1deec372809da06f440",
+   "bytes": 193123,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "size:100kb-1mb",
+    "style:default-absent",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:dotnet-diffgram",
+    "xs:element-ref",
+    "xs:minOccurs-0",
+    "xs:mixed",
+    "xsd:boolean",
+    "xsd:dateTime"
+   ],
+   "baseline_v1": {
+    "expected_ops": 94,
+    "default": {
+     "ok": true,
+     "ops": 94,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 94,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://services.arcgisonline.com/arcgis/services/World_Imagery/MapServer?wsdl",
+   "sha256": "39884ac797a2a740a12fefb590632d3124773eefad1018f74c69bd9fb4d56466",
+   "bytes": 290160,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-absent",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-xs",
+    "size:100kb-1mb",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:abstract-type",
+    "xs:anonymous-complex",
+    "xs:complexContent",
+    "xs:element-default-or-fixed",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:restriction",
+    "xsd:anyType",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:double",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 55,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 55,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v13/CampaignManagementService.svc?singleWsdl",
+   "sha256": "e871515baa492cf88ac1ee94f34cc07f44c519669bd0cf51d24364145647a48a",
+   "bytes": 1207230,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:fault-declared",
+    "binding:soap11",
+    "combo:document/literal",
+    "form:attribute-qualified",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:fault-declared",
+    "part:element",
+    "policy:ws-policy",
+    "policy:ws-security",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xs",
+    "prefix:xsd-xsd",
+    "size:over-1mb",
+    "style:default-absent",
+    "types:multiple-inline-schemas",
+    "wrapper:element-ne-op",
+    "wsa:action-attr",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:list",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:restriction",
+    "xsd:QName",
+    "xsd:anyType",
+    "xsd:anyURI",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:decimal",
+    "xsd:double",
+    "xsd:duration",
+    "xsd:float",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 195,
+    "default": {
+     "ok": true,
+     "ops": 195,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 195,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 8
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v13/CampaignManagementService.svc?wsdl",
+   "sha256": "a2db59ee16fa5b4c04720506b2f524c2eab689405b5205cd4c51773a7cdd52a1",
+   "bytes": 447851,
+   "features": [
+    "address:https",
+    "binding:none-abstract",
+    "form:element-absent",
+    "import:wsdl",
+    "import:xsd-located",
+    "location:absolute-url",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:fault-declared",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "wrapper:element-ne-op",
+    "wsa:action-attr",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 0,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://wsbexpress.dhl.com/sndpt/expressRateBook?WSDL",
+   "sha256": "fcc7fb6cf335fc880eac57d9c75ac531aab8587fff7e6257c411a6dfd56fa6d3",
+   "bytes": 279302,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "body:parts-attr",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-absent",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "types:multiple-inline-schemas",
+    "wrapper:element-ne-op",
+    "wsdl:1.1",
+    "xs:all",
+    "xs:anonymous-complex",
+    "xs:attribute",
+    "xs:choice",
+    "xs:complexContent",
+    "xs:element-default-or-fixed",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:pattern",
+    "xs:restriction",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:date",
+    "xsd:dateTime",
+    "xsd:integer"
+   ],
+   "baseline_v1": {
+    "expected_ops": 3,
+    "default": {
+     "ok": true,
+     "ops": 3,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 3,
+     "endpoint": true
+    },
+    "bodies": 3,
+    "bodies_crash": 3,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://www.uid-wse.admin.ch/V5.0/PublicServices.svc?wsdl",
+   "sha256": "c1793d7e42fe50b1d529e84c546be91bab022b5dc5ea6462161078503ee748b3",
+   "bytes": 4570,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:fault-declared",
+    "binding:soap11",
+    "combo:document/literal",
+    "import:wsdl",
+    "location:absolute-url",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "style:default-absent",
+    "types:empty-or-nonxsd",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 5,
+    "default": {
+     "ok": true,
+     "ops": 5,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 5,
+     "endpoint": true
+    },
+    "bodies": 5,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/wsdl/UslugaBIRzewnPubl-ver11-prod.wsdl",
+   "sha256": "c4836cdb9c3912adeab53676995091f13c2de1efdad6c1bb8bcf880ef2cb0457",
+   "bytes": 16272,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap12",
+    "combo:document/literal",
+    "form:attribute-qualified",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "policy:ws-policy",
+    "policy:ws-security",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xs",
+    "prefix:xsd-xsd",
+    "style:default-absent",
+    "types:multiple-inline-schemas",
+    "wrapper:element-eq-op",
+    "wsa:action-attr",
+    "wsa:used",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:attribute",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:restriction",
+    "xsd:QName",
+    "xsd:anyType",
+    "xsd:anyURI",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:dateTime",
+    "xsd:decimal",
+    "xsd:double",
+    "xsd:duration",
+    "xsd:float",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 6,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "loose": {
+     "ok": true,
+     "ops": 6,
+     "endpoint": true
+    },
+    "bodies": 6,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "API key"
+  },
+  {
+   "url": "http://www.gcomputer.net/webservices/dilbert.asmx?WSDL",
+   "sha256": "96eba15bf778ff23ac23d681f4dd69c5db55e01eade963d0d2e18f08a12afa59",
+   "bytes": 4552,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "form:element-qualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "style:default-absent",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:minOccurs-0",
+    "xsd:dateTime"
+   ],
+   "baseline_v1": {
+    "expected_ops": 2,
+    "default": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 2,
+     "endpoint": true
+    },
+    "bodies": 2,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://ssl.ibanrechner.de/soap?wsdl",
+   "sha256": "20212f6c30092d40efc46ea10a540c1477c7299dfec00175a6802051a83a80aa",
+   "bytes": 74202,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "body:encodingStyle",
+    "body:namespace-attr",
+    "combo:rpc/encoded",
+    "doc:wsdl-documentation",
+    "enc:soapenc-array",
+    "form:element-absent",
+    "import:xsd-located",
+    "import:xsd-no-location",
+    "location:absolute-url",
+    "mep:request-response",
+    "msg:multi-part",
+    "part:type",
+    "prefix:wsdl-default-and-alias",
+    "prefix:xsd-xsd",
+    "wsdl:1.1",
+    "xs:all",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:restriction"
+   ],
+   "baseline_v1": {
+    "expected_ops": 19,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "loose": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": false
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/developerforce/Force.com-Toolkit-for-PHP/master/soapclient/partner.wsdl.xml",
+   "sha256": "f499f78fb75dd6bf89b4abad7f388392df59d488f928c806e8776b475e5e4b52",
+   "bytes": 152601,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:fault-declared",
+    "binding:soap11",
+    "body:parts-attr",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:fault-declared",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-default",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "types:multiple-inline-schemas",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:recursive-type",
+    "xs:restriction",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:dateTime"
+   ],
+   "baseline_v1": {
+    "expected_ops": 32,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 32,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/developerforce/Force.com-Toolkit-for-PHP/master/soapclient/enterprise.wsdl.xml",
+   "sha256": "6e14a2902db8fe2ef5677b99f9987a039b4b60e7f9073342a841aec2d0c5c4ff",
+   "bytes": 409697,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:fault-declared",
+    "binding:soap11",
+    "body:parts-attr",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:fault-declared",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-default",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "types:multiple-inline-schemas",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:any",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:recursive-type",
+    "xs:restriction",
+    "xsd:anyType",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:date",
+    "xsd:dateTime",
+    "xsd:double",
+    "xsd:time"
+   ],
+   "baseline_v1": {
+    "expected_ops": 32,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 32,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/developerforce/Force.com-Toolkit-for-PHP/master/soapclient/metadata.wsdl.xml",
+   "sha256": "0672d4b51e69c8d3956759744c216986476caaeff8f5e9fab039b2c7d6cbacc2",
+   "bytes": 154799,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "body:parts-attr",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:element-qualified",
+    "header:declared-input",
+    "header:declared-output",
+    "mep:request-response",
+    "msg:multi-part",
+    "part:element",
+    "prefix:wsdl-default",
+    "prefix:xsd-xsd",
+    "size:100kb-1mb",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:complexContent",
+    "xs:enumeration",
+    "xs:extension",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:recursive-type",
+    "xs:restriction",
+    "xsd:base64Binary",
+    "xsd:boolean",
+    "xsd:date",
+    "xsd:dateTime",
+    "xsd:double"
+   ],
+   "baseline_v1": {
+    "expected_ops": 10,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 10,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 8,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://schemas.xmlsoap.org/ws/2005/04/discovery/ws-discovery.wsdl",
+   "sha256": "cb44ea039cdb52062123788e15ff9a8cd1c6c22bffc08ab782e103ad194e68e8",
+   "bytes": 5223,
+   "features": [
+    "binding:none-abstract",
+    "form:element-absent",
+    "import:xsd-located",
+    "location:absolute-url",
+    "mep:notification",
+    "mep:one-way",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xs",
+    "schema:no-target-namespace",
+    "service:none",
+    "wrapper:element-ne-op",
+    "wsa:action-attr",
+    "wsdl:1.1"
+   ],
+   "baseline_v1": {
+    "expected_ops": 0,
+    "default": {
+     "ok": false,
+     "crash": "ArgumentError"
+    },
+    "loose": {
+     "ok": false,
+     "crash": "ArgumentError"
+    },
+    "bodies": 0,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "WSDL only"
+  },
+  {
+   "url": "https://webservices.nbs.rs/CommunicationOfficeService1_0/CoreXmlService.asmx?WSDL",
+   "sha256": "4c6a19f80a8a82f126480b953b97569918d422175c6737f88f58f0298dd503cc",
+   "bytes": 54867,
+   "features": [
+    "action:present",
+    "address:https",
+    "binding:soap11",
+    "binding:soap12",
+    "combo:document/literal",
+    "form:element-qualified",
+    "header:declared-input",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-s",
+    "service:multi-port",
+    "style:default-absent",
+    "types:multiple-inline-schemas",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:anyAttribute",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xs:pattern",
+    "xs:restriction",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 23,
+    "default": {
+     "ok": true,
+     "ops": 23,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 23,
+     "endpoint": true
+    },
+    "bodies": 8,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": "account"
+  },
+  {
+   "url": "https://www3.bcb.gov.br/sgspub/JSP/sgsgeral/FachadaWSSGS.wsdl",
+   "sha256": "8ee30000f940de31eb07ec3b059ee42fb98eb954dc45da00f794b0fac91966c0",
+   "bytes": 13147,
+   "features": [
+    "action:empty",
+    "address:https",
+    "binding:soap11",
+    "body:encodingStyle",
+    "body:namespace-attr",
+    "combo:rpc/encoded",
+    "enc:soapenc-array",
+    "form:element-absent",
+    "import:xsd-no-location",
+    "mep:request-response",
+    "msg:multi-part",
+    "op:parameterOrder",
+    "part:type",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-default",
+    "prefix:xsd-multiple",
+    "prefix:xsd-xsd",
+    "types:multiple-inline-schemas",
+    "wsdl:1.1",
+    "xs:attribute",
+    "xs:complexContent",
+    "xs:nillable",
+    "xs:restriction",
+    "xsd:boolean",
+    "xsd:decimal",
+    "xsd:long"
+   ],
+   "baseline_v1": {
+    "expected_ops": 7,
+    "default": {
+     "ok": true,
+     "ops": 0,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 7,
+     "endpoint": true
+    },
+    "bodies": 7,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  },
+  {
+   "url": "https://www.ebi.ac.uk/Tools/services/soap/clustalo?wsdl",
+   "sha256": "ec97af2bdf988a277feba3413aa863e3ff8076df2f3066f32fdceb362eb84887",
+   "bytes": 25626,
+   "features": [
+    "action:present",
+    "binding:soap11",
+    "combo:document/literal",
+    "doc:wsdl-documentation",
+    "form:attribute-unqualified",
+    "form:element-unqualified",
+    "mep:request-response",
+    "part:element",
+    "prefix:wsdl-wsdl",
+    "prefix:xsd-xsd",
+    "wrapper:element-eq-op",
+    "wsdl:1.1",
+    "xs:anonymous-complex",
+    "xs:maxOccurs-many",
+    "xs:minOccurs-0",
+    "xs:nillable",
+    "xsd:base64Binary",
+    "xsd:boolean"
+   ],
+   "baseline_v1": {
+    "expected_ops": 6,
+    "default": {
+     "ok": true,
+     "ops": 6,
+     "endpoint": true
+    },
+    "loose": {
+     "ok": true,
+     "ops": 6,
+     "endpoint": true
+    },
+    "bodies": 6,
+    "bodies_crash": 0,
+    "bodies_malformed": 0,
+    "bodies_wrong_wrapper": 0
+   },
+   "requires": null
+  }
+ ],
+ "unavailable": [
+  "https://ec.europa.eu/taxation_customs/vies/services/checkVatService?wsdl",
+  "http://www.learnwebservices.com/services/hello?WSDL",
+  "http://www.learnwebservices.com/services/tempconverter?wsdl",
+  "https://www.herongyang.com/Service/Registration_WSDL_11_SOAP.wsdl",
+  "https://www.herongyang.com/Service/GetStockPrice_WSDL_11_SOAP.wsdl",
+  "http://www.thomas-bayer.com/axis2/services/BLZService?wsdl",
+  "https://www.holidaywebservice.com/HolidayService_v2/HolidayService2.asmx?WSDL",
+  "http://wsf.cdyne.com/WeatherWS/Weather.asmx?WSDL",
+  "https://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl",
+  "https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL",
+  "https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente?wsdl",
+  "https://ads.google.com/apis/ads/publisher/v202505/NetworkService?wsdl",
+  "https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc?wsdl",
+  "http://www.soapclient.com/xml/soapresponder.wsdl",
+  "http://www.whitemesa.com/interop/InteropTest.wsdl",
+  "https://www.banrep.gov.co/SeriesEstadisticas?wsdl",
+  "https://soap.amazon.com/schemas2/AmazonWebServices.wsdl",
+  "https://adwords.google.com/api/adwords/cm/v201809/CampaignService?wsdl",
+  "https://api.betfair.com/global/v3/BFGlobalService.wsdl",
+  "https://webservices.sabre.com/wsdl/sabreXML1.0.00/tpf/EnhancedAirBookRQ_v3.8.0.wsdl"
+ ]
+}
