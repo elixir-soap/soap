@@ -1,0 +1,17 @@
+[
+  {"name": "calculator-add-11", "wsdl": "http://www.dneonline.com/calculator.asmx?WSDL", "version": "1.1", "operation": "Add", "params": [["intA", 2], ["intB", 3]], "expect": {"key": "AddResult", "value": "5"}},
+  {"name": "calculator-add-12", "wsdl": "http://www.dneonline.com/calculator.asmx?WSDL", "version": "1.2", "operation": "Add", "params": [["intA", 2], ["intB", 3]], "expect": {"key": "AddResult", "value": "5"}},
+  {"name": "calculator-divzero-11", "wsdl": "http://www.dneonline.com/calculator.asmx?WSDL", "version": "1.1", "operation": "Divide", "params": [["intA", 1], ["intB", 0]], "expect": {"fault": "Server"}},
+  {"name": "tempconvert-11", "wsdl": "https://www.w3schools.com/xml/tempconvert.asmx?WSDL", "version": "1.1", "operation": "CelsiusToFahrenheit", "params": [["Celsius", "20"]], "expect": {"key": "CelsiusToFahrenheitResult", "value": "68"}},
+  {"name": "numberconversion-11", "wsdl": "https://www.dataaccess.com/webservicesserver/NumberConversion.wso?WSDL", "version": "1.1", "operation": "NumberToWords", "params": [["ubiNum", 500]], "expect": {"key": "NumberToWordsResult", "value": "five hundred"}},
+  {"name": "country-capital", "wsdl": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL", "version": "1.1", "operation": "CapitalCity", "params": [["sCountryISOCode", "FR"]], "expect": {"key": "CapitalCityResult", "value": "Paris"}},
+  {"name": "country-continents-array", "wsdl": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL", "version": "1.1", "operation": "ListOfContinentsByName", "params": [], "expect": {"key": "sName", "value": "Europe"}},
+  {"name": "crcind-add", "wsdl": "https://www.crcind.com/csp/samples/SOAP.Demo.cls?WSDL", "version": "1.1", "operation": "AddInteger", "params": [["Arg1", 2], ["Arg2", 3]], "expect": {"key": "AddIntegerResult", "value": "5"}},
+  {"name": "vies-invalid", "wsdl": "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", "version": "1.1", "operation": "checkVat", "params": [["countryCode", "DE"], ["vatNumber", "000000000"]], "expect": {"key": "valid", "value": "false"}},
+  {"name": "bcb-rpc-encoded-multiref", "wsdl": "https://www3.bcb.gov.br/sgspub/JSP/sgsgeral/FachadaWSSGS.wsdl", "version": "1.1", "operation": "getUltimoValorVO", "params": [["in0", 1]], "expect": {"key": "getUltimoValorVOReturn", "value": ""}},
+  {"name": "smartbear-array", "wsdl": "http://secure.smartbearsoftware.com/samples/testcomplete14/webservices/Service.asmx?WSDL", "version": "1.1", "operation": "GetArray", "params": [], "expect": {"key": "int", "value": "9"}},
+  {"name": "cbr-datetime", "wsdl": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?WSDL", "version": "1.1", "operation": "GetLatestDateTime", "params": [], "expect": {"key": "GetLatestDateTimeResult", "value": "T00:00:00"}},
+  {"name": "arcgis-defaultmap", "wsdl": "https://services.arcgisonline.com/arcgis/services/World_Imagery/MapServer?wsdl", "version": "1.1", "operation": "GetDefaultMapName", "params": [], "expect": {"key": "Result", "value": "Layers"}},
+  {"name": "swiss-uid-validate", "wsdl": "https://www.uid-wse.admin.ch/V5.0/PublicServices.svc?wsdl", "version": "1.1", "operation": "ValidateVatNumber", "params": [["vatNumber", "CHE-116.281.710"]], "expect": {"key": "ValidateVatNumberResult", "value": "true"}},
+  {"name": "ebi-parameters", "wsdl": "https://www.ebi.ac.uk/Tools/services/soap/clustalo?wsdl", "version": "1.1", "operation": "getParameters", "params": [], "expect": {"key": "id", "value": "guidetreeout"}}
+]
