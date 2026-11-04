@@ -17,7 +17,7 @@ A rewrite. See the [migration guide](MIGRATING.md).
 - WS-Security `UsernameToken`, with a plain password or a digest.
 - MTOM in both directions, and SOAP with Attachments.
 - `Soap.Raw`, for prebuilt XML.
-- HTTP adapters, with Req by default and HTTPoison as an option.
+- A `Soap.HTTP` behaviour for choosing an HTTP client, with Req as the default.
 - Telemetry events and a logger, with credentials masked.
 - `Soap.Test`, for testing code that calls SOAP services.
 - `mix soap.gen`, which generates a typed client from a WSDL.
@@ -32,7 +32,7 @@ A rewrite. See the [migration guide](MIGRATING.md).
 ### Removed
 
 - `Soap.init_model`, `Soap.Wsdl`, `Soap.Xsd`, `Soap.Type`, `Soap.Request.Params` and `config :soap, :globals`.
-- The `sweet_xml` and `xml_builder` dependencies.
+- The `sweet_xml`, `xml_builder` and `httpoison` dependencies.
 
 All notable changes to this project will be documented in this file.
 

@@ -2,8 +2,8 @@ defmodule Soap.HTTP do
   @moduledoc """
   The HTTP client behaviour. Choose an implementation with the `:http` option.
 
-  `Soap.HTTP.Req` is the default. `Soap.HTTP.HTTPoison` is included for applications that
-  already use HTTPoison, which is an optional dependency.
+  `Soap.HTTP.Req` is the default. To use another client, implement this behaviour, which
+  takes a few lines. The README has an example for HTTPoison.
 
   A request returns `{:ok, %{status: integer, headers: list, body: binary}}` for any HTTP
   response, whatever its status, and `{:error, reason}` when there is no response.
@@ -67,35 +67,5 @@ defmodule Soap.HTTP.Req do
 
   defp flatten_headers(headers) do
     Enum.flat_map(headers, fn {name, values} -> Enum.map(List.wrap(values), &{name, &1}) end)
-  end
-end
-
-if Code.ensure_loaded?(HTTPoison) do
-  defmodule Soap.HTTP.HTTPoison do
-    @moduledoc "An adapter for `HTTPoison`. Add `:httpoison` to your dependencies to use it."
-    @behaviour Soap.HTTP
-
-    @impl true
-    def request(method, url, headers, body, opts) do
-      case HTTPoison.request(method, url, IO.iodata_to_binary(body), headers, translate(opts)) do
-        {:ok, %HTTPoison.Response{status_code: status, headers: response_headers, body: response_body}} ->
-          {:ok, %{status: status, headers: response_headers, body: response_body}}
-
-        {:ok, other} ->
-          {:error, {:unexpected_response, other}}
-
-        {:error, %HTTPoison.Error{reason: reason}} ->
-          {:error, reason}
-      end
-    end
-
-    defp translate(opts) do
-      Enum.map(opts, fn
-        {:timeout, value} -> {:recv_timeout, value}
-        {:connect_timeout, value} -> {:timeout, value}
-        {:follow_redirects, value} -> {:follow_redirect, value}
-        other -> other
-      end)
-    end
   end
 end

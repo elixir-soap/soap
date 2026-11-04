@@ -85,6 +85,6 @@ Soap.load(url, allow_imports_from: ["schemas.example.com"])
 
 ## Dependencies
 
-2.0 uses Saxy for XML and Req for HTTP. `sweet_xml` and `xml_builder` are gone, and `httpoison` is now optional. To keep using HTTPoison, add it to your dependencies and pass `http: Soap.HTTP.HTTPoison`.
+2.0 uses Saxy for XML and Req for HTTP. `sweet_xml`, `xml_builder` and `httpoison` are gone. Your application can still use HTTPoison for its own requests. To send SOAP calls through it, write a small `Soap.HTTP` adapter. The README has an example.
 
 Elixir 1.15 or newer is required.

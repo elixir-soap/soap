@@ -337,46 +337,69 @@ defmodule SoapTest do
     if metadata[:tag] == test_pid, do: send(test_pid, {event, measurements, metadata})
   end
 
+  defmodule CustomHTTP do
+    @behaviour Soap.HTTP
+
+    @impl true
+    def request(method, url, headers, body, opts) do
+      send(opts[:test_pid], {:custom_adapter, method, url})
+      Soap.HTTP.Req.request(method, url, headers, body, Keyword.delete(opts, :test_pid))
+    end
+  end
+
   describe "HTTP adapters" do
-    for adapter <- [Soap.HTTP.Req, Soap.HTTP.HTTPoison] do
-      @adapter adapter
-
-      test "#{inspect(adapter)} sends a call and reads its reply" do
-        WireServer.with_reply(WireServer.http(200, [{"Content-Type", "text/xml"}], pay_reply("done")), fn server ->
-          {:ok, client} = Soap.from_string(wsdl(endpoint: WireServer.url(server)), http: @adapter)
-
-          assert {:ok, %{"PayOut" => %{"result" => "done"}}} =
-                   Soap.call(client, "Pay", @params, timeout: 2_000, connect_timeout: 2_000)
-
-          assert [%{method: "POST", path: "/soap", body: body, headers: headers}] = WireServer.requests(server)
-          assert body =~ "zeta"
-          assert {"soapaction", ~s("urn:t/Pay")} in headers
-        end)
+    test "any implementation of Soap.HTTP can be used, for loading and for calls" do
+      handler = fn
+        %{method: "GET"} -> WireServer.http(200, [], wsdl())
+        _ -> WireServer.http(200, [{"Content-Type", "text/xml"}], pay_reply("done"))
       end
 
-      test "#{inspect(adapter)} reports a timeout and a refused connection" do
-        WireServer.with_reply([{:sleep, 800}], fn server ->
-          {:ok, client} = Soap.from_string(wsdl(endpoint: WireServer.url(server)), http: @adapter)
-          assert {:error, %Error{reason: {:transport, _}}} = Soap.call(client, "Pay", @params, timeout: 50)
-        end)
+      WireServer.with_handler(handler, fn server ->
+        url = WireServer.url(server)
+        opts = [http: CustomHTTP, http_opts: [test_pid: self()], endpoint: url]
 
-        {:ok, client} =
-          Soap.from_string(wsdl(endpoint: "http://127.0.0.1:#{WireServer.unused_port()}/x"), http: @adapter)
+        assert {:ok, client} = Soap.load(url <> "?wsdl", opts)
+        assert {:ok, %{"PayOut" => %{"result" => "done"}}} = Soap.call(client, "Pay", @params)
+        assert_received {:custom_adapter, :get, _}
+        assert_received {:custom_adapter, :post, ^url}
+      end)
+    end
 
-        assert {:error, %Error{reason: {:transport, _}}} = Soap.call(client, "Pay", @params)
+    test "sends a call and reads its reply" do
+      WireServer.with_reply(WireServer.http(200, [{"Content-Type", "text/xml"}], pay_reply("done")), fn server ->
+        {:ok, client} = Soap.from_string(wsdl(endpoint: WireServer.url(server)), http: Soap.HTTP.Req)
+
+        assert {:ok, %{"PayOut" => %{"result" => "done"}}} =
+                 Soap.call(client, "Pay", @params, timeout: 2_000, connect_timeout: 2_000)
+
+        assert [%{method: "POST", path: "/soap", body: body, headers: headers}] = WireServer.requests(server)
+        assert body =~ "zeta"
+        assert {"soapaction", ~s("urn:t/Pay")} in headers
+      end)
+    end
+
+    test "reports a timeout and a refused connection" do
+      WireServer.with_reply([{:sleep, 800}], fn server ->
+        {:ok, client} = Soap.from_string(wsdl(endpoint: WireServer.url(server)), http: Soap.HTTP.Req)
+        assert {:error, %Error{reason: {:transport, _}}} = Soap.call(client, "Pay", @params, timeout: 50)
+      end)
+
+      {:ok, client} =
+        Soap.from_string(wsdl(endpoint: "http://127.0.0.1:#{WireServer.unused_port()}/x"), http: Soap.HTTP.Req)
+
+      assert {:error, %Error{reason: {:transport, _}}} = Soap.call(client, "Pay", @params)
+    end
+
+    test "loads a WSDL by URL, following redirects" do
+      handler = fn
+        %{path: "/old"} -> WireServer.http(302, [{"Location", "/new"}], "")
+        _ -> WireServer.http(200, [], wsdl())
       end
 
-      test "#{inspect(adapter)} loads a WSDL by URL, following redirects" do
-        handler = fn
-          %{path: "/old"} -> WireServer.http(302, [{"Location", "/new"}], "")
-          _ -> WireServer.http(200, [], wsdl())
-        end
-
-        WireServer.with_handler(handler, fn server ->
-          assert {:ok, client} = Soap.load(WireServer.url(server, "/old"), http: @adapter)
-          assert Soap.operations(client) == ["Pay"]
-        end)
-      end
+      WireServer.with_handler(handler, fn server ->
+        assert {:ok, client} = Soap.load(WireServer.url(server, "/old"), http: Soap.HTTP.Req)
+        assert Soap.operations(client) == ["Pay"]
+      end)
     end
   end
 

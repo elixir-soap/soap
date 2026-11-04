@@ -177,11 +177,36 @@ Raw XML goes out unchecked and unescaped, so never build it from untrusted input
 
 ## HTTP clients
 
-Req is the default. To use another client, implement `Soap.HTTP` and pass it as `:http`:
+Req is the default, and you can pass it options:
 
 ```elixir
-Soap.load(url, http: Soap.HTTP.HTTPoison)    # add :httpoison to your deps
 Soap.load(url, http_opts: [req: [connect_options: [proxy: {:http, "proxy", 3128, []}]]])
+```
+
+To use another client, implement `Soap.HTTP` and pass it as `:http`. For HTTPoison:
+
+```elixir
+defmodule MyApp.SoapHTTP do
+  @behaviour Soap.HTTP
+
+  @impl true
+  def request(method, url, headers, body, opts) do
+    options = [
+      recv_timeout: opts[:timeout] || 5_000,
+      follow_redirect: opts[:follow_redirects] || false
+    ]
+
+    case HTTPoison.request(method, url, IO.iodata_to_binary(body), headers, options) do
+      {:ok, %HTTPoison.Response{status_code: status, headers: headers, body: body}} ->
+        {:ok, %{status: status, headers: headers, body: body}}
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        {:error, reason}
+    end
+  end
+end
+
+Soap.load(url, http: MyApp.SoapHTTP)
 ```
 
 ## Generating a client

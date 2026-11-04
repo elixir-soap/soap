@@ -128,11 +128,6 @@ defmodule Soap.Conformance.InteropTest do
       assert {:error, %Fault{}} =
                Soap.call(client, "whoAmI", %{}, wsse: WSSE.username_token("ann", "wrong", digest: true))
     end
-
-    test "every adapter works" do
-      opts = [http: Soap.HTTP.HTTPoison]
-      assert {:ok, %{"greetResponse" => _}} = Soap.call(client("#{@cxf}/doc?wsdl", opts), "greet", %{name: "A"})
-    end
   end
 
   describe "PHP SoapServer" do

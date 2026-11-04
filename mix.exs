@@ -60,7 +60,6 @@ defmodule Soap.MixProject do
       {:req, "~> 0.5"},
       {:telemetry, "~> 1.0"},
       {:decimal, "~> 2.0 or ~> 3.0", optional: true},
-      {:httpoison, "~> 1.0 or ~> 2.0 or ~> 3.0", optional: true},
       {:jason, "~> 1.4"},
       {:stream_data, "~> 1.1", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},

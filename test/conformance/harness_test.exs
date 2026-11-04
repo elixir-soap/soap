@@ -104,7 +104,7 @@ defmodule Soap.Conformance.HarnessTest do
       steps = WireServer.http(201, [{"X-Test", "yes"}], "hello")
 
       WireServer.with_reply(steps, fn server ->
-        {:ok, reply} = Soap.HTTP.HTTPoison.request(:post, WireServer.url(server, "/p"), [{"A", "b"}], "body", [])
+        {:ok, reply} = Soap.HTTP.Req.request(:post, WireServer.url(server, "/p"), [{"A", "b"}], "body", [])
         assert reply.status == 201
         assert reply.body == "hello"
         assert [%{method: "POST", path: "/p", body: "body", headers: headers}] = WireServer.requests(server)
