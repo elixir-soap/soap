@@ -230,7 +230,7 @@ defmodule Soap.Encoder do
     {more_attrs, value} = split_special_keys(value)
     attrs = Map.merge(to_string_map(attrs), more_attrs)
     {type, type_attr} = apply_xsi_type(type, attrs, ctx)
-    encoded = encoded_type_attr(type, field, ctx)
+    encoded = if type_attr == [], do: encoded_type_attr(type, field, ctx), else: []
     node_attrs = type_attr ++ encoded ++ node_attributes(attrs, type, path, ctx)
 
     {children, array_attrs} = encode_content(value, qname, type, path, ctx)
@@ -243,12 +243,13 @@ defmodule Soap.Encoder do
       nil ->
         {type, []}
 
+      {ns, local} ->
+        {Walk.find_type(ctx.schema, {ns, local}) || type, [{{@xsi, "type"}, {:qname, {ns, local}}}]}
+
       name ->
         local = name |> String.split(":") |> List.last()
         found = Walk.find_type(ctx.schema, {nil, local})
-        ns = if found, do: found.ns
-
-        {found || type, [{{@xsi, "type"}, {:qname, {ns, local}}}]}
+        {found || type, [{{@xsi, "type"}, {:qname, {found && found.ns, local}}}]}
     end
   end
 

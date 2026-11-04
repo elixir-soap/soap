@@ -1,27 +1,3 @@
 {
-  "golden/Dummy__ref_element_should_have_correct_namespace/response": "match (=) failed",
-  "golden/Dummy__ref_element_should_have_correct_namespace_with_overrideElementKey/response": "match (=) failed",
-  "golden/Dummy__should_extract_envelope_from_response/response": "match (=) failed",
-  "golden/Dummy__should_handle_cdata_xml_in_response/response": "Assertion with == failed",
-  "golden/Dummy__should_handle_datetime_transformation/response": "Assertion with == failed",
-  "golden/Dummy__should_handle_inline_types/response": "Assertion with == failed",
-  "golden/Dummy__should_handle_nil_false/response": "Assertion with == failed",
-  "golden/GetSubscription__should_handle_ref_minOccurs_and_maxOccurs/response": "Assertion with == failed",
-  "golden/Login__unsupported_response_name_returned_and_local_xs_schema_missed/response": "Assertion with == failed",
-  "golden/addList__complex_extension_namespace_for_arrays/request": "Protocol.UndefinedError: protocol String.Chars not implemented for Jason.OrderedObject (a struct). This protocol is implemented for: Atom, BitString, Date, DateTime, Decimal, Float",
-  "golden/addList__complex_extension_namespace_for_arrays/response": "Assertion with == failed",
-  "golden/getAppointmentNumber__should_be_able_to_parse_response/response": "match (=) failed",
-  "golden/getAttachments__should_handle_MTOM_response/response": "match (=) failed",
-  "golden/getAttachments__should_handle_not_MTOM_response/response": "Assertion with == failed",
-  "golden/get__complex_extension_with_explicit_namespace/request": "Protocol.UndefinedError: protocol String.Chars not implemented for Jason.OrderedObject (a struct). This protocol is implemented for: Atom, BitString, Date, DateTime, Decimal, Float",
-  "golden/get__complex_extension_with_explicit_namespace/response": "Assertion with == failed",
-  "golden/get__complex_extension_without_explicit_namespace/request": "Protocol.UndefinedError: protocol String.Chars not implemented for Jason.OrderedObject (a struct). This protocol is implemented for: Atom, BitString, Date, DateTime, Decimal, Float",
-  "golden/get__complex_extension_without_explicit_namespace/response": "Assertion with == failed",
-  "golden/login__complex_schema_xmlns_with_array_and_any_type_and_other_types/response": "Assertion with == failed",
-  "golden/multiCall__rpc_stype_request_xsi_attributes/response": "Assertion with == failed",
-  "golden/update__complex_extension_fields_in_parent_without_explicit_namespace/request": "Protocol.UndefinedError: protocol String.Chars not implemented for Jason.OrderedObject (a struct). This protocol is implemented for: Atom, BitString, Date, DateTime, Decimal, Float",
-  "golden/update__complex_extension_fields_in_parent_without_explicit_namespace/response": "Assertion with == failed",
-  "golden/update__complex_extension_with_array_attributes/request": "Protocol.UndefinedError: protocol String.Chars not implemented for Jason.OrderedObject (a struct). This protocol is implemented for: Atom, BitString, Date, DateTime, Decimal, Float",
-  "golden/update__complex_extension_with_array_attributes/response": "Assertion with == failed",
-  "wire/mtom": "match (=) failed"
+  "golden/update__complex_extension_with_array_attributes/request": "Assertion with == failed"
 }

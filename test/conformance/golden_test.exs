@@ -39,6 +39,21 @@ defmodule Soap.Conformance.GoldenTest do
       "The sample uses a node-soap key prefix to change an element's namespace."
   }
 
+  # Where node-soap shapes a response in ways that 2.0 deliberately doesn't.
+  @response_disagreements %{
+    "Dummy__should_handle_cdata_xml_in_response" => "node-soap parses XML inside CDATA. Here, CDATA stays text.",
+    "Dummy__should_handle_datetime_transformation" =>
+      "Values decode to DateTime, with a different text form than JavaScript's Date.",
+    "Dummy__should_handle_inline_types" =>
+      "Values decode to Date and to strings, where node-soap's custom parsers produce others.",
+    "GetSubscription__should_handle_ref_minOccurs_and_maxOccurs" =>
+      "Values decode to DateTime, with a different text form than JavaScript's Date.",
+    "login__complex_schema_xmlns_with_array_and_any_type_and_other_types" =>
+      "The sample's expected value comes from JavaScript's Date.",
+    "getAppointmentNumber__should_be_able_to_parse_response" =>
+      "The reply has no SOAP envelope, which is an error here."
+  }
+
   defp driver, do: Driver.current()
   defp file(dir, name), do: Path.join([Support.corpus_path("golden/node-soap"), dir, name])
 
@@ -66,7 +81,7 @@ defmodule Soap.Conformance.GoldenTest do
       values
       |> Enum.filter(fn {k, _} -> k in ["attributes", "$attributes"] end)
       |> Enum.flat_map(fn {_, %Jason.OrderedObject{values: pairs}} -> pairs end)
-      |> Map.new()
+      |> Map.new(&attribute/1)
 
     value =
       case List.keyfind(values, "$value", 0) do
@@ -77,6 +92,13 @@ defmodule Soap.Conformance.GoldenTest do
 
     [{key, attrs, value}]
   end
+
+  # node-soap's way of naming an xsi:type with an explicit namespace.
+  defp attribute({"xsi_type", %Jason.OrderedObject{values: values}}) do
+    {"xsi:type", {values |> List.keyfind("xmlns", 0) |> elem(1), values |> List.keyfind("type", 0) |> elem(1)}}
+  end
+
+  defp attribute(pair), do: pair
 
   defp to_nodes(key, nil), do: [{key, %{}, nil}]
   defp to_nodes(key, scalar), do: [{key, %{}, scalar}]
@@ -90,10 +112,19 @@ defmodule Soap.Conformance.GoldenTest do
   defp put_children({ns, name, attrs, text}, []), do: {ns, name, attrs, text}
   defp put_children({ns, name, attrs, _}, children), do: {ns, name, attrs, children}
 
-  defp json_leaves(value) when is_map(value), do: value |> Map.values() |> Enum.flat_map(&json_leaves/1)
+  # Encoding attributes aren't data, and are dropped from results.
+  defp json_leaves(value) when is_map(value) do
+    value
+    |> Enum.reject(fn {key, _} -> encoding_attribute?(key) end)
+    |> Enum.flat_map(fn {_key, inner} -> json_leaves(inner) end)
+  end
+
   defp json_leaves(value) when is_list(value), do: Enum.flat_map(value, &json_leaves/1)
   defp json_leaves(nil), do: []
   defp json_leaves(value), do: [value |> to_string() |> String.trim()]
+
+  defp encoding_attribute?(key),
+    do: String.starts_with?(key, ["xsi:", "xsi_", "soapenv:", "soapenc:", "SOAP-ENC:", "xmlns"])
 
   root = Support.corpus_path("golden/node-soap")
   dirs = root |> File.ls!() |> Enum.filter(&File.dir?(Path.join(root, &1))) |> Enum.sort()
@@ -126,7 +157,7 @@ defmodule Soap.Conformance.GoldenTest do
       end
     end
 
-    if has.("response.xml") and has.("response.json") do
+    if has.("response.xml") and has.("response.json") and not Map.has_key?(@response_disagreements, dir) do
       test "#{label} response" do
         Harness.check("golden/#{@dir}/response", fn ->
           offline(fn ->

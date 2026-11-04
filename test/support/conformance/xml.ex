@@ -11,6 +11,7 @@ defmodule Soap.Conformance.Xml do
   """
 
   @xml_ns "http://www.w3.org/XML/1998/namespace"
+  @xsi "http://www.w3.org/2001/XMLSchema-instance"
 
   @spec parse(iodata()) :: {:ok, map()} | {:error, term()}
   def parse(xml) do
@@ -75,11 +76,21 @@ defmodule Soap.Conformance.Xml do
   defp resolve_attrs(attrs, scope) do
     Enum.reduce_while(attrs, {:ok, %{}}, fn {key, value}, {:ok, acc} ->
       case expand(key, scope, false) do
-        {:ok, ns, name} -> {:cont, {:ok, Map.put(acc, {ns, name}, value)}}
+        {:ok, ns, name} -> {:cont, {:ok, Map.put(acc, {ns, name}, qname_value(ns, name, value, scope))}}
         error -> {:halt, error}
       end
     end)
   end
+
+  # An xsi:type value is a QName, so its prefix doesn't matter either.
+  defp qname_value(@xsi, "type", value, scope) do
+    case expand(value, scope, true) do
+      {:ok, ns, local} -> {ns, local}
+      _ -> value
+    end
+  end
+
+  defp qname_value(_ns, _name, value, _scope), do: value
 
   defp resolve_children(content, scope) do
     content

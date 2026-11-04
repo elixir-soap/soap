@@ -84,7 +84,7 @@ defmodule Soap.Decoder do
   end
 
   defp split_parts(headers, body) do
-    case Multipart.parse(header(headers, "content-type"), body) do
+    case Multipart.parse(raw_header(headers, "content-type"), body) do
       :not_multipart -> {:ok, body, []}
       {:ok, root, attachments} -> {:ok, root, attachments}
       {:error, reason} -> {:error, %Error{reason: reason}}
@@ -92,8 +92,15 @@ defmodule Soap.Decoder do
   end
 
   defp header(headers, name) do
+    case raw_header(headers, name) do
+      nil -> nil
+      value -> String.downcase(value)
+    end
+  end
+
+  defp raw_header(headers, name) do
     Enum.find_value(headers, fn {key, value} ->
-      if String.downcase(to_string(key)) == name, do: value |> to_string() |> String.downcase()
+      if String.downcase(to_string(key)) == name, do: to_string(value)
     end)
   end
 

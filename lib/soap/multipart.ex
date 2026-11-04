@@ -12,13 +12,28 @@ defmodule Soap.Multipart do
   """
   @spec parse(String.t() | nil, binary()) ::
           :not_multipart | {:ok, binary(), [Attachment.t()]} | {:error, term()}
-  def parse(nil, _body), do: :not_multipart
-
   def parse(content_type, body) do
-    if String.starts_with?(String.downcase(content_type), "multipart/") do
+    if String.starts_with?(String.downcase(content_type || ""), "multipart/") do
       parse_multipart(content_type, body)
     else
-      :not_multipart
+      parse_by_first_line(body)
+    end
+  end
+
+  # Some gateways lose or rewrite the content type. A body that opens with a boundary
+  # can't be anything else.
+  defp parse_by_first_line(body) do
+    trimmed = String.trim_leading(body)
+
+    with "--" <> rest <- trimmed,
+         [boundary, _] <- String.split(rest, ~r/\r?\n/, parts: 2),
+         true <- boundary != "" and not String.contains?(boundary, " ") do
+      case split(trimmed, boundary) do
+        [] -> :not_multipart
+        parts -> choose_root(parts, nil)
+      end
+    else
+      _ -> :not_multipart
     end
   end
 
