@@ -44,8 +44,11 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: priv/plts
-          key: plts-${{ hashFiles('mix.lock') }}
+          key: plts-dev-${{ hashFiles('mix.lock') }}
+      # In the test environment, Dialyzer also reads test/support, which calls ExUnit.
       - run: mix dialyzer
+        env:
+          MIX_ENV: dev
 
   interop:
     runs-on: ubuntu-latest
