@@ -33,6 +33,8 @@ defmodule Soap.Conformance.GoldenTest do
       "A nil for an element the schema doesn't call nillable is left out. node-soap sends xsi:nil.",
     "Dummy__should_escape_xml" =>
       "A nil for an element the schema doesn't call nillable is left out. node-soap sends xsi:nil.",
+    "update__complex_extension_with_array_attributes" =>
+      "Fields follow the schema's order here, and node-soap keeps the caller's order.",
     "Message__overriding_namespace_prefix" =>
       "The sample uses a node-soap key prefix to change an element's namespace.",
     "createData__should_generate_complex_type_request" =>
@@ -93,15 +95,15 @@ defmodule Soap.Conformance.GoldenTest do
     [{key, attrs, value}]
   end
 
+  defp to_nodes(key, nil), do: [{key, %{}, nil}]
+  defp to_nodes(key, scalar), do: [{key, %{}, scalar}]
+
   # node-soap's way of naming an xsi:type with an explicit namespace.
   defp attribute({"xsi_type", %Jason.OrderedObject{values: values}}) do
     {"xsi:type", {values |> List.keyfind("xmlns", 0) |> elem(1), values |> List.keyfind("type", 0) |> elem(1)}}
   end
 
   defp attribute(pair), do: pair
-
-  defp to_nodes(key, nil), do: [{key, %{}, nil}]
-  defp to_nodes(key, scalar), do: [{key, %{}, scalar}]
 
   # encodingStyle is correct on an encoded body, though node-soap leaves it out.
   defp comparable(node) do
