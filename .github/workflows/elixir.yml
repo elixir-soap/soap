@@ -98,8 +98,6 @@ jobs:
 
   dialyzer:
     runs-on: ubuntu-latest
-    # 1.x has known errors, tracked in #105 and #121. This reports them without blocking.
-    continue-on-error: true
     env:
       MIX_ENV: dev
 
