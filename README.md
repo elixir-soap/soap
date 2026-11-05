@@ -99,6 +99,7 @@ Missing required elements are allowed, because servers often accept less than th
 | `:validate` | Check params against the schema. Defaults to true |
 | `:timeout`, `:connect_timeout` | In milliseconds |
 | `:follow_redirects` | Follow redirects on calls. Defaults to false |
+| `:max_reply_size` | The largest reply to accept, in bytes, also once decompressed. Defaults to 100 MB. `:infinity` turns it off |
 | `:http`, `:http_opts` | The HTTP adapter and its options |
 
 ## Results
@@ -257,6 +258,8 @@ See `Soap.Telemetry`.
 - XML in UTF-8, UTF-16 and ISO-8859-1.
 
 Replies containing a DOCTYPE are refused, so external entities and entity bombs can't apply.
+
+A reply over `:max_reply_size` returns `{:error, %Soap.Error{reason: :reply_too_large}}`. The limit also covers what a compressed reply expands to.
 
 ## Testing this library
 

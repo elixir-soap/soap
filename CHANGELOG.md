@@ -27,6 +27,8 @@ A rewrite. See the [migration guide](MIGRATING.md).
 - Results use string keys and no longer create atoms.
 - Imports are limited by default: a WSDL can't reach other hosts or read arbitrary files.
 - Replies with a DOCTYPE are refused.
+- Replies are limited to 100 MB, also once decompressed. `:max_reply_size` changes this.
+- Most replies decode while they're parsed, with no XML tree in memory.
 - Elixir 1.15 or newer is required.
 
 ### Removed
