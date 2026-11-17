@@ -9,7 +9,7 @@
 | `Soap.init_model(path, :file)` | `Soap.load(path)` |
 | `Soap.init_model(url, :url)` | `Soap.load(url)` |
 | `Soap.call(wsdl, op, params)` | `Soap.call(client, op, params)` |
-| `Soap.call(wsdl, op, {headers, params})` | `Soap.call(client, op, params, headers: headers)` |
+| `Soap.call(wsdl, op, {headers, params})` | `Soap.call(client, op, params, soap_headers: headers)` |
 | `Soap.call(wsdl, op, params, http_headers)` | `Soap.call(client, op, params, http_headers: http_headers)` |
 | `Soap.call(wsdl, op, params, [], http_opts)` | `Soap.call(client, op, params, http_opts: http_opts)` |
 | `{:ok, response} = Soap.call(...)`, then `Soap.Response.parse(response)` | `{:ok, result} = Soap.call(...)` |

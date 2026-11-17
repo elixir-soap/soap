@@ -93,7 +93,7 @@ Missing required elements are allowed, because servers often accept less than th
 | `:endpoint` | Send here instead of the address in the WSDL |
 | `:version` | `"1.1"` or `"1.2"`, when the WSDL offers both |
 | `:input` | The input's name, to choose between overloaded operations |
-| `:headers` | SOAP headers, in the same forms as params |
+| `:soap_headers` | SOAP headers, in the same forms as params |
 | `:http_headers` | Extra HTTP headers. One with a standard header's name replaces it |
 | `:wsse` | WS-Security credentials |
 | `:mtom` | Send every base64 field as an attachment |
@@ -173,7 +173,7 @@ MTOM replies resolve into the result automatically. Other parts are in `Soap.req
 
 ```elixir
 Soap.call(client, "Send", %{"Document" => %Soap.Raw{xml: prebuilt_fragment}})
-Soap.call(client, "Send", params, headers: [%Soap.Raw{xml: custom_header}])
+Soap.call(client, "Send", params, soap_headers: [%Soap.Raw{xml: custom_header}])
 ```
 
 Raw XML goes out unchecked and unescaped, so never build it from untrusted input.

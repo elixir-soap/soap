@@ -21,7 +21,7 @@ defmodule Soap do
     * `:endpoint` - send here instead of the address in the WSDL.
     * `:version` - the SOAP version, `"1.1"` or `"1.2"`, when the WSDL offers both.
     * `:input` - the input's name, to choose between overloaded operations.
-    * `:headers` - SOAP headers, in the same forms as params.
+    * `:soap_headers` - SOAP headers, in the same forms as params.
     * `:http_headers` - extra HTTP headers. One with the name of a standard header
       replaces it.
     * `:wsse` - WS-Security credentials from `Soap.WSSE.username_token/3`.
@@ -170,9 +170,9 @@ defmodule Soap do
   end
 
   defp encoder_opts(opts) do
-    soap_headers = normalize_headers(Keyword.get(opts, :headers, []))
+    soap_headers = normalize_headers(Keyword.get(opts, :soap_headers, []))
     security = if opts[:wsse], do: [WSSE.header(opts[:wsse])], else: []
-    [headers: security ++ soap_headers] ++ Keyword.take(opts, [:mtom, :validate])
+    [soap_headers: security ++ soap_headers] ++ Keyword.take(opts, [:mtom, :validate])
   end
 
   defp normalize_headers(headers) when is_map(headers), do: Enum.to_list(headers)

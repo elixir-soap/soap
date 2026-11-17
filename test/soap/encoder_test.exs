@@ -220,7 +220,7 @@ defmodule Soap.EncoderTest do
     end
 
     test "works as a SOAP header" do
-      {:ok, %{xml: xml}} = encode(field("a", "xsd:string"), %{}, headers: [%Raw{xml: "<h/>"}])
+      {:ok, %{xml: xml}} = encode(field("a", "xsd:string"), %{}, soap_headers: [%Raw{xml: "<h/>"}])
       assert xml =~ "<h/>"
     end
   end
@@ -300,13 +300,13 @@ defmodule Soap.EncoderTest do
 
       {:ok, service} = Service.from_string(doc)
       {:ok, operation} = Service.operation(service, "Pay")
-      {:ok, %{xml: xml}} = Encoder.encode(service, operation, %{}, headers: %{"auth" => "t"})
+      {:ok, %{xml: xml}} = Encoder.encode(service, operation, %{}, soap_headers: %{"auth" => "t"})
       {:ok, envelope} = Xml.parse(xml)
       assert [%{ns: "urn:t", name: "Auth", text: "t"}] = Xml.header_children(envelope)
     end
 
     test "a {namespace, name} key names an undeclared header" do
-      {:ok, %{xml: xml}} = encode(field("a", "xsd:string"), %{}, headers: [{{"urn:h", "Token"}, "t"}])
+      {:ok, %{xml: xml}} = encode(field("a", "xsd:string"), %{}, soap_headers: [{{"urn:h", "Token"}, "t"}])
       {:ok, envelope} = Xml.parse(xml)
       assert [%{ns: "urn:h", name: "Token", text: "t"}] = Xml.header_children(envelope)
     end

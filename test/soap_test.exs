@@ -269,7 +269,7 @@ defmodule SoapTest do
   describe "raw XML" do
     test "goes into params and headers" do
       {:ok, request} =
-        Soap.build_request(client(echoing()), "Pay", %{"zeta" => %Raw{xml: "<x/>"}}, headers: [%Raw{xml: "<h/>"}])
+        Soap.build_request(client(echoing()), "Pay", %{"zeta" => %Raw{xml: "<x/>"}}, soap_headers: [%Raw{xml: "<h/>"}])
 
       assert request.body =~ "<x/>"
       assert request.body =~ "<h/>"

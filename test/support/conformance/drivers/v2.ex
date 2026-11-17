@@ -76,7 +76,7 @@ defmodule Soap.Conformance.Drivers.V2 do
     Enum.flat_map(opts, fn
       {:soap_version, version} -> [version: version]
       {:soap_headers, nil} -> []
-      {:soap_headers, headers} -> [headers: headers]
+      {:soap_headers, headers} -> [soap_headers: headers]
       {:recv_timeout, value} -> [timeout: value]
       {:timeout, value} -> [connect_timeout: value]
       other -> [other]

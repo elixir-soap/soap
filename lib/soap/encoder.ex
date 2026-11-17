@@ -63,7 +63,7 @@ defmodule Soap.Encoder do
 
   ## Options
 
-    * `:headers` - SOAP headers, in the same forms as params.
+    * `:soap_headers` - SOAP headers, in the same forms as params.
     * `:mtom` - send every base64 field as an attachment.
     * `:validate` - check params against the schema. Defaults to true.
   """
@@ -79,7 +79,7 @@ defmodule Soap.Encoder do
     }
 
     body = encode_body(operation, params, ctx)
-    header = encode_headers(operation, Keyword.get(opts, :headers, []), ctx)
+    header = encode_headers(operation, Keyword.get(opts, :soap_headers, []), ctx)
     {:ok, serialize(envelope(header, body, ctx))}
   catch
     {:invalid_param, path, message} ->
