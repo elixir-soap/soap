@@ -10,7 +10,9 @@ A rewrite. See the [migration guide](MIGRATING.md).
 - A WSDL model that follows binding, port type, message, part and schema instead of guessing from names.
 - Schema-aware requests: order, namespaces, validation, and values formatted by type.
 - Schema-aware results: lists stay lists, values are typed, and prefixes are gone.
-- `Soap.Fault` and `Soap.Error`, for every failure.
+- `Soap.Fault` and `Soap.Error`, for every failure. Both keep the HTTP reply they came from.
+- Call options merge with the client's: HTTP headers, SOAP headers, adapter options and telemetry metadata are combined by name, and `nil` removes one.
+- A `:port` option and `Soap.ports/1`, to choose the binding and address when a WSDL offers an operation on several.
 - SOAP 1.2 per client, including Faults with subcodes.
 - `wsdl:import`, `xsd:include`, `xsd:redefine` and import cycles.
 - rpc/encoded requests and replies, with `multiRef` links and `soapenc:Array`.
