@@ -112,24 +112,41 @@ defmodule Soap.Service do
   Finds an operation by name.
 
   A service can offer an operation on several bindings. Without options, this returns
-  the one on the first port that offers it.
+  the one on the first port, in document order, that offers it.
 
   ## Options
 
+    * `:port` - the name of a `wsdl:port`. Only its binding is used.
     * `:version` - the SOAP version, `"1.1"` or `"1.2"`.
     * `:input` - the input's name, to choose between overloaded operations.
   """
   @spec operation(t(), String.t(), keyword()) :: {:ok, Operation.t()} | {:error, term()}
   def operation(%__MODULE__{} = service, name, opts \\ []) do
-    matches =
-      service.operations
-      |> Enum.filter(&(&1.name == name))
-      |> filter_by(:version, opts[:version])
-      |> filter_by(:input_name, opts[:input])
+    with {:ok, ports} <- ports_named(service, opts[:port]) do
+      matches =
+        service.operations
+        |> Enum.filter(&(&1.name == name))
+        |> filter_by(:binding, opts[:port] && hd(ports).binding)
+        |> filter_by(:version, opts[:version])
+        |> filter_by(:input_name, opts[:input])
 
-    case prefer_first_port(matches, service.ports) do
-      nil -> {:error, {:unknown_operation, name, operations(service)}}
-      operation -> {:ok, operation}
+      case prefer_first_port(matches, ports) do
+        nil -> {:error, {:unknown_operation, name, operations(service)}}
+        operation -> {:ok, operation}
+      end
+    end
+  end
+
+  @doc "The names of the service's SOAP ports."
+  @spec port_names(t()) :: [String.t()]
+  def port_names(%__MODULE__{ports: ports}), do: ports |> Enum.map(& &1.name) |> Enum.uniq()
+
+  defp ports_named(service, nil), do: {:ok, service.ports}
+
+  defp ports_named(service, name) do
+    case Enum.filter(service.ports, &(&1.name == name)) do
+      [] -> {:error, {:unknown_port, name, port_names(service)}}
+      ports -> {:ok, ports}
     end
   end
 
@@ -139,10 +156,15 @@ defmodule Soap.Service do
     ports |> Enum.map(& &1.location) |> Enum.reject(&(&1 in [nil, ""])) |> Enum.uniq()
   end
 
-  @doc "The endpoint URL for an operation, or nil if no port serves its binding."
-  @spec endpoint(t(), Operation.t()) :: String.t() | nil
-  def endpoint(%__MODULE__{ports: ports}, %Operation{binding: binding}) do
-    Enum.find_value(ports, &(&1.binding == binding && &1.location))
+  @doc """
+  The endpoint URL for an operation, or nil if no port serves its binding.
+
+  With a port name, it's that port's address. Otherwise it's the first port's that
+  serves the operation's binding.
+  """
+  @spec endpoint(t(), Operation.t(), String.t() | nil) :: String.t() | nil
+  def endpoint(%__MODULE__{ports: ports}, %Operation{binding: binding}, port \\ nil) do
+    Enum.find_value(ports, &(&1.binding == binding and (port == nil or &1.name == port) and &1.location))
   end
 
   defp filter_by(operations, _field, nil), do: operations

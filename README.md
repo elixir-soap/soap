@@ -91,6 +91,7 @@ Missing required elements are allowed, because servers often accept less than th
 | Option | Meaning |
 |---|---|
 | `:endpoint` | Send here instead of the address in the WSDL |
+| `:port` | The `wsdl:port` to use, by name, when several offer the operation. It picks the binding and the address. By default it's the first one in the WSDL |
 | `:version` | `"1.1"` or `"1.2"`, when the WSDL offers both |
 | `:input` | The input's name, to choose between overloaded operations |
 | `:soap_headers` | SOAP headers, in the same forms as params |

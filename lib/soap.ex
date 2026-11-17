@@ -19,6 +19,9 @@ defmodule Soap do
   These work in `load/2` and `from_string/2`, as defaults for the client, and in each call.
 
     * `:endpoint` - send here instead of the address in the WSDL.
+    * `:port` - the name of the `wsdl:port` to use, when the WSDL offers the operation on
+      several. It picks the binding and the address. Without it, the first port in the
+      WSDL that offers the operation is used, after `:version` and `:input` narrow them.
     * `:version` - the SOAP version, `"1.1"` or `"1.2"`, when the WSDL offers both.
     * `:input` - the input's name, to choose between overloaded operations.
     * `:soap_headers` - SOAP headers, in the same forms as params.
@@ -86,6 +89,10 @@ defmodule Soap do
   @doc "The operations a client can call."
   @spec operations(Client.t()) :: [String.t()]
   def operations(%Client{service: service}), do: Service.operations(service)
+
+  @doc "The names of the WSDL's ports, for the `:port` option."
+  @spec ports(Client.t()) :: [String.t()]
+  def ports(%Client{service: service}), do: Service.port_names(service)
 
   @doc """
   Calls an operation and returns its decoded result.
@@ -172,7 +179,7 @@ defmodule Soap do
   end
 
   defp find_operation(%Client{service: service}, name, opts) do
-    case Service.operation(service, name, Keyword.take(opts, [:version, :input])) do
+    case Service.operation(service, name, Keyword.take(opts, [:port, :version, :input])) do
       {:ok, operation} -> {:ok, operation}
       {:error, reason} -> {:error, %Error{reason: reason}}
     end
@@ -185,7 +192,7 @@ defmodule Soap do
 
       {:ok,
        %Request{
-         url: Keyword.get(opts, :endpoint) || Service.endpoint(service, operation),
+         url: Keyword.get(opts, :endpoint) || Service.endpoint(service, operation, Keyword.get(opts, :port)),
          operation: operation.name,
          version: operation.version,
          body: body,

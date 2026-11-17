@@ -261,6 +261,22 @@ defmodule SoapTest do
       assert {:ok, %{ns: "http://www.w3.org/2003/05/soap-envelope"}} = Xml.parse(v12.body)
     end
 
+    test ":port picks the binding and its address" do
+      {:ok, client} = Soap.load(Support.corpus_path("synthetic/wsdl/divergent-bindings.wsdl"))
+      assert Soap.ports(client) == ["A11", "A12", "Z11"]
+
+      {:ok, z11} = Soap.build_request(client, "Ping", %{v: "x"}, port: "Z11")
+      {:ok, a12} = Soap.build_request(client, "Ping", %{v: "x"}, port: "A12")
+      assert {z11.url, z11.version} == {"http://localhost:9/z11", "1.1"}
+      assert {a12.url, a12.version} == {"http://localhost:9/a12", "1.2"}
+
+      assert {:error, %Error{reason: {:unknown_port, "Q", ["A11", "A12", "Z11"]}}} =
+               Soap.build_request(client, "Ping", %{v: "x"}, port: "Q")
+
+      assert {:error, %Error{reason: {:unknown_operation, "Ping", _}}} =
+               Soap.build_request(client, "Ping", %{v: "x"}, port: "Z11", version: "1.2")
+    end
+
     test "1.1 and 1.2 clients work side by side" do
       v11 = client(fn _ -> soap11("<R>1</R>") end)
 

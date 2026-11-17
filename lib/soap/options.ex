@@ -58,6 +58,8 @@ defmodule Soap.Options do
   defp check(:telemetry_metadata, _), do: {:error, "must be a map"}
   defp check(:endpoint, url) when is_nil(url) or is_binary(url), do: :ok
   defp check(:endpoint, _), do: {:error, "must be a string"}
+  defp check(:port, name) when is_nil(name) or is_binary(name), do: :ok
+  defp check(:port, _), do: {:error, "must be a string"}
   defp check(:version, version) when version in [nil, "1.1", "1.2"], do: :ok
   defp check(:version, _), do: {:error, ~s(must be "1.1" or "1.2")}
   defp check(key, value) when key in [:timeout, :connect_timeout] and is_integer(value) and value >= 0, do: :ok
