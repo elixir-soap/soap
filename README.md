@@ -52,6 +52,8 @@ A WSDL is often loaded from somewhere you don't control, so imports are limited 
 
 - `allow_imports_from: ["schemas.example.com"]` or `allow_imports_from: :all` allows more hosts.
 - `import_root: "priv/wsdl"` keeps local imports inside a directory. Without it, a local WSDL can import from parent directories.
+- With `import_root`, imports through symlinks below that directory are skipped.
+- HTTP redirects follow the same host restrictions as imports. Relative imports resolve against the final URL.
 - `client.service.unresolved_imports` lists what was skipped, and why.
 - An import that's allowed but can't be read is an error. `ignore_failed_imports: true` accepts a partial model instead.
 
