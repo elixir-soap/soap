@@ -126,6 +126,18 @@ defmodule Soap.EncoderTest do
     end
   end
 
+  describe "empty values" do
+    test "an empty list sends none of a repeating element" do
+      assert body(field("a", "xsd:string", ~s( maxOccurs="unbounded")), %{a: []}).children == []
+    end
+
+    test "an empty list or string sends an empty element otherwise" do
+      assert [%{name: "a", text: ""}] = body(field("a", "xsd:string"), %{a: []}).children
+      assert [%{name: "a", text: ""}] = body(field("a", "xsd:string"), %{a: ""}).children
+      assert [%{name: "a", text: ""}] = body(field("a", "xsd:string", ~s( maxOccurs="unbounded")), %{a: ""}).children
+    end
+  end
+
   describe "values" do
     test "formats values by type" do
       cases = [

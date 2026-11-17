@@ -396,12 +396,18 @@ defmodule Soap.Encoder do
     type = Walk.type_of(ctx.schema, field)
     child_path = [field.name | path]
 
-    if is_nil(value) and not field.nillable do
-      []
-    else
-      {field.ns, field.name}
-      |> encode_repeated(attrs, value, type, field, child_path, ctx)
-      |> Enum.map(&{field.order, &1})
+    cond do
+      is_nil(value) and not field.nillable ->
+        []
+
+      # An empty list repeats the element zero times.
+      value == [] and field.repeats and not list_type?(type, ctx) ->
+        []
+
+      true ->
+        {field.ns, field.name}
+        |> encode_repeated(attrs, value, type, field, child_path, ctx)
+        |> Enum.map(&{field.order, &1})
     end
   end
 
