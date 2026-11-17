@@ -2,7 +2,7 @@
 
 [![Module Version](https://img.shields.io/hexpm/v/soap.svg)](https://hex.pm/packages/soap)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/soap/)
-[![License](https://img.shields.io/hexpm/l/soap.svg)](https://github.com/elixir-soap/soap/blob/master/LICENSE.md)
+[![License](https://img.shields.io/hexpm/l/soap.svg)](https://github.com/Nitrino/soap/blob/master/LICENSE.md)
 
 A SOAP client for Elixir. It reads a WSDL, checks your params against its schema, and gives you back plain Elixir data shaped by that schema.
 
