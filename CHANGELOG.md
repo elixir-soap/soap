@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (unreleased)
+## 2.0.0 - 2026-11-17
 
 A rewrite. See the [migration guide](MIGRATING.md).
 
@@ -26,6 +26,9 @@ A rewrite. See the [migration guide](MIGRATING.md).
 
 - Results use string keys and no longer create atoms.
 - Imports are limited by default: a WSDL can't reach other hosts or read arbitrary files.
+- Import host restrictions also apply to scheme-relative URLs and HTTP redirects.
+- `:import_root` rejects imports through symlinks below the root directory.
+- Loading a WSDL honors `:timeout` and `:connect_timeout`, including its imports.
 - Replies with a DOCTYPE are refused.
 - Replies are limited to 100 MB, also once decompressed. `:max_reply_size` changes this.
 - Most replies decode while they're parsed, with no XML tree in memory.
@@ -88,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🚀 Features
 
-- Add `Soap.Response.parse/1` [#61]
+- Add <code>Soap.Response.parse/1</code> [#61]
 - Add xsd parsing from external resources [#57]
 
 ### 🐛 Bug Fixes
@@ -128,7 +131,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release. A simple low-tested wrapper for sending SOAP requests based on wsdl.
 
-- Parsing base struct from WSDL. `Soap.init_model/2`
+- Parsing base struct from WSDL. <code>Soap.init_model/2</code>
 - Parsing WSDL from file or url.
 - List operations from WSDL. `Soap.operations/1`
 - Execution call requests `Soap.call/4`
