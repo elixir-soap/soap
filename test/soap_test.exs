@@ -184,6 +184,33 @@ defmodule SoapTest do
     end
   end
 
+  describe "failures keep the reply" do
+    test "a Fault has the HTTP headers and body" do
+      {500, body} = Soap.Test.fault("s:Server", "busy")
+      client = client(fn _ -> {500, [{"retry-after", "30"}], body} end)
+
+      assert {:error, %Fault{status: 500, headers: [{"retry-after", "30"}], body: ^body} = fault} =
+               Soap.request(client, "Pay", @params)
+
+      refute inspect(fault) =~ "busy</"
+    end
+
+    test "an Error from a reply has it, and one with no reply doesn't" do
+      client = client(fn _ -> {503, [{"retry-after", "5"}], "down"} end)
+
+      assert {:error,
+              %Error{reason: {:http_status, 503, "down"}, status: 503, headers: [{"retry-after", "5"}], body: "down"}} =
+               Soap.call(client, "Pay", @params)
+
+      assert {:error, %Error{status: nil, headers: nil, body: nil}} =
+               Soap.call(client(fn _ -> {:error, :timeout} end), "Pay", @params)
+    end
+
+    test "decode_response keeps it too" do
+      assert {:error, %Error{status: 200, body: "<x"}} = Soap.decode_response(nil, nil, 200, [], "<x")
+    end
+  end
+
   describe "decode_response" do
     test "decodes with the operation's schema, and refuses an unknown name" do
       client = client(echoing())

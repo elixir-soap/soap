@@ -45,10 +45,19 @@ defmodule Soap.Error do
     * `{:invalid_xml, message}`, `:no_envelope`, `:doctype_not_allowed` - a broken reply.
     * `:no_endpoint` - the WSDL gives no address for this operation, and none was passed.
     * `:reply_too_large` - the reply is over `:max_reply_size`.
-  """
-  defexception [:reason]
 
-  @type t :: %__MODULE__{reason: term()}
+  When a reply arrived, `status`, `headers` and `body` hold it, as in `Soap.Response`.
+  Otherwise they're nil. `inspect/1` leaves out the body.
+  """
+  @derive {Inspect, except: [:body]}
+  defexception [:reason, :status, :headers, :body]
+
+  @type t :: %__MODULE__{
+          reason: term(),
+          status: pos_integer() | nil,
+          headers: list() | nil,
+          body: binary() | nil
+        }
 
   @impl true
   def message(%__MODULE__{reason: reason}), do: "SOAP error: #{inspect(reason)}"
@@ -63,9 +72,11 @@ defmodule Soap.Fault do
     * `message` - the human-readable text.
     * `actor` - who raised it: `faultactor` in 1.1, `Role` in 1.2.
     * `detail` - the decoded detail, if any.
-    * `status` - the HTTP status it arrived with.
+    * `status`, `headers` and `body` - the HTTP reply it arrived in, as in `Soap.Response`.
+      `inspect/1` leaves out the body.
   """
-  defexception [:code, :message, :actor, :detail, :status, subcodes: []]
+  @derive {Inspect, except: [:body]}
+  defexception [:code, :message, :actor, :detail, :status, :headers, :body, subcodes: []]
 
   @type t :: %__MODULE__{
           code: String.t() | nil,
@@ -73,7 +84,9 @@ defmodule Soap.Fault do
           message: String.t() | nil,
           actor: String.t() | nil,
           detail: term(),
-          status: pos_integer() | nil
+          status: pos_integer() | nil,
+          headers: list() | nil,
+          body: binary() | nil
         }
 
   @impl true

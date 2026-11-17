@@ -144,8 +144,16 @@ defmodule Soap do
           {:ok, Response.t()} | {:error, Fault.t() | Error.t()}
   def decode_response(client, operation_name, status, headers, body) do
     with {:ok, service, operation} <- decoding_context(client, operation_name),
-         {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, decoding_opts(client)) do
+         {:ok, decoded} <- decode(service, operation, {status, headers, body}, decoding_opts(client)) do
       {:ok, Response.new(status, headers, body, decoded)}
+    end
+  end
+
+  defp decode(service, operation, {status, headers, body}, opts) do
+    case Decoder.decode(service, operation, status, headers, body, opts) do
+      {:ok, decoded} -> {:ok, decoded}
+      {:error, %Fault{} = fault} -> {:error, %{fault | status: fault.status || status, headers: headers, body: body}}
+      {:error, %Error{} = error} -> {:error, %{error | status: status, headers: headers, body: body}}
     end
   end
 
@@ -236,7 +244,7 @@ defmodule Soap do
 
     case HTTP.adapter(opts).request(:post, request.url, request.headers, request.body, http_opts) do
       {:ok, %{status: status, headers: headers, body: body}} ->
-        with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, max_reply_size: limit) do
+        with {:ok, decoded} <- decode(service, operation, {status, headers, body}, max_reply_size: limit) do
           {:ok, Response.new(status, headers, body, decoded)}
         end
 

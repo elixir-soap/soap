@@ -88,13 +88,7 @@ defmodule Soap.Telemetry do
     Map.merge(metadata, %{status: status, outcome: :fault})
   end
 
-  def stop_metadata(metadata, {:error, %Soap.Error{reason: reason}}) do
-    status =
-      case reason do
-        {:http_status, code, _} -> code
-        _ -> nil
-      end
-
+  def stop_metadata(metadata, {:error, %Soap.Error{reason: reason, status: status}}) do
     Map.merge(metadata, %{status: status, outcome: :error, reason: summarize(reason)})
   end
 

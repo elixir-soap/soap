@@ -149,6 +149,8 @@ case Soap.call(client, "Pay", params) do
 end
 ```
 
+A Fault or error that came from a reply keeps its HTTP `status`, `headers` and `body`, for example to read `Retry-After`.
+
 Invalid params, wrongly shaped options, broken replies and network failures return errors instead of raising or exiting. `:http_opts` are the exception: they go to the HTTP adapter unchecked, and Req raises on one it doesn't know. A SOAP Fault is reported the same way at any HTTP status, in either SOAP version. `Soap.call!/4` raises these as exceptions instead.
 
 ## WS-Security
