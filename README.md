@@ -104,6 +104,14 @@ Missing required elements are allowed, because servers often accept less than th
 | `:max_reply_size` | The largest reply to accept, in bytes, also once decompressed. Defaults to 100 MB. `:infinity` turns it off |
 | `:http`, `:http_opts` | The HTTP adapter and its options |
 
+A call's options replace the client's, except `:http_headers`, `:soap_headers`, `:http_opts` and `:telemetry_metadata`, which are merged by name or key, with the call winning. A header set to `nil` is removed, so a call can drop one the client sets:
+
+```elixir
+{:ok, client} = Soap.load(url, http_headers: [{"Authorization", "Bearer t"}])
+Soap.call(client, "Ping", %{}, http_headers: [{"X-Request-Id", "42"}])   # sends both headers
+Soap.call(client, "Ping", %{}, http_headers: [{"authorization", nil}])  # sends no Authorization
+```
+
 ## Results
 
 ```elixir

@@ -60,6 +60,47 @@ defmodule SoapTest do
       assert {"X-A", "1"} in headers
     end
 
+    test "HTTP headers on the call are added to the client's, and nil removes one" do
+      client = client(echoing(), http_headers: [{"Authorization", "Bearer t"}, {"X-A", "1"}])
+
+      assert {:ok, _} = Soap.call(client, "Pay", @params, http_headers: [{"x-a", "2"}, {"X-B", "3"}])
+      assert_received {:request, %{headers: headers}}
+      assert {"Authorization", "Bearer t"} in headers
+      assert {"x-a", "2"} in headers
+      assert {"X-B", "3"} in headers
+      refute {"X-A", "1"} in headers
+
+      assert {:ok, _} = Soap.call(client, "Pay", @params, http_headers: [{"authorization", nil}, {"SOAPAction", nil}])
+      assert_received {:request, %{headers: headers}}
+      refute Enum.any?(headers, fn {name, _} -> String.downcase(name) in ["authorization", "soapaction"] end)
+    end
+
+    test "SOAP headers on the call are added to the client's, by name" do
+      client = client(echoing(), soap_headers: %{"Token" => "a", "Tenant" => "x"})
+
+      {:ok, request} = Soap.build_request(client, "Pay", @params, soap_headers: [{"Token", "b"}, %Raw{xml: "<h/>"}])
+      body = IO.iodata_to_binary(request.body)
+      assert body =~ "<Tenant>x</Tenant>"
+      assert body =~ "<Token>b</Token>"
+      refute body =~ "<Token>a</Token>"
+      assert body =~ "<h/>"
+
+      {:ok, request} = Soap.build_request(client, "Pay", @params, soap_headers: %{"Tenant" => nil})
+      refute IO.iodata_to_binary(request.body) =~ "Tenant"
+    end
+
+    test "http_opts and telemetry_metadata merge by key" do
+      merged =
+        Soap.Options.merge(
+          [http_opts: [handler: :h, req: [retry: false, receive_timeout: 1]], telemetry_metadata: %{a: 1}],
+          http_opts: [req: [retry: :transient]],
+          telemetry_metadata: %{b: 2}
+        )
+
+      assert merged[:http_opts] == [handler: :h, req: [receive_timeout: 1, retry: :transient]]
+      assert merged[:telemetry_metadata] == %{a: 1, b: 2}
+    end
+
     test "a custom header replaces a standard one of the same name" do
       assert {:ok, _} = Soap.call(client(echoing()), "Pay", @params, http_headers: [{"content-type", "text/plain"}])
       assert_received {:request, %{headers: headers}}

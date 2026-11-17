@@ -37,13 +37,22 @@ defmodule Soap do
     * `:http_opts` - extra options for that implementation.
     * `:telemetry_metadata` - a map added to telemetry events.
 
+  A call's options replace the client's, except these, which are merged:
+
+    * `:http_headers` - by name, ignoring case. The call's value wins, and a `nil` value
+      removes the header, including a standard one such as `SOAPAction`.
+    * `:soap_headers` - by name. The call's value wins, a `nil` value removes the header,
+      and unnamed ones such as `%Soap.Raw{}` are added.
+    * `:http_opts` - by key, and recursively for nested keyword lists such as `req: [...]`.
+    * `:telemetry_metadata` - by key.
+
   `load/2` also takes the import options described in `Soap.Service`.
 
   See `Soap.Encoder` for the params format, `Soap.Decoder` for the result format, and
   `Soap.Telemetry` for events.
   """
 
-  alias Soap.{Attachment, Client, Decoder, Encoder, Error, Fault, HTTP, Multipart, Request, Response, Service, WSSE}
+  alias Soap.{Attachment, Client, Decoder, Encoder, Error, Fault, HTTP, Multipart, Options, Request, Response, Service, WSSE}
   alias Soap.Service.Operation
 
   @typedoc "What a call returns."
@@ -103,7 +112,7 @@ defmodule Soap do
   """
   @spec request(Client.t(), String.t(), term(), keyword()) :: {:ok, Response.t()} | {:error, Fault.t() | Error.t()}
   def request(%Client{} = client, operation_name, params \\ %{}, opts \\ []) do
-    opts = Keyword.merge(client.opts, opts)
+    opts = Options.merge(client.opts, opts)
 
     with {:ok, operation} <- find_operation(client, operation_name, opts),
          {:ok, request} <- build(client, operation, params, opts) do
@@ -114,7 +123,7 @@ defmodule Soap do
   @doc "Builds a request without sending it."
   @spec build_request(Client.t(), String.t(), term(), keyword()) :: {:ok, Request.t()} | {:error, Error.t()}
   def build_request(%Client{} = client, operation_name, params \\ %{}, opts \\ []) do
-    opts = Keyword.merge(client.opts, opts)
+    opts = Options.merge(client.opts, opts)
 
     with {:ok, operation} <- find_operation(client, operation_name, opts) do
       build(client, operation, params, opts)
@@ -170,13 +179,10 @@ defmodule Soap do
   end
 
   defp encoder_opts(opts) do
-    soap_headers = normalize_headers(Keyword.get(opts, :soap_headers, []))
+    soap_headers = Options.soap_headers(Keyword.get(opts, :soap_headers, []))
     security = if opts[:wsse], do: [WSSE.header(opts[:wsse])], else: []
     [soap_headers: security ++ soap_headers] ++ Keyword.take(opts, [:mtom, :validate])
   end
-
-  defp normalize_headers(headers) when is_map(headers), do: Enum.to_list(headers)
-  defp normalize_headers(headers), do: headers
 
   defp extra_attachments(opts) do
     opts
@@ -191,11 +197,10 @@ defmodule Soap do
     Multipart.build(xml, attachments, if(version == "1.1", do: "text/xml", else: "application/soap+xml"))
   end
 
-  defp request_headers(operation, nil, opts), do: Request.headers(operation, Keyword.get(opts, :http_headers, []))
-
   defp request_headers(operation, content_type, opts) do
     custom = Keyword.get(opts, :http_headers, [])
-    Request.headers(operation, [{"Content-Type", content_type} | custom])
+    custom = if content_type, do: [{"Content-Type", content_type} | custom], else: custom
+    operation |> Request.headers(custom) |> Options.http_headers()
   end
 
   defp send_request(_client, _operation, %Request{url: url}, _opts) when url in [nil, ""] do
