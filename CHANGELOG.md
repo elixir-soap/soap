@@ -12,10 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking changes
 
-- `Soap.init_model` is gone. `Soap.load/2` reads the WSDL and returns a client.
+- `Soap.init_model/2` is gone. `Soap.load/2` reads the WSDL and returns a client.
 - `Soap.call` takes the client and a keyword list of options, instead of positional headers and HTTP options.
 - `Soap.call/4` returns the decoded result. A SOAP Fault or a failed request returns `{:error, %Soap.Fault{}}` or `{:error, %Soap.Error{}}`, not `{:ok, response}`.
-- Results use string keys, typed values, and lists for elements that can repeat. `Soap.Response.parse` is gone.
+- Results use string keys, typed values, and lists for elements that can repeat. `Soap.Response.parse/1` is gone.
 - `config :soap, :globals` is no longer read. Everything is set per client or per call.
 - An unknown operation returns `{:error, %Soap.Error{}}` instead of raising `OperationError`.
 - A custom HTTP client must implement `Soap.HTTP`. HTTPoison is no longer used, and Req is the default.
