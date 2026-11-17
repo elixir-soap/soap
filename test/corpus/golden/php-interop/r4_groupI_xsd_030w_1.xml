@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://soapinterop.org/echoheader/" xmlns:ns2="http://soapinterop.org/"><SOAP-ENV:Header><ns2:echoMeStringResponse><ns1:varString>Hello World</ns1:varString></ns2:echoMeStringResponse></SOAP-ENV:Header><SOAP-ENV:Body><ns2:echoVoidSoapHeaderResponse/></SOAP-ENV:Body></SOAP-ENV:Envelope>

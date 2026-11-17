@@ -1,0 +1,101 @@
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             xmlns:s="http://www.w3.org/2001/XMLSchema" 
+             xmlns:tns="http://example.org/soapformat" 
+             xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+             targetNamespace="http://example.org/soapformat" 
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <s:schema elementFormDefault="qualified" 
+              targetNamespace="http://example.org/soapformat">
+    <!-- there are no global element declarations. There's nothing in the 
+         schema that completely describes the content of soap:Body -->
+      <s:complexType name="ArrayOfCustomer">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" 
+                     name="Customer" nillable="true" 
+                     type="tns:Customer" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Customer">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" 
+                     name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" 
+                     name="Id" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </types>
+
+  <message name="ExampleSoapIn">
+    <!-- using type="" to reference a type declaration -->
+    <part name="cust" type="tns:ArrayOfCustomer" />
+    <part name="remark" type="s:string" />
+  </message>
+
+  <message name="example2SoapIn">
+    <!-- using type="" to reference a type declaration -->
+    <part name="integer" type="s:integer" />
+    <part name="float" type="s:float" />
+    <part name="string" type="s:string" />
+  </message>
+
+  <message name="ExampleSoapOut">
+    <part name="response" type="s:string" />
+  </message>
+
+  <message name="empty">
+  </message>
+
+  <portType name="testserviceSoap">
+    <operation name="Example">
+      <input message="tns:ExampleSoapIn" />
+      <output message="tns:ExampleSoapOut" />
+    </operation>
+
+    <operation name="example2">
+      <input message="tns:example2SoapIn" />
+      <output message="tns:empty" />
+    </operation>
+
+  </portType>
+
+  <binding name="testserviceSoap" type="tns:testserviceSoap">
+    <soap:binding 
+         transport="http://schemas.xmlsoap.org/soap/http" 
+         style="rpc" />
+
+    <operation name="Example">
+      <soap:operation 
+           soapAction="http://example.org/soapformat/Example"/>
+      <input>
+        <soap:body 
+          namespace="http://example.org/soapformat/Example"
+          use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+    <operation name="example2">
+      <soap:operation 
+           soapAction="http://example.org/soapformat/example2"/>
+      <input>
+        <soap:body 
+          namespace="http://example.org/soapformat/example2"
+          use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+
+  </binding>
+
+  <service name="testservice">
+     <port name="testservicePort" binding="tns:testserviceSoap">
+       <soap:address location="http://localhost:8080"/>
+     </port>
+  </service>
+</definitions>

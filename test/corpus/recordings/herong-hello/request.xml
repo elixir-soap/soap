@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><Hello xmlns="http://www.herongyang.com/Service/">World</Hello></e:Body></e:Envelope>

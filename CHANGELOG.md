@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 2026-11-17
+
+**WARNING: This release breaks compatibility with 1.x.** It's a rewrite with a new API, so code written for 1.x needs changes. The [migration guide](MIGRATING.md) covers each one.
+
+### Breaking changes
+
+- `Soap.init_model` is gone. `Soap.load/2` reads the WSDL and returns a client.
+- `Soap.call` takes the client and a keyword list of options, instead of positional headers and HTTP options.
+- `Soap.call/4` returns the decoded result. A SOAP Fault or a failed request returns `{:error, %Soap.Fault{}}` or `{:error, %Soap.Error{}}`, not `{:ok, response}`.
+- Results use string keys, typed values, and lists for elements that can repeat. `Soap.Response.parse` is gone.
+- `config :soap, :globals` is no longer read. Everything is set per client or per call.
+- An unknown operation returns `{:error, %Soap.Error{}}` instead of raising `OperationError`.
+- A custom HTTP client must implement `Soap.HTTP`. HTTPoison is no longer used, and Req is the default.
+- By default, WSDL imports from other hosts, by absolute path or by `file:` URL are skipped. `:allow_imports_from` allows more hosts.
+- Replies with a DOCTYPE, or over 100 MB, are refused.
+- Elixir 1.15 or newer is required.
+
+### Added
+
+- `Soap.load/2`, `Soap.call/4`, `Soap.request/4` and `Soap.build_request/4`, configured per client and per call.
+- A WSDL model that follows binding, port type, message, part and schema instead of guessing from names.
+- Schema-aware requests: order, namespaces, validation, and values formatted by type.
+- Schema-aware results: lists stay lists, values are typed, and prefixes are gone.
+- `Soap.Fault` and `Soap.Error`, for every failure. Both keep the HTTP reply they came from.
+- Call options merge with the client's: HTTP headers, SOAP headers, adapter options and telemetry metadata are combined by name, and `nil` removes one.
+- A `:port` option and `Soap.ports/1`, to choose the binding and address when a WSDL offers an operation on several.
+- SOAP 1.2 per client, including Faults with subcodes.
+- `wsdl:import`, `xsd:include`, `xsd:redefine` and import cycles.
+- rpc/encoded requests and replies, with `multiRef` links and `soapenc:Array`.
+- WS-Security `UsernameToken`, with a plain password or a digest.
+- MTOM in both directions, and SOAP with Attachments.
+- `Soap.Raw`, for prebuilt XML.
+- A `Soap.HTTP` behaviour for choosing an HTTP client, with Req as the default.
+- Telemetry events and a logger, with credentials masked.
+- `Soap.Test`, for testing code that calls SOAP services.
+- `mix soap.gen`, which generates a typed client from a WSDL.
+
+### Changed
+
+- Results use string keys and no longer create atoms.
+- Imports are limited by default: a WSDL can't reach other hosts or read arbitrary files.
+- Import host restrictions also apply to scheme-relative URLs and HTTP redirects.
+- `:import_root` rejects imports through symlinks below the root directory.
+- Loading a WSDL honors `:timeout` and `:connect_timeout`, including its imports.
+- Replies with a DOCTYPE are refused.
+- Replies are limited to 100 MB, also once decompressed. `:max_reply_size` changes this.
+- Most replies decode while they're parsed, with no XML tree in memory.
+- Elixir 1.15 or newer is required.
+
+### Removed
+
+- `Soap.init_model`, `Soap.Wsdl`, `Soap.Xsd`, `Soap.Type`, `Soap.Request.Params` and `config :soap, :globals`.
+- The `sweet_xml`, `xml_builder` and `httpoison` dependencies.
+
 ## v1.1.1 - 2023-08-18
 
 ### 🚀 Features
@@ -52,7 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🚀 Features
 
-- Add `Soap.Response.parse/1` [#61]
+- Add <code>Soap.Response.parse/1</code> [#61]
 - Add xsd parsing from external resources [#57]
 
 ### 🐛 Bug Fixes
@@ -92,7 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release. A simple low-tested wrapper for sending SOAP requests based on wsdl.
 
-- Parsing base struct from WSDL. `Soap.init_model/2`
+- Parsing base struct from WSDL. <code>Soap.init_model/2</code>
 - Parsing WSDL from file or url.
 - List operations from WSDL. `Soap.operations/1`
 - Execution call requests `Soap.call/4`

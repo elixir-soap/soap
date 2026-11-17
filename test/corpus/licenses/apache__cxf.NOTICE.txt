@@ -1,0 +1,60 @@
+This product also includes schemas and specification developed by or submitted to:
+      - the W3C consortium (http://www.w3c.org)
+      (http://www.w3.org/XML/1998/namespace)
+      
+This product also includes WS-* schemas developed by International
+   Business Machines Corporation, Microsoft Corporation, BEA Systems, 
+   TIBCO Software, SAP AG, Sonic Software, and VeriSign
+   (http://schemas.xmlsoap.org/wsdl/2003-02-11.xsd)
+   (http://schemas.xmlsoap.org/ws/2004/08/addressing/)
+   (http://schemas.xmlsoap.org/wsdl/http)
+   (http://schemas.xmlsoap.org/ws/2005/02/rm/wsrm.xsd)
+   (http://www.w3.org/2005/08/addressing/ws-addr.xsd)
+   (http://www.w3.org/TR/ws-metadata-exchange/)
+   (http://schemas.xmlsoap.org/ws/2004/09/mex/)
+   (http://docs.oasis-open.org/ws-sx/ws-trust/v1.4/ws-trust.html)
+
+The product contains code (StaxBuilder.java) that is
+  Copyright (C) 2000-2004 Jason Hunter & Brett McLaughlin.
+  All rights reserved.
+  See the NOTICE.jdom file for additional information
+
+Java classes (source and binary) under org.apache.cxf.jaxws.javaee
+are generated from schema available here:
+(http://java.sun.com/xml/ns/javaee/javaee_5.xsd)
+
+This Product also includes software developed by David Heinemeier Hansson.
+(http://dev.rubyonrails.org/browser/trunk/activesupport/lib/active_support/inflections.rb)
+
+This product includes software Copyright University of Southampton IT Innovation Centre, 2009 
+(http://www.it-innovation.soton.ac.uk). 
+
+Portions of the included XmlSchema library are Copyright 2006 International Business Machines Corp.
+
+Portions of the included xmlbeans library were originally based on the following:
+   - software copyright (c) 2000-2003, BEA Systems, <http://www.bea.com/>.
+
+Portions of the file cxf-utils.js derives from code marked:
+This code was written by Tyler Akins and has been placed in the
+public domain.  It would be nice if you left this header intact.
+Base64 code from Tyler Akins -- http://rumkin.com
+
+This project includes Public Suffix List copied from
+https://publicsuffix.org/list/effective_tld_names.dat
+licensed under the terms of the Mozilla Public License, v. 2.0
+Full license text: <http://mozilla.org/MPL/2.0/>
+
+This product includes software from the Spring Framework, under the Apache
+License 2.0
+
+This project includes Apache Ant. The <sync> task is based on code Copyright
+(c) 2002, Landmark Graphics Corp that has been kindly donated to the Apache
+Software Foundation.
+
+Additional copyright notices and license terms applicable are
+present in the licenses directory of this distribution.
+
+This product includes code from the Nimbus JOSE + JWT project, under the Apache
+license 2.0 (https://github.com/felx/nimbus-jose-jwt). Copyright 2012-2017,
+Connect2id Ltd.
+

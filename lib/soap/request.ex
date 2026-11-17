@@ -1,35 +1,39 @@
 defmodule Soap.Request do
-  @moduledoc """
-  Documentation for Soap.Request.
-  """
-  alias Soap.Request.{Headers, Params}
+  @moduledoc "A request ready to send: where it goes, its headers and its body."
+
+  alias Soap.Service.Operation
+
+  defstruct [:url, :operation, :version, :body, headers: [], attachments: []]
+
+  @type t :: %__MODULE__{
+          url: String.t() | nil,
+          operation: String.t(),
+          version: String.t(),
+          body: iodata(),
+          headers: [{String.t(), String.t()}],
+          attachments: [Soap.Attachment.t()]
+        }
 
   @doc """
-  Executing with parsed wsdl and headers with body map.
+  The HTTP headers an operation needs, plus any custom ones.
 
-  Calling HTTPoison request by Map with method, url, body, headers, options keys.
+  SOAP 1.1 uses a quoted `SOAPAction` header and `text/xml`. SOAP 1.2 puts the action in
+  `application/soap+xml`. A custom header replaces one of the same name.
   """
-  @spec call(wsdl :: map(), operation :: String.t(), params :: any(), headers :: any(), opts :: any()) :: any()
-  def call(wsdl, operation, soap_headers_and_params, request_headers \\ [], opts \\ [])
-
-  def call(wsdl, operation, {soap_headers, params}, request_headers, opts) do
-    url = get_url(wsdl)
-    request_headers = Headers.build(wsdl, operation, request_headers)
-    body = Params.build_body(wsdl, operation, params, soap_headers)
-
-    get_http_client().post(url, body, request_headers, opts)
+  @spec headers(Operation.t(), [{String.t(), String.t()}]) :: [{String.t(), String.t()}]
+  def headers(%Operation{version: "1.1", soap_action: action}, custom) do
+    merge([{"SOAPAction", ~s("#{action}")}, {"Content-Type", "text/xml; charset=utf-8"}], custom)
   end
 
-  def call(wsdl, operation, params, request_headers, opts),
-    do: call(wsdl, operation, {%{}, params}, request_headers, opts)
-
-  @spec get_http_client() :: HTTPoison.Base
-  def get_http_client do
-    Application.get_env(:soap, :globals)[:http_client] || HTTPoison
+  def headers(%Operation{version: "1.2", soap_action: action}, custom) do
+    merge([{"Content-Type", content_type_12(action)}], custom)
   end
 
-  @spec get_url(wsdl :: map()) :: String.t()
-  defp get_url(wsdl) do
-    wsdl.endpoint
+  defp content_type_12(action) when action in [nil, ""], do: "application/soap+xml; charset=utf-8"
+  defp content_type_12(action), do: ~s(application/soap+xml; charset=utf-8; action="#{action}")
+
+  defp merge(base, custom) do
+    names = Enum.map(custom, fn {name, _} -> String.downcase(to_string(name)) end)
+    Enum.reject(base, fn {name, _} -> String.downcase(name) in names end) ++ custom
   end
 end

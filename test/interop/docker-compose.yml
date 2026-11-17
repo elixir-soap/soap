@@ -1,0 +1,29 @@
+# Real SOAP servers for the interop layer. See test/conformance/interop_test.exs.
+#
+#   docker compose -f test/interop/docker-compose.yml up -d --build --wait
+#   mix test --only interop
+
+services:
+  cxf:
+    build: ./cxf
+    ports: ["18081:8080"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs 'http://localhost:8080/doc?wsdl' > /dev/null"]
+      interval: 3s
+      retries: 40
+
+  php:
+    build: ./php
+    ports: ["18082:8080"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs 'http://localhost:8080/rpc.wsdl' > /dev/null"]
+      interval: 2s
+      retries: 20
+
+  node:
+    build: ./node
+    ports: ["18083:8080"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- 'http://127.0.0.1:8080/doc?wsdl' > /dev/null"]
+      interval: 2s
+      retries: 20

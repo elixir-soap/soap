@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><ns:validateEORI xmlns:ns="http://eori.ws.eos.dds.s/"><eori>DE000000000</eori></ns:validateEORI></e:Body></e:Envelope>

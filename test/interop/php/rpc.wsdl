@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Rpc" targetNamespace="urn:rpc"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:tns="urn:rpc"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xsd:schema targetNamespace="urn:rpc">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <xsd:complexType name="StringList">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="Person">
+        <xsd:all><xsd:element name="name" type="xsd:string"/></xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="Order">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:int"/>
+          <xsd:element name="total" type="xsd:double"/>
+          <xsd:element name="paid" type="xsd:boolean"/>
+          <xsd:element name="lines" type="tns:StringList"/>
+          <xsd:element name="buyer" type="tns:Person"/>
+          <xsd:element name="payer" type="tns:Person"/>
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+  <message name="echoStringIn"><part name="value" type="xsd:string"/></message>
+  <message name="echoStringOut"><part name="return" type="xsd:string"/></message>
+  <message name="addIn"><part name="a" type="xsd:int"/><part name="b" type="xsd:int"/></message>
+  <message name="addOut"><part name="return" type="xsd:int"/></message>
+  <message name="echoFlagIn"><part name="flag" type="xsd:boolean"/></message>
+  <message name="echoFlagOut"><part name="return" type="xsd:boolean"/></message>
+  <message name="echoStringsIn"><part name="values" type="tns:StringList"/></message>
+  <message name="echoStringsOut"><part name="return" type="tns:StringList"/></message>
+  <message name="getOrderIn"><part name="id" type="xsd:int"/></message>
+  <message name="getOrderOut"><part name="return" type="tns:Order"/></message>
+  <message name="failIn"><part name="message" type="xsd:string"/></message>
+  <message name="failOut"><part name="return" type="xsd:string"/></message>
+  <portType name="RpcPort">
+    <operation name="echoString"><input message="tns:echoStringIn"/><output message="tns:echoStringOut"/></operation>
+    <operation name="add"><input message="tns:addIn"/><output message="tns:addOut"/></operation>
+    <operation name="echoFlag"><input message="tns:echoFlagIn"/><output message="tns:echoFlagOut"/></operation>
+    <operation name="echoStrings"><input message="tns:echoStringsIn"/><output message="tns:echoStringsOut"/></operation>
+    <operation name="getOrder"><input message="tns:getOrderIn"/><output message="tns:getOrderOut"/></operation>
+    <operation name="fail"><input message="tns:failIn"/><output message="tns:failOut"/></operation>
+  </portType>
+  <binding name="RpcBinding" type="tns:RpcPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="echoString"><soap:operation soapAction="urn:rpc#echoString"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+    <operation name="add"><soap:operation soapAction="urn:rpc#add"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+    <operation name="echoFlag"><soap:operation soapAction="urn:rpc#echoFlag"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+    <operation name="echoStrings"><soap:operation soapAction="urn:rpc#echoStrings"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+    <operation name="getOrder"><soap:operation soapAction="urn:rpc#getOrder"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+    <operation name="fail"><soap:operation soapAction="urn:rpc#fail"/><input><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:rpc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation>
+  </binding>
+  <service name="RpcService">
+    <port name="RpcPort" binding="tns:RpcBinding"><soap:address location="http://localhost:8080/rpc"/></port>
+  </service>
+</definitions>

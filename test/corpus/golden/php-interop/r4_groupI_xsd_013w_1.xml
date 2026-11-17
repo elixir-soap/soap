@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://soapinterop.org/"><SOAP-ENV:Body><ns1:echoStringMultiOccursResponse><ns1:return>arg1</ns1:return><ns1:return/><ns1:return>arg3</ns1:return></ns1:echoStringMultiOccursResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

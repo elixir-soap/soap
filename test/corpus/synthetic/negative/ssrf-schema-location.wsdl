@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:s" targetNamespace="urn:s">
+<wsdl:types><xsd:schema targetNamespace="urn:s" elementFormDefault="qualified"><xsd:import namespace="urn:a" schemaLocation="http://169.254.169.254/latest/meta-data/"/><xsd:import namespace="urn:b" schemaLocation="file:///etc/passwd"/><xsd:element name="Ping"><xsd:complexType><xsd:sequence><xsd:element name="v" type="xsd:string"/></xsd:sequence></xsd:complexType></xsd:element><xsd:element name="PingR" type="xsd:string"/></xsd:schema></wsdl:types>
+<wsdl:message name="In"><wsdl:part name="p" element="tns:Ping"/></wsdl:message><wsdl:message name="Out"><wsdl:part name="p" element="tns:PingR"/></wsdl:message>
+<wsdl:portType name="PT"><wsdl:operation name="Ping"><wsdl:input message="tns:In"/><wsdl:output message="tns:Out"/></wsdl:operation></wsdl:portType>
+<wsdl:binding name="B" type="tns:PT"><soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/><wsdl:operation name="Ping"><soap:operation soapAction="urn:s/x"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation></wsdl:binding>
+<wsdl:service name="S"><wsdl:port name="P" binding="tns:B"><soap:address location="http://localhost:9/s"/></wsdl:port></wsdl:service>
+</wsdl:definitions>

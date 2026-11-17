@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<definitions
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="http://soapinterop.org/"
+        targetNamespace="http://soapinterop.org/">
+    <import namespace="http://soapinterop.org/" location="wsdl/import-namespaces.wsdl" />
+</definitions>

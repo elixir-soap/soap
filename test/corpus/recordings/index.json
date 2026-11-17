@@ -1,0 +1,394 @@
+{
+ "recorded": "2026-11-04",
+ "cases": [
+  {
+   "name": "calculator-add-11",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.1",
+   "action": "http://tempuri.org/Add",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 325,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "calculator-add-12",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.2",
+   "action": "http://tempuri.org/Add",
+   "status": "200",
+   "content_type": "application/soap+xml; charset=utf-8",
+   "bytes": 323,
+   "features": [
+    "env:1.2",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "calculator-divzero-11",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.1",
+   "action": "http://tempuri.org/Divide",
+   "status": "500",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 665,
+   "features": [
+    "env:1.1",
+    "fault",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "calculator-divzero-12",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.2",
+   "action": "http://tempuri.org/Divide",
+   "status": "500",
+   "content_type": "application/soap+xml; charset=utf-8",
+   "bytes": 732,
+   "features": [
+    "env:1.2",
+    "fault",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "tempconvert-11",
+   "url": "https://www.w3schools.com/xml/tempconvert.asmx",
+   "version": "1.1",
+   "action": "https://www.w3schools.com/xml/CelsiusToFahrenheit",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 401,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "numberconversion-11",
+   "url": "https://www.dataaccess.com/webservicesserver/NumberConversion.wso",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 345,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "numberconversion-12",
+   "url": "https://www.dataaccess.com/webservicesserver/NumberConversion.wso",
+   "version": "1.2",
+   "action": "",
+   "status": "200",
+   "content_type": "application/soap+xml; charset=utf-8",
+   "bytes": 343,
+   "features": [
+    "env:1.2",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "country-capital",
+   "url": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 332,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "country-continents-array",
+   "url": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 1103,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "crcind-add",
+   "url": "https://www.crcind.com/csp/samples/SOAP.Demo.cls",
+   "version": "1.1",
+   "action": "http://tempuri.org/SOAP.Demo.AddInteger",
+   "status": "200",
+   "content_type": "text/xml; charset=UTF-8",
+   "bytes": 381,
+   "features": [
+    "env:1.1",
+    "envprefix:SOAP-ENV"
+   ],
+   "err": ""
+  },
+  {
+   "name": "crcind-divzero",
+   "url": "https://www.crcind.com/csp/samples/SOAP.Demo.cls",
+   "version": "1.1",
+   "action": "http://tempuri.org/SOAP.Demo.DivideInteger",
+   "status": "500",
+   "content_type": "text/html",
+   "bytes": 1208,
+   "features": [
+    "html-body"
+   ],
+   "err": ""
+  },
+  {
+   "name": "crcind-dataset",
+   "url": "https://www.crcind.com/csp/samples/SOAP.Demo.cls",
+   "version": "1.1",
+   "action": "http://tempuri.org/SOAP.Demo.GetDataSetByName",
+   "status": "200",
+   "content_type": "text/xml; charset=UTF-8",
+   "bytes": 2951,
+   "features": [
+    "env:1.1",
+    "dotnet:diffgram",
+    "envprefix:SOAP-ENV"
+   ],
+   "err": ""
+  },
+  {
+   "name": "crcind-person",
+   "url": "https://www.crcind.com/csp/samples/SOAP.Demo.cls",
+   "version": "1.1",
+   "action": "http://tempuri.org/SOAP.Demo.FindPerson",
+   "status": "200",
+   "content_type": "text/xml; charset=UTF-8",
+   "bytes": 745,
+   "features": [
+    "env:1.1",
+    "envprefix:SOAP-ENV"
+   ],
+   "err": ""
+  },
+  {
+   "name": "vies-invalid",
+   "url": "https://ec.europa.eu/taxation_customs/vies/services/checkVatService",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml; charset=UTF-8",
+   "bytes": 436,
+   "features": [
+    "env:1.1",
+    "envprefix:env"
+   ],
+   "err": ""
+  },
+  {
+   "name": "ndfd-rpc-encoded",
+   "url": "https://graphical.weather.gov/xml/SOAP_server/ndfdXMLserver.php",
+   "version": "1.1",
+   "action": "https://digital.weather.gov/xml/wsdl/ndfdXML.wsdl#LatLonListZipCode",
+   "status": "500",
+   "content_type": "text/html; charset=UTF-8",
+   "bytes": 0,
+   "features": [
+    "not-xml",
+    "html-body",
+    "empty-body"
+   ],
+   "err": ""
+  },
+  {
+   "name": "bcb-rpc-encoded-multiref",
+   "url": "https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 6775,
+   "features": [
+    "env:1.1",
+    "rpc:multiRef",
+    "rpc:href",
+    "xsi:type",
+    "xsi:nil",
+    "envprefix:soapenv"
+   ],
+   "err": ""
+  },
+  {
+   "name": "smartbear-array",
+   "url": "http://secure.smartbearsoftware.com/samples/testcomplete14/webservices/Service.asmx",
+   "version": "1.1",
+   "action": "http://smartbear.com/GetArray",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 465,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "smartbear-object",
+   "url": "http://secure.smartbearsoftware.com/samples/testcomplete14/webservices/Service.asmx",
+   "version": "1.1",
+   "action": "http://smartbear.com/GetSampleObject",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 562,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "cbr-datetime",
+   "url": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx",
+   "version": "1.1",
+   "action": "http://web.cbr.ru/GetLatestDateTime",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 398,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "cbr-diffgram",
+   "url": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx",
+   "version": "1.1",
+   "action": "http://web.cbr.ru/EnumValutes",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 65006,
+   "features": [
+    "env:1.1",
+    "dotnet:diffgram",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "arcgis-defaultmap",
+   "url": "https://services.arcgisonline.com/arcgis/services/World_Imagery/MapServer",
+   "version": "1.1",
+   "action": "",
+   "status": "200",
+   "content_type": "text/xml;charset=UTF-8",
+   "bytes": 386,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "swiss-uid-validate",
+   "url": "https://www.uid-wse.admin.ch/V5.0/PublicServices.svc",
+   "version": "1.1",
+   "action": "http://www.uid.admin.ch/xmlns/uid-wse/IPublicServices/ValidateVatNumber",
+   "status": "200",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 349,
+   "features": [
+    "env:1.1",
+    "envprefix:s"
+   ],
+   "err": ""
+  },
+  {
+   "name": "ebi-parameters",
+   "url": "https://www.ebi.ac.uk/Tools/services/soap/clustalo",
+   "version": "1.1",
+   "action": "urn:GetParameters",
+   "status": "200",
+   "content_type": "text/xml;charset=UTF-8",
+   "bytes": 543,
+   "features": [
+    "env:1.1",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "herong-hello",
+   "url": "http://www.herongyang.com/Service/Hello_SOAP_11.php",
+   "version": "1.1",
+   "action": "http://www.herongyang.com/Service/Hello",
+   "status": "200",
+   "content_type": "text/xml;charset=UTF-8",
+   "bytes": 290,
+   "features": [
+    "env:1.1",
+    "envprefix:soapenv"
+   ],
+   "err": ""
+  },
+  {
+   "name": "eori-invalid",
+   "url": "https://ec.europa.eu/taxation_customs/dds2/eos/validation/services/validation",
+   "version": "1.1",
+   "action": "",
+   "status": "500",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 457,
+   "features": [
+    "env:1.1",
+    "env:1.2",
+    "fault",
+    "envprefix:S"
+   ],
+   "err": ""
+  },
+  {
+   "name": "badaction-calculator",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.1",
+   "action": "http://tempuri.org/NoSuchOp",
+   "status": "500",
+   "content_type": "text/xml; charset=utf-8",
+   "bytes": 1032,
+   "features": [
+    "env:1.1",
+    "fault",
+    "envprefix:soap"
+   ],
+   "err": ""
+  },
+  {
+   "name": "malformed-envelope-calculator",
+   "url": "http://www.dneonline.com/calculator.asmx",
+   "version": "1.1",
+   "action": "http://tempuri.org/Add",
+   "status": "400",
+   "content_type": "",
+   "bytes": 0,
+   "features": [
+    "not-xml",
+    "empty-body"
+   ],
+   "err": ""
+  }
+ ]
+}

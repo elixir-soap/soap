@@ -1,0 +1,10 @@
+<soapenv:Envelope
+  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:hy="http://www.herongyang.com/Service/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <hy:HelloResponse>
+      Hello from server - herongyang.com.
+    </hy:HelloResponse>
+  </soapenv:Body>
+</soapenv:Envelope>

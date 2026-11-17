@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><GetDefaultMapName xmlns="http://www.esri.com/schemas/ArcGIS/3.5.0"/></e:Body></e:Envelope>

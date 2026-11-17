@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:s" targetNamespace="urn:s">
+<wsdl:types><xsd:schema targetNamespace="urn:s" elementFormDefault="qualified"><xsd:element name="Ping"><xsd:complexType><xsd:sequence><xsd:element name="v" type="xsd:string"/></xsd:sequence></xsd:complexType></xsd:element><xsd:element name="PingR" type="xsd:string"/></xsd:schema></wsdl:types>
+<wsdl:message name="In"><wsdl:part name="p" element="tns:Ping"/></wsdl:message><wsdl:message name="Out"><wsdl:part name="p" element="tns:PingR"/></wsdl:message>
+<wsdl:portType name="PT"><wsdl:operation name="Ping"><wsdl:input message="tns:In"/><wsdl:output message="tns:Out"/></wsdl:operation></wsdl:portType>
+<wsdl:binding name="B11" type="tns:PT"><soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/><wsdl:operation name="Ping"><soap:operation soapAction="urn:s/v11"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation></wsdl:binding>
+<wsdl:binding name="B12" type="tns:PT"><soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/><wsdl:operation name="Ping"><soap12:operation soapAction="urn:s/v12" soapActionRequired="true"/><wsdl:input><soap12:body use="literal"/></wsdl:input><wsdl:output><soap12:body use="literal"/></wsdl:output></wsdl:operation></wsdl:binding>
+<wsdl:service name="A"><wsdl:port name="A11" binding="tns:B11"><soap:address location="http://localhost:9/a11"/></wsdl:port><wsdl:port name="A12" binding="tns:B12"><soap12:address location="http://localhost:9/a12"/></wsdl:port></wsdl:service>
+<wsdl:service name="Z"><wsdl:port name="Z11" binding="tns:B11"><soap:address location="http://localhost:9/z11"/></wsdl:port></wsdl:service>
+</wsdl:definitions>

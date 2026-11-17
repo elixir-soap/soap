@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://apache.org/axis2/mtom" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MTOMService" targetNamespace="http://apache.org/axis2/mtom">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://apache.org/axis2/mtom" xmlns:xmime="http://www.w3.org/2005/05/xmlmime">
+      <xsd:element name="GetContent">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetContentResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="content" type="xsd:base64Binary" xmime:expectedContentTypes="application/octet-stream"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetContentRequest">
+    <wsdl:part element="tns:GetContent" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="GetContentResponse">
+    <wsdl:part element="tns:GetContentResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="MTOMService">
+    <wsdl:operation name="GetContent">
+      <wsdl:input message="tns:GetContentRequest"/>
+      <wsdl:output message="tns:GetContentResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MTOMServiceSOAP" type="tns:MTOMService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetContent">
+      <soap:operation soapAction="http://apache.org/axis2/mtom/GetContent"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MTOMService">
+    <wsdl:port binding="tns:MTOMServiceSOAP" name="MTOMServiceSOAP">
+      <soap:address location="http://localhost:8080/mtom"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

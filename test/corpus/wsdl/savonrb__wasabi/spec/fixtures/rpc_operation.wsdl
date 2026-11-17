@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<definitions
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    name="ExampleService"
+    targetNamespace="http://www.example.com"
+    xmlns:tns="http://www.example.com"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <message name="ExampleOperationRequest">
+    <part name="ExampleField" type="xs:string"/>
+  </message>
+  <message name="ExampleOperationResponse">
+    <part name="ExampleField" type="xs:string"/>
+  </message>
+  <portType name="ExamplePortType">
+    <operation name="ExampleOperation">
+      <input message="tns:ExampleOperationRequest"/>
+      <output message="tns:ExampleOperationResponse"/>
+    </operation>
+  </portType>
+  <binding name="ExampleBinding" type="tns:ExamplePortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ExampleOperation">
+      <soap:operation soapAction="urn:ExampleInterface-ExamplePortType#ExampleOperation" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:ExampleInterface-ExamplePortType"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:ExampleInterface-ExamplePortType"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="ExampleService">
+    <port name="ExamplePort" binding="tns:ExampleBinding">
+      <soap:address location="http://example.com/ExampleService.dll/soap/ExamplePortType"/>
+    </port>
+  </service>
+</definitions>

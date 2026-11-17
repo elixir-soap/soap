@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:s='http://www.w3.org/2001/XMLSchema'>
+  <SOAP-ENV:Body><GetDataSetByNameResponse xmlns="http://tempuri.org"><GetDataSetByNameResult>
+<s:schema id="ByNameDataSet" targetNamespace="http://tempuri.org/ByNameDataSet" xmlns="http://tempuri.org/ByNameDataSet" xmlns:mstns="http://tempuri.org/ByNameDataSet" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <s:element name="ByNameDataSet" msdata:IsDataSet="true">
+    <s:complexType>
+      <s:choice maxOccurs="unbounded">
+        <s:element name="ByName">
+          <s:complexType>
+            <s:sequence>
+              <s:element name="ID" type="s:long" minOccurs="0" />
+              <s:element name="Name" type="s:string" minOccurs="0" />
+              <s:element name="DOB" type="s:date" minOccurs="0" />
+              <s:element name="SSN" type="s:string" minOccurs="0" />
+            </s:sequence>
+          </s:complexType>
+        </s:element>
+      </s:choice>
+    </s:complexType>
+    <s:unique name="Constraint1" msdata:PrimaryKey="true">
+      <s:selector xpath=".//mstns:ByName" />
+      <s:field xpath="mstns:ID" />
+    </s:unique>
+  </s:element>
+</s:schema>
+<diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+<ByNameDataSet xmlns="http://tempuri.org/ByNameDataSet">
+  <ByName diffgr:id="ByName1" msdata:rowOrder="0">
+    <ID>96</ID>
+    <Name>Adam,Wolfgang F.</Name>
+    <DOB>1991-02-12</DOB>
+    <SSN>850-53-6279</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName2" msdata:rowOrder="1">
+    <ID>188</ID>
+    <Name>Adams,Phil H.</Name>
+    <DOB>1972-11-24</DOB>
+    <SSN>729-18-4435</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName3" msdata:rowOrder="2">
+    <ID>84</ID>
+    <Name>Ahmed,Edward V.</Name>
+    <DOB>1988-12-03</DOB>
+    <SSN>769-88-2265</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName4" msdata:rowOrder="3">
+    <ID>157</ID>
+    <Name>Ahmed,Michael O.</Name>
+    <DOB>1967-01-17</DOB>
+    <SSN>484-78-3467</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName5" msdata:rowOrder="4">
+    <ID>19</ID>
+    <Name>Ahmed,Patrick O.</Name>
+    <DOB>1953-11-21</DOB>
+    <SSN>900-49-7613</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName6" msdata:rowOrder="5">
+    <ID>75</ID>
+    <Name>Allen,Zelda P.</Name>
+    <DOB>1932-06-25</DOB>
+    <SSN>140-77-4981</SSN>
+  </ByName>
+  <ByName diffgr:id="ByName7" msdata:rowOrder="6">
+    <ID>98</ID>
+    <Name>Alton,Samantha F.</Name>
+    <DOB>1945-09-17</DOB>
+    <SSN>316-64-7558</SSN>
+  </ByName>
+</ByNameDataSet>
+</diffgr:diffgram>
+</GetDataSetByNameResult></GetDataSetByNameResponse></SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

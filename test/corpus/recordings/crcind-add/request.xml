@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><e:Envelope xmlns:e="http://schemas.xmlsoap.org/soap/envelope/"><e:Body><AddInteger xmlns="http://tempuri.org"><Arg1>2</Arg1><Arg2>3</Arg2></AddInteger></e:Body></e:Envelope>

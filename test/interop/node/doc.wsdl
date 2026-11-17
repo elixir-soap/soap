@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Doc" targetNamespace="urn:doc"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="urn:doc"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:doc" elementFormDefault="qualified">
+      <xs:complexType name="Nested"><xs:sequence>
+        <xs:element name="id" type="xs:int"/>
+        <xs:element name="ok" type="xs:boolean"/>
+      </xs:sequence></xs:complexType>
+      <xs:complexType name="Payload"><xs:sequence>
+        <xs:element name="message" type="xs:string"/>
+        <xs:element name="count" type="xs:int"/>
+        <xs:element name="tags" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="nested" type="tns:Nested" minOccurs="0"/>
+      </xs:sequence></xs:complexType>
+      <xs:element name="Echo" type="tns:Payload"/>
+      <xs:element name="EchoResponse" type="tns:Payload"/>
+      <xs:element name="Secure"><xs:complexType><xs:sequence/></xs:complexType></xs:element>
+      <xs:element name="SecureResponse"><xs:complexType><xs:sequence><xs:element name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="EchoIn"><wsdl:part name="body" element="tns:Echo"/></wsdl:message>
+  <wsdl:message name="EchoOut"><wsdl:part name="body" element="tns:EchoResponse"/></wsdl:message>
+  <wsdl:message name="SecureIn"><wsdl:part name="body" element="tns:Secure"/></wsdl:message>
+  <wsdl:message name="SecureOut"><wsdl:part name="body" element="tns:SecureResponse"/></wsdl:message>
+  <wsdl:portType name="DocPortType">
+    <wsdl:operation name="Echo"><wsdl:input message="tns:EchoIn"/><wsdl:output message="tns:EchoOut"/></wsdl:operation>
+    <wsdl:operation name="Secure"><wsdl:input message="tns:SecureIn"/><wsdl:output message="tns:SecureOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DocBinding" type="tns:DocPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Echo"><soap:operation soapAction="urn:doc#Echo"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+    <wsdl:operation name="Secure"><soap:operation soapAction="urn:doc#Secure"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DocService">
+    <wsdl:port name="DocPort" binding="tns:DocBinding"><soap:address location="http://localhost:8080/doc"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
