@@ -1,8 +1,26 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## 2.0.0 - 2026-11-17
 
-A rewrite. See the [migration guide](MIGRATING.md).
+**This release breaks compatibility with 1.x.** It's a rewrite with a new API, so code written for 1.x needs changes. The [migration guide](MIGRATING.md) covers each one.
+
+### Breaking changes
+
+- `Soap.init_model/2` is gone. `Soap.load/2` reads the WSDL and returns a client.
+- `Soap.call` takes the client and a keyword list of options, instead of positional headers and HTTP options.
+- `Soap.call/4` returns the decoded result. A SOAP Fault or a failed request returns `{:error, %Soap.Fault{}}` or `{:error, %Soap.Error{}}`, not `{:ok, response}`.
+- Results use string keys, typed values, and lists for elements that can repeat. `Soap.Response.parse/1` is gone.
+- `config :soap, :globals` is no longer read. Everything is set per client or per call.
+- An unknown operation returns `{:error, %Soap.Error{}}` instead of raising `OperationError`.
+- A custom HTTP client must implement `Soap.HTTP`. HTTPoison is no longer used, and Req is the default.
+- By default, WSDL imports from other hosts, by absolute path or by `file:` URL are skipped. `:allow_imports_from` allows more hosts.
+- Replies with a DOCTYPE, or over 100 MB, are refused.
+- Elixir 1.15 or newer is required.
 
 ### Added
 
@@ -40,11 +58,6 @@ A rewrite. See the [migration guide](MIGRATING.md).
 
 - `Soap.init_model`, `Soap.Wsdl`, `Soap.Xsd`, `Soap.Type`, `Soap.Request.Params` and `config :soap, :globals`.
 - The `sweet_xml`, `xml_builder` and `httpoison` dependencies.
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## v1.1.1 - 2023-08-18
 
