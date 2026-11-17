@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.0.0 - 2026-11-17
 
-> #### This release breaks compatibility with 1.x {: .warning}
->
-> It's a rewrite with a new API, so code written for 1.x needs changes. The [migration guide](MIGRATING.md) covers each one.
+> [!CAUTION]
+> **This release breaks compatibility with 1.x.** It's a rewrite with a new API, so code written for 1.x needs changes. The [migration guide](MIGRATING.md) covers each one.
 
 ### Breaking changes
 
