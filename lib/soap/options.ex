@@ -105,13 +105,9 @@ defmodule Soap.Options do
   defp to_list(headers), do: headers
 
   defp deep_merge(a, b) do
-    if Keyword.keyword?(a) and Keyword.keyword?(b) do
-      Keyword.merge(a, b, fn _key, x, y ->
-        if Keyword.keyword?(x) and Keyword.keyword?(y), do: deep_merge(x, y), else: y
-      end)
-    else
-      b
-    end
+    if Keyword.keyword?(a) and Keyword.keyword?(b),
+      do: Keyword.merge(a, b, fn _key, x, y -> deep_merge(x, y) end),
+      else: b
   end
 
   defp downcase(name), do: name |> to_string() |> String.downcase()
