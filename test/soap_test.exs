@@ -164,6 +164,22 @@ defmodule SoapTest do
     end
   end
 
+  describe "decode_response" do
+    test "decodes with the operation's schema, and refuses an unknown name" do
+      client = client(echoing())
+      body = soap11(~s(<PayOut xmlns="urn:t"><result>r</result><item>1</item></PayOut>))
+
+      assert {:ok, %Response{result: %{"PayOut" => %{"item" => ["1"]}}}} =
+               Soap.decode_response(client, "Pay", 200, [], body)
+
+      assert {:error, %Error{reason: {:unknown_operation, "Pyy", ["Pay"]}}} =
+               Soap.decode_response(client, "Pyy", 200, [], body)
+
+      assert {:ok, %Response{}} = Soap.decode_response(client, nil, 200, [], body)
+      assert {:ok, %Response{}} = Soap.decode_response(nil, nil, 200, [], body)
+    end
+  end
+
   describe "build_request" do
     test "builds without sending" do
       assert {:ok,

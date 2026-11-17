@@ -52,7 +52,8 @@ defmodule Soap do
   `Soap.Telemetry` for events.
   """
 
-  alias Soap.{Attachment, Client, Decoder, Encoder, Error, Fault, HTTP, Multipart, Options, Request, Response, Service, WSSE}
+  alias Soap.{Attachment, Client, Decoder, Encoder, Error, Fault, HTTP, Multipart, Request, Response, Service, WSSE}
+  alias Soap.Options
   alias Soap.Service.Operation
 
   @typedoc "What a call returns."
@@ -130,13 +131,18 @@ defmodule Soap do
     end
   end
 
-  @doc "Decodes a reply that arrived some other way. `operation_name` can be nil."
+  @doc """
+  Decodes a reply that arrived some other way.
+
+  With a client and an operation name, the reply is decoded with that operation's schema,
+  and an unknown name returns `{:unknown_operation, name, available}`. With a nil name,
+  only the schema's global elements are used. With no client, nothing is.
+  """
   @spec decode_response(Client.t() | nil, String.t() | nil, pos_integer(), list(), binary()) ::
           {:ok, Response.t()} | {:error, Fault.t() | Error.t()}
   def decode_response(client, operation_name, status, headers, body) do
-    {service, operation} = decoding_context(client, operation_name)
-
-    with {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, decoding_opts(client)) do
+    with {:ok, service, operation} <- decoding_context(client, operation_name),
+         {:ok, decoded} <- Decoder.decode(service, operation, status, headers, body, decoding_opts(client)) do
       {:ok, Response.new(status, headers, body, decoded)}
     end
   end
@@ -144,14 +150,11 @@ defmodule Soap do
   defp decoding_opts(nil), do: []
   defp decoding_opts(%Client{opts: opts}), do: Keyword.take(opts, [:max_reply_size])
 
-  defp decoding_context(nil, _name), do: {nil, nil}
-  defp decoding_context(%Client{service: service}, nil), do: {service, nil}
+  defp decoding_context(nil, _name), do: {:ok, nil, nil}
+  defp decoding_context(%Client{service: service}, nil), do: {:ok, service, nil}
 
-  defp decoding_context(%Client{service: service, opts: opts}, name) do
-    case Service.operation(service, name, Keyword.take(opts, [:version, :input])) do
-      {:ok, operation} -> {service, operation}
-      {:error, _} -> {service, nil}
-    end
+  defp decoding_context(%Client{service: service} = client, name) do
+    with {:ok, operation} <- find_operation(client, name, client.opts), do: {:ok, service, operation}
   end
 
   defp find_operation(%Client{service: service}, name, opts) do

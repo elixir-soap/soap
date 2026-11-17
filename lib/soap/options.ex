@@ -55,7 +55,9 @@ defmodule Soap.Options do
 
   defp deep_merge(a, b) do
     if Keyword.keyword?(a) and Keyword.keyword?(b) do
-      Keyword.merge(a, b, fn _key, x, y -> if Keyword.keyword?(x) and Keyword.keyword?(y), do: deep_merge(x, y), else: y end)
+      Keyword.merge(a, b, fn _key, x, y ->
+        if Keyword.keyword?(x) and Keyword.keyword?(y), do: deep_merge(x, y), else: y
+      end)
     else
       b
     end
