@@ -18,8 +18,10 @@ defmodule Soap.ServiceTest do
     @impl true
     def request(:get, url, _headers, _body, opts) do
       send(opts[:test], {:fetched, url})
+      send(opts[:test], {:http_options, opts})
 
       case opts[:pages] do
+        %{^url => {status, headers, body}} -> {:ok, %{status: status, headers: headers, body: body}}
         %{^url => body} -> {:ok, %{status: 200, headers: [], body: body}}
         _ -> {:ok, %{status: 404, headers: [], body: "<html/>"}}
       end
@@ -386,6 +388,35 @@ defmodule Soap.ServiceTest do
   end
 
   describe "import security" do
+    test "scheme-relative URLs obey the host allowlist" do
+      location = "//other/x.xsd"
+      main = wsdl(imports: ~s(<xsd:import schemaLocation="#{location}"/>))
+      pages = %{"http://h/main.wsdl" => main, "http://other/x.xsd" => schema("")}
+
+      assert {:ok, service} = Service.load("http://h/main.wsdl", http_opts(pages))
+      assert service.unresolved_imports == [{location, :host_not_allowed}]
+      assert fetched() == ["http://h/main.wsdl"]
+
+      assert {:ok, service} = Service.load("http://h/main.wsdl", [allow_imports_from: ["other"]] ++ http_opts(pages))
+      assert service.unresolved_imports == []
+      assert fetched() == ["http://h/main.wsdl", "http://other/x.xsd"]
+    end
+
+    test "import_root rejects symlinked files and directories" do
+      dir = tmp_dir([{"svc/main.wsdl", wsdl()}, {"secret.xsd", schema("")}])
+      File.ln_s!(Path.join(dir, "secret.xsd"), Path.join(dir, "svc/link.xsd"))
+      File.ln_s!(dir, Path.join(dir, "svc/link"))
+
+      for reference <- ["link.xsd", "link/secret.xsd"] do
+        main = wsdl(imports: ~s(<xsd:import schemaLocation="#{reference}"/>))
+
+        assert {:ok, service} =
+                 Service.from_string(main, base: Path.join(dir, "svc/main.wsdl"), import_root: Path.join(dir, "svc"))
+
+        assert service.unresolved_imports == [{reference, :symlink_not_allowed}]
+      end
+    end
+
     test ":import_root confines local imports" do
       doc = wsdl(imports: ~s(<xsd:import namespace="urn:x" schemaLocation="../secret.xsd"/>))
       dir = tmp_dir([{"svc/main.wsdl", doc}, {"secret.xsd", schema(~s(<xsd:complexType name="Leaked"/>))}])
@@ -471,6 +502,89 @@ defmodule Soap.ServiceTest do
   end
 
   describe "remote loading" do
+    test "top-level timeouts override nested options for the WSDL and imports" do
+      main = wsdl(imports: ~s(<xsd:import schemaLocation="x.xsd"/>))
+      pages = %{"http://h/main.wsdl" => main, "http://h/x.xsd" => schema("")}
+      opts = http_opts(pages) |> Keyword.update!(:http_opts, &Keyword.put(&1, :timeout, 999))
+
+      assert {:ok, _} = Soap.load("http://h/main.wsdl", [timeout: 123, connect_timeout: 456] ++ opts)
+
+      for _ <- 1..2 do
+        assert_receive {:http_options, options}
+        assert options[:timeout] == 123
+        assert options[:connect_timeout] == 456
+        assert options[:follow_redirects] == false
+      end
+    end
+
+    test "redirects stay on allowed hosts and use the final URL as the import base" do
+      pages = %{
+        "http://h/main.wsdl" => {302, [{"Location", "/moved/main.wsdl"}], ""},
+        "http://h/moved/main.wsdl" => wsdl(imports: ~s(<xsd:import schemaLocation="x.xsd"/>)),
+        "http://h/moved/x.xsd" => schema("")
+      }
+
+      assert {:ok, _} = Service.load("http://h/main.wsdl", http_opts(pages))
+      assert fetched() == ["http://h/main.wsdl", "http://h/moved/main.wsdl", "http://h/moved/x.xsd"]
+    end
+
+    test "each redirect is checked against the original host policy" do
+      pages = %{
+        "http://h/main.wsdl" => wsdl(imports: ~s(<xsd:import schemaLocation="x.xsd"/>)),
+        "http://h/x.xsd" => {302, [{"location", "http://allowed/x.xsd"}], ""},
+        "http://allowed/x.xsd" => {307, [{"Location", "//blocked/x.xsd"}], ""},
+        "http://blocked/x.xsd" => schema("")
+      }
+
+      assert {:error,
+              {:import_failed, "http://h/x.xsd", {:redirect_not_allowed, "http://blocked/x.xsd", :host_not_allowed}}} =
+               Service.load("http://h/main.wsdl", [allow_imports_from: ["allowed"]] ++ http_opts(pages))
+
+      assert fetched() == ["http://h/main.wsdl", "http://h/x.xsd", "http://allowed/x.xsd"]
+    end
+
+    test "the Req adapter cannot automatically follow a blocked redirect" do
+      alias Soap.Conformance.WireServer
+
+      {:ok, _} = Application.ensure_all_started(:req)
+
+      WireServer.with_reply(WireServer.http(200, [], schema("")), fn target ->
+        destination = WireServer.url(target)
+
+        WireServer.with_reply(WireServer.http(302, [{"Location", destination}], ""), fn redirect ->
+          location = redirect |> WireServer.url() |> String.replace("127.0.0.1", "localhost")
+          main = wsdl(imports: ~s(<xsd:import schemaLocation="#{location}"/>))
+
+          assert {:error, {:import_failed, ^location, {:redirect_not_allowed, ^destination, :host_not_allowed}}} =
+                   Service.from_string(main,
+                     base: "http://localhost/main.wsdl",
+                     http_opts: [follow_redirects: true, req: [redirect: true]]
+                   )
+
+          assert length(WireServer.requests(redirect)) == 1
+          assert WireServer.requests(target) == []
+        end)
+      end)
+    end
+
+    test "redirects cannot switch to a non-HTTP scheme" do
+      pages = %{"http://h/main.wsdl" => {302, [{"Location", "file:///etc/passwd"}], ""}}
+
+      assert {:error, {:redirect_not_allowed, "file:///etc/passwd", :scheme_not_allowed}} =
+               Service.load("http://h/main.wsdl", http_opts(pages))
+
+      assert fetched() == ["http://h/main.wsdl"]
+    end
+
+    test "redirect loops are bounded" do
+      pages = %{"http://h/main.wsdl" => {302, [{"Location", "/main.wsdl"}], ""}}
+
+      assert {:error, {:too_many_redirects, "http://h/main.wsdl"}} =
+               Service.load("http://h/main.wsdl", http_opts(pages))
+
+      assert length(fetched()) == 11
+    end
+
     test "resolves relative imports against the importing document, keeping query strings" do
       main =
         wsdl(

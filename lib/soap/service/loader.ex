@@ -12,6 +12,8 @@ defmodule Soap.Service.Loader do
   | Absolute path, `file:`, other schemes | Skipped | Skipped |
 
   Allow more hosts with `allow_imports_from: ["host"]`, or every host with `:all`.
+  Redirect destinations obey the same rules, and relative imports use the final URL.
+  With `:import_root`, imports through symlinks below that directory are skipped.
 
   Skipped imports don't fail the load. They appear in `unresolved_imports`, with the
   reason. An import the rules allow but that can't be read is an error, because the
@@ -38,7 +40,7 @@ defmodule Soap.Service.Loader do
   def load(source, opts) do
     location = if url?(source), do: {:url, source}, else: {:file, Path.expand(source)}
 
-    with {:ok, body} <- read(location, opts) do
+    with {:ok, body, location} <- read(location, opts) do
       load_document(body, location, opts)
     end
   end
@@ -170,7 +172,7 @@ defmodule Soap.Service.Loader do
   defp tolerate(result, _reference, _state), do: result
 
   defp visit(location, target, state) do
-    with {:ok, body} <- read(location, state.opts),
+    with {:ok, body, location} <- read(location, state.opts),
          state = count(state, body),
          :ok <- check_size(state),
          {:ok, root} <- parse_import(body, location) do
@@ -206,8 +208,8 @@ defmodule Soap.Service.Loader do
 
   defp resolve_relative(_reference, :inline, _opts), do: {:blocked, :no_base_location}
 
-  defp resolve_relative(reference, {:url, base}, _opts) do
-    {:ok, {:url, base |> URI.merge(reference) |> URI.to_string()}}
+  defp resolve_relative(reference, {:url, base} = location, opts) do
+    base |> URI.merge(reference) |> URI.to_string() |> resolve_url(location, opts)
   end
 
   defp resolve_relative(reference, {:file, base}, opts) do
@@ -224,7 +226,20 @@ defmodule Soap.Service.Loader do
 
   defp check_root_directory(path, root) do
     root = Path.expand(root)
-    if String.starts_with?(path, root <> "/"), do: {:ok, {:file, path}}, else: {:blocked, :outside_import_root}
+
+    cond do
+      not String.starts_with?(path, root <> "/") -> {:blocked, :outside_import_root}
+      symlink_below_root?(path, root) -> {:blocked, :symlink_not_allowed}
+      true -> {:ok, {:file, path}}
+    end
+  end
+
+  defp symlink_below_root?(path, root) do
+    path
+    |> Path.relative_to(root)
+    |> Path.split()
+    |> Enum.scan(root, &Path.join(&2, &1))
+    |> Enum.any?(fn component -> match?({:ok, %File.Stat{type: :symlink}}, File.lstat(component)) end)
   end
 
   defp resolve_url(reference, base, opts) do
@@ -243,18 +258,56 @@ defmodule Soap.Service.Loader do
 
   defp read({:file, path}, _opts) do
     case File.read(path) do
-      {:ok, body} -> {:ok, body}
+      {:ok, body} -> {:ok, body, {:file, path}}
       {:error, reason} -> {:error, {:file, reason, path}}
     end
   end
 
   defp read({:url, url}, opts) do
-    http_opts = Keyword.merge([follow_redirects: true, max_reply_size: @max_bytes], Keyword.get(opts, :http_opts, []))
+    http_opts =
+      [max_reply_size: @max_bytes]
+      |> Keyword.merge(Keyword.get(opts, :http_opts, []))
+      |> Keyword.merge(Keyword.take(opts, [:timeout, :connect_timeout]))
+      |> Keyword.put(:follow_redirects, false)
 
+    # Redirects must pass the import policy before the adapter sends another request.
+    http_opts =
+      if Keyword.has_key?(http_opts, :req),
+        do: Keyword.update!(http_opts, :req, &Keyword.put(&1, :redirect, false)),
+        else: http_opts
+
+    read_url(url, {:url, url}, opts, http_opts, 10)
+  end
+
+  defp read_url(url, origin, opts, http_opts, redirects_left) do
     case HTTP.adapter(opts).request(:get, url, [], "", http_opts) do
-      {:ok, %{status: status, body: body}} when status in 200..299 -> {:ok, body}
-      {:ok, %{status: status}} -> {:error, {:http_status, status, url}}
-      {:error, reason} -> {:error, {:http, reason, url}}
+      {:ok, %{status: status, body: body}} when status in 200..299 ->
+        {:ok, body, {:url, url}}
+
+      {:ok, %{status: status, headers: headers}} when status in [301, 302, 303, 307, 308] ->
+        follow_redirect(redirect_location(headers), url, origin, opts, http_opts, redirects_left)
+
+      {:ok, %{status: status}} ->
+        {:error, {:http_status, status, url}}
+
+      {:error, reason} ->
+        {:error, {:http, reason, url}}
+    end
+  end
+
+  defp redirect_location(headers) do
+    Enum.find_value(headers, fn {name, value} -> if String.downcase(name) == "location", do: value end)
+  end
+
+  defp follow_redirect(nil, url, _origin, _opts, _http_opts, _left), do: {:error, {:missing_redirect_location, url}}
+  defp follow_redirect(_location, url, _origin, _opts, _http_opts, 0), do: {:error, {:too_many_redirects, url}}
+
+  defp follow_redirect(location, url, origin, opts, http_opts, left) do
+    destination = url |> URI.merge(location) |> URI.to_string()
+
+    case resolve(destination, origin, opts) do
+      {:ok, {:url, allowed}} -> read_url(allowed, origin, opts, http_opts, left - 1)
+      {:blocked, reason} -> {:error, {:redirect_not_allowed, destination, reason}}
     end
   end
 
