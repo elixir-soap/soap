@@ -72,8 +72,19 @@ Soap.call(client, "CreateOrder", %{
 - Elements go out in the order and namespaces the schema requires.
 - A list repeats the element.
 - `"@name"` is an attribute, and `"#text"` is an element's text next to its attributes.
-- `nil` leaves the element out, or sends `xsi:nil` if the schema allows that.
+- Missing, `nil`, empty and `[]` values follow the table below.
 - Values go out in the form their type needs, including `Date`, `DateTime` and `Decimal`. Base64 and hex fields take raw bytes.
+
+### Missing and empty values
+
+| Param | Element sent |
+|---|---|
+| Key left out | None |
+| `nil` | `xsi:nil="true"` if the schema says nillable, otherwise none |
+| `""` | An empty element |
+| `[]` | None if the element can repeat, otherwise an empty element |
+
+In results, an element that's absent has no key, even one that can repeat. `xsi:nil` is `nil`, an empty simple element is `""`, and an empty complex one is `%{}`.
 
 ### Validation
 

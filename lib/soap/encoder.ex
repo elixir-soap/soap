@@ -15,8 +15,9 @@ defmodule Soap.Encoder do
 
       %{"Price" => %{"@currency" => "EUR", "#text" => 10}}
 
-  A list value repeats the element. `nil` omits the element, or sends `xsi:nil` when the
-  schema says it's nillable. `%Soap.Raw{}` is sent as is, and `%Soap.Attachment{}` is sent
+  A list value repeats the element, so `[]` sends none of an element that can repeat, and
+  an empty one otherwise. `""` sends an empty element. `nil` omits the element, or sends
+  `xsi:nil` when the schema says it's nillable. `%Soap.Raw{}` is sent as is, and `%Soap.Attachment{}` is sent
   by MTOM.
 
   Values go out in the form their schema type needs. Base64 and hex fields take the raw
