@@ -101,6 +101,26 @@ defmodule SoapTest do
       assert merged[:telemetry_metadata] == %{a: 1, b: 2}
     end
 
+    test "wrongly shaped options are errors, and nothing is sent" do
+      client = client(echoing())
+
+      for {key, value} <- [
+            attachments: ["not an attachment"],
+            http_headers: [:oops],
+            soap_headers: "x",
+            timeout: -1,
+            version: "2.0",
+            telemetry_metadata: [a: 1]
+          ] do
+        assert {:error, %Error{reason: {:invalid_option, ^key, _}}} = Soap.call(client, "Pay", @params, [{key, value}])
+
+        assert {:error, %Error{reason: {:invalid_option, ^key, _}}} =
+                 Soap.build_request(client, "Pay", @params, [{key, value}])
+      end
+
+      refute_received {:request, _}
+    end
+
     test "a custom header replaces a standard one of the same name" do
       assert {:ok, _} = Soap.call(client(echoing()), "Pay", @params, http_headers: [{"content-type", "text/plain"}])
       assert_received {:request, %{headers: headers}}

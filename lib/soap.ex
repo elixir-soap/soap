@@ -115,7 +115,8 @@ defmodule Soap do
   def request(%Client{} = client, operation_name, params \\ %{}, opts \\ []) do
     opts = Options.merge(client.opts, opts)
 
-    with {:ok, operation} <- find_operation(client, operation_name, opts),
+    with :ok <- validate(opts),
+         {:ok, operation} <- find_operation(client, operation_name, opts),
          {:ok, request} <- build(client, operation, params, opts) do
       send_request(client, operation, request, opts)
     end
@@ -126,7 +127,8 @@ defmodule Soap do
   def build_request(%Client{} = client, operation_name, params \\ %{}, opts \\ []) do
     opts = Options.merge(client.opts, opts)
 
-    with {:ok, operation} <- find_operation(client, operation_name, opts) do
+    with :ok <- validate(opts),
+         {:ok, operation} <- find_operation(client, operation_name, opts) do
       build(client, operation, params, opts)
     end
   end
@@ -155,6 +157,10 @@ defmodule Soap do
 
   defp decoding_context(%Client{service: service} = client, name) do
     with {:ok, operation} <- find_operation(client, name, client.opts), do: {:ok, service, operation}
+  end
+
+  defp validate(opts) do
+    with {:error, reason} <- Options.validate(opts), do: {:error, %Error{reason: reason}}
   end
 
   defp find_operation(%Client{service: service}, name, opts) do

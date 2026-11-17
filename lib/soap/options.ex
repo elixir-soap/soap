@@ -15,13 +15,62 @@ defmodule Soap.Options do
   @spec merge(keyword(), keyword()) :: keyword()
   def merge(defaults, overrides) do
     Keyword.merge(defaults, overrides, fn
-      :http_headers, a, b -> merge_http_headers(a, b)
-      :soap_headers, a, b -> merge_soap_headers(a, b)
+      :http_headers, a, b when is_list(a) and is_list(b) -> merge_http_headers(a, b)
+      :soap_headers, a, b when (is_list(a) or is_map(a)) and (is_list(b) or is_map(b)) -> merge_soap_headers(a, b)
       :http_opts, a, b -> deep_merge(a, b)
-      :telemetry_metadata, a, b -> Map.merge(a, b)
+      :telemetry_metadata, a, b when is_map(a) and is_map(b) -> Map.merge(a, b)
       _key, _a, b -> b
     end)
   end
+
+  @doc """
+  Checks the shape of the options that are used before anything is sent. Returns
+  `{:error, {:invalid_option, key, reason}}` for the first one that's wrong.
+  """
+  @spec validate(keyword()) :: :ok | {:error, {:invalid_option, atom(), String.t()}}
+  def validate(opts) do
+    Enum.find_value(opts, :ok, fn {key, value} ->
+      case check(key, value) do
+        :ok -> nil
+        {:error, reason} -> {:error, {:invalid_option, key, reason}}
+      end
+    end)
+  end
+
+  defp check(:http_headers, headers) do
+    if is_list(headers) and Enum.all?(headers, &header?/1),
+      do: :ok,
+      else: {:error, "must be a list of {name, value} string pairs"}
+  end
+
+  defp check(:soap_headers, headers) when is_map(headers) or is_list(headers), do: :ok
+  defp check(:soap_headers, _), do: {:error, "must be a map or a list"}
+
+  defp check(:attachments, attachments) do
+    if is_list(attachments) and Enum.all?(attachments, &match?(%Soap.Attachment{data: data} when is_binary(data), &1)),
+      do: :ok,
+      else: {:error, "must be a list of %Soap.Attachment{} with binary data"}
+  end
+
+  defp check(:http_opts, opts) when is_list(opts), do: :ok
+  defp check(:http_opts, _), do: {:error, "must be a keyword list"}
+  defp check(:telemetry_metadata, meta) when is_map(meta), do: :ok
+  defp check(:telemetry_metadata, _), do: {:error, "must be a map"}
+  defp check(:endpoint, url) when is_nil(url) or is_binary(url), do: :ok
+  defp check(:endpoint, _), do: {:error, "must be a string"}
+  defp check(:version, version) when version in [nil, "1.1", "1.2"], do: :ok
+  defp check(:version, _), do: {:error, ~s(must be "1.1" or "1.2")}
+  defp check(key, value) when key in [:timeout, :connect_timeout] and is_integer(value) and value >= 0, do: :ok
+  defp check(key, _) when key in [:timeout, :connect_timeout], do: {:error, "must be a non-negative integer"}
+
+  defp check(:max_reply_size, size) when size == :infinity or (is_integer(size) and size > 0), do: :ok
+  defp check(:max_reply_size, _), do: {:error, "must be a positive integer or :infinity"}
+  defp check(:http, module) when is_atom(module), do: :ok
+  defp check(:http, _), do: {:error, "must be a module"}
+  defp check(_key, _value), do: :ok
+
+  defp header?({name, value}) when is_binary(name) or is_atom(name), do: is_binary(value) or is_nil(value)
+  defp header?(_), do: false
 
   @doc "Drops HTTP headers set to nil."
   @spec http_headers(list()) :: [{String.t(), String.t()}]

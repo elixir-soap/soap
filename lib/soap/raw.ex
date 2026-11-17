@@ -39,6 +39,7 @@ defmodule Soap.Error do
 
     * `{:invalid_param, path, message}` - a param doesn't fit the schema. Nothing was sent.
     * `{:unknown_operation, name, available}`
+    * `{:invalid_option, key, message}` - an option has the wrong shape. Nothing was sent.
     * `{:http_status, status, body}` - an error status with no SOAP Fault in the reply.
     * `{:transport, reason}` - no reply at all, such as a timeout or a refused connection.
     * `{:invalid_xml, message}`, `:no_envelope`, `:doctype_not_allowed` - a broken reply.
