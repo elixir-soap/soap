@@ -26,16 +26,30 @@ defmodule Soap.Test do
   """
   @behaviour Soap.HTTP
 
-  alias Soap.{Decoder, Encoder}
+  alias Soap.{Decoder, Encoder, Options}
 
   @env11 "http://schemas.xmlsoap.org/soap/envelope/"
   @env12 "http://www.w3.org/2003/05/soap-envelope"
 
-  @doc "Loads a WSDL and returns a client that answers with `handler` instead of the network."
-  @spec client(String.t(), (map() -> term()), keyword()) :: {:ok, Soap.Client.t()} | {:error, Soap.Error.t()}
-  def client(wsdl_path, handler, opts \\ []) do
-    Soap.load(wsdl_path, Keyword.merge([http: __MODULE__, http_opts: [handler: handler]], opts))
+  @doc """
+  Returns a client that answers with `handler` instead of the network.
+
+  `source` is a WSDL path for `Soap.load/2`, or a client that's already loaded. `opts` are
+  client options, merged as a call's would be, so `:http_opts` keeps the handler.
+  """
+  @spec client(String.t() | Soap.Client.t(), (map() -> term()), keyword()) ::
+          {:ok, Soap.Client.t()} | {:error, Soap.Error.t()}
+  def client(source, handler, opts \\ [])
+
+  def client(%Soap.Client{} = client, handler, opts) do
+    {:ok, %{client | opts: Options.merge(client.opts, test_opts(handler, opts))}}
   end
+
+  def client(wsdl_path, handler, opts) do
+    Soap.load(wsdl_path, test_opts(handler, opts))
+  end
+
+  defp test_opts(handler, opts), do: Options.merge(opts, http: __MODULE__, http_opts: [handler: handler])
 
   @doc "Wraps XML in a SOAP envelope. Takes `:version`, which defaults to `\"1.1\"`."
   @spec envelope(iodata(), keyword()) :: binary()
